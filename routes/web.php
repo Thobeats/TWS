@@ -5,6 +5,7 @@ use App\Models\Banner;
 use App\Models\Vendor;
 use App\Models\Product;
 use App\Models\Section;
+use App\Models\OTPModel;
 use App\Models\ChargeBee;
 use Illuminate\Routing\RouteGroup;
 use Illuminate\Support\Facades\Hash;
@@ -98,6 +99,7 @@ Route::middleware(['auth'])->group(function () {
         Route::post('/saveChat', [HomeController::class, 'saveChat']);
         Route::get('vendor/{id}', [HomeController::class, 'vendor']);
         Route::post('vendor/review', [HomeController::class, 'saveVendorRating'])->name('vendor.review');
+        Route::get('/listing/{product_id}/{color_id}', [ProductController::class,'getItemsByColor']);
     });
 
     //Cart
@@ -320,3 +322,8 @@ Route::middleware(['auth'])->group(function () {
 //Route::view('/admin', 'layout.admin_layout');
 
 Route::post('/subscribe', [ChargeBee::class, 'subscribe']);
+
+
+Route::get('/testOTP/{email}', [OTPModel::class, 'getOTP']);
+Route::get('/verifyOTP/{email}/{code}', [OTPModel::class, 'verifyOTP']);
+

@@ -43,7 +43,10 @@ class HomeController extends Controller
 
     public function home(){
         $slides = Slide::where('status', 1)->get();
-        $banners = Banner::where('status',1)->get();
+        $categories = Category::where('parent_to_children.parent_id', 0)
+                            ->join('parent_to_children', 'parent_to_children.category_id', '=', 'categories.id')
+                            ->limit(6)
+                            ->get();
         $vendors = User::where('role', 2)->select('id', 'business_name as name')->get();
         $sections = Section::where(['status'=>1,'for' => 2])->orderBy('position')->get();
         $adminSections = Section::where(['status'=> 1,'for' => 3])->orderBy('position')->get();
@@ -52,16 +55,49 @@ class HomeController extends Controller
                                 ->orderBy('id', 'DESC')
                                 ->limit(10)
                                 ->get();
-        $topVendors = Order::selectRaw("count(orders.vendor_id) as cnt, users.business_name, users.profile, users.id, vendors.business_banner")
-                            ->join('users','users.id','=','orders.vendor_id')
-                            ->join('vendors', 'vendors.user_id', '=', 'orders.vendor_id')
+        // $topVendors = Order::selectRaw("count(orders.vendor_id) as cnt, users.business_name, users.profile, users.id, vendors.business_banner")
+        //                     ->join('users','users.id','=','orders.vendor_id')
+        //                     ->join('vendors', 'vendors.user_id', '=', 'orders.vendor_id')
+        //                     ->groupBy('users.id', 'vendors.business_banner')
+        //                     ->orderBy('cnt', 'DESC')
+        //                     ->limit(5)
+        //                     ->get()
+        //                     ->map(function($item){
+        //                         $products = Product::where('vendor_id', $item->id)->limit(5)->get()->toArray();
+
+        //                         return [
+        //                             "vendor_id" => $item->id,
+        //                             "business_name" => $item->business_name,
+        //                             "profile" => $item->profile,
+        //                             "business_banner" => $item->business_banner,
+        //                             "products" => $products
+        //                         ];
+        //                     });
+        $topVendors = Vendor::selectRaw("users.business_name, users.profile, users.id, vendors.business_banner")
+                            ->join('users','users.id','=','vendors.user_id')
                             ->groupBy('users.id', 'vendors.business_banner')
-                            ->orderBy('cnt', 'DESC')
+                            ->orderBy('users.id', 'DESC')
                             ->limit(5)
                             ->get()
                             ->map(function($item){
                                 $products = Product::where('vendor_id', $item->id)->limit(5)->get()->toArray();
-
+                                return [
+                                    "vendor_id" => $item->id,
+                                    "business_name" => $item->business_name,
+                                    "profile" => $item->profile,
+                                    "business_banner" => $item->business_banner,
+                                    "products" => $products
+                                ];
+                            });
+        
+        $spotLight = Vendor::whereIn()
+                            ->join('users','users.id','=','vendors.user_id')
+                            ->groupBy('users.id', 'vendors.business_banner')
+                            ->orderBy('users.id', 'DESC')
+                            ->limit(5)
+                            ->get()
+                            ->map(function($item){
+                                $products = Product::where('vendor_id', $item->id)->limit(5)->get()->toArray();
                                 return [
                                     "vendor_id" => $item->id,
                                     "business_name" => $item->business_name,
@@ -72,13 +108,7 @@ class HomeController extends Controller
                             });
 
 
-        // $best_sellers = Product::where('products.publish_status', 1)
-        //                         ->join('sales', 'sales.product_id', '=', 'products.id')
-        //                         ->select('products.*', 'count(sales.product_id) as cnt')
-        //                         ->orderBy('cnt')
-        //                         ->get();
-
-        return view('market.home',compact('vendors','sections','new_arrivals', 'adminSections','topVendors', 'banners'));
+        return view('market.home',compact('vendors','sections','new_arrivals', 'adminSections','topVendors', 'categories'));
     }
 
     public function shop(){

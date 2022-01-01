@@ -6,15 +6,15 @@
 @section('content')
 
 <!-- Slider -->
-<section class="section-slide container">
+<section class="section-slide bg-light m-0">
     <div class="wrap-slick1 rs1-slick1">
         <div class="slick1">
             @forelse ($topVendors as $tv)
-            <div class="item-slick1" data-caption="{{$tv['business_name']}}" data-thumb="{{ url('storage/' . $tv['business_banner'])}}">
+            <div class="item-slick1" data-caption="{{$tv['business_name']}}" data-thumb="{{ file_exists(url('storage/' . $tv['business_banner'])) ? url('storage/' . $tv['business_banner']) : url('images/Welcome.png')}}">
                 <div class="container h-full">
                     {{-- Business Banner --}}
                     <a href="/market/vendor/{{$tv['vendor_id']}}">
-                        <div class="h-50" style="background-image: url({{ 'storage/' . $tv['business_banner']}}); background-position: top center;">
+                        <div class="h-50" style="background-image: url({{ file_exists(url('storage/' . $tv['business_banner'])) ? url('storage/' . $tv['business_banner']) : url('images/Welcome.png')}}); background-size:cover; background-position: left center;">
                         </div>
                     </a>
                     <div class="wrap-slick2">
@@ -118,138 +118,54 @@
 <div class="sec-banner bg0 p-b-40 mt-5">
     <div class="p-b-32">
         <h6 class="ltext-107 cl5 txt-left respon1">
-            Top Categories
+            Trending Categories
         </h6>
     </div>
 
-    <div class="flex-w flex-c-m">
-
-        @forelse ($banners as $banner)
-        <div class="size-202 m-lr-auto respon4">
-            <!-- Block1 -->
-            <div class="block1 wrap-pic-w">
-                <img src="{{'storage/slides/'.$banner->image}}" alt="IMG-BANNER">
-
-                <a href="{{ route('shop',[$banner->slug]) }}" class="block1-txt ab-t-l s-full flex-col-l-sb p-lr-38 p-tb-34 trans-03 respon3">
-                    <div class="block1-txt-child1 flex-col-l">
-                        <span class="block1-name ltext-102 trans-04 p-b-8">
-                            {{$banner->title}}
-                        </span>
-
-                        <span class="block1-info stext-102 trans-04">
-                            {{$banner->subtitle}}
-                        </span>
-                    </div>
-
-                    <div class="block1-txt-child2 p-b-4 trans-05">
-                        <div class="block1-link stext-101 cl0 trans-09">
-                            Shop Now
+    <div class="wrap-slick2">
+        <div class="slick2">
+            @forelse ($categories as $category)
+            <div class="size-202 m-lr-auto respon4">
+               <a href="">
+                    <div class="card">
+                        <div class="card-body">
+                            <span class="block1-name ltext-102 trans-04 p-b-8">
+                                {{ $category->name }}
+                            </span>
                         </div>
                     </div>
-                </a>
+               </a>
             </div>
-        </div>
-        @empty
-        <div class="size-202 m-lr-auto respon4">
-            <!-- Block1 -->
-            <div class="block1 wrap-pic-w">
-                <img src="images/banner-04.jpg" alt="IMG-BANNER">
-
-                <a class="block1-txt ab-t-l s-full flex-col-l-sb p-lr-38 p-tb-34 trans-03 respon3">
-                    <div class="block1-txt-child1 flex-col-l">
+            @empty
+            <div class="size-202 m-lr-auto respon4">
+                <div class="card">
+                    <div class="card-body">
                         <span class="block1-name ltext-102 trans-04 p-b-8">
                             Women
                         </span>
-
-                        <span class="block1-info stext-102 trans-04">
-                            Coming Soon
-                        </span>
                     </div>
-
-                    {{-- <div class="block1-txt-child2 p-b-4 trans-05">
-                        <div class="block1-link stext-101 cl0 trans-09">
-                            Shop Now
-                        </div>
-                    </div> --}}
-                </a>
+                </div>
             </div>
-        </div>
-        @endforelse
-
-        {{-- <div class="size-202 m-lr-auto respon4">
-            <!-- Block1 -->
-            <div class="block1 wrap-pic-w">
-                <img src="images/banner-04.jpg" alt="IMG-BANNER">
-
-                <a href="product.html" class="block1-txt ab-t-l s-full flex-col-l-sb p-lr-38 p-tb-34 trans-03 respon3">
-                    <div class="block1-txt-child1 flex-col-l">
+            <div class="size-202 m-lr-auto respon4">
+                <div class="card">
+                    <div class="card-body">
                         <span class="block1-name ltext-102 trans-04 p-b-8">
                             Women
                         </span>
-
-                        <span class="block1-info stext-102 trans-04">
-                            Spring 2018
-                        </span>
                     </div>
-
-                    <div class="block1-txt-child2 p-b-4 trans-05">
-                        <div class="block1-link stext-101 cl0 trans-09">
-                            Shop Now
-                        </div>
-                    </div>
-                </a>
+                </div>
             </div>
-        </div>
-
-        <div class="size-202 m-lr-auto respon4">
-            <!-- Block1 -->
-            <div class="block1 wrap-pic-w">
-                <img src="images/banner-05.jpg" alt="IMG-BANNER">
-
-                <a href="product.html" class="block1-txt ab-t-l s-full flex-col-l-sb p-lr-38 p-tb-34 trans-03 respon3">
-                    <div class="block1-txt-child1 flex-col-l">
+            <div class="size-202 m-lr-auto respon4">
+                 <div class="card">
+                    <div class="card-body text-center">
                         <span class="block1-name ltext-102 trans-04 p-b-8">
-                            Men
-                        </span>
-
-                        <span class="block1-info stext-102 trans-04">
-                            Spring 2018
+                            Women
                         </span>
                     </div>
-
-                    <div class="block1-txt-child2 p-b-4 trans-05">
-                        <div class="block1-link stext-101 cl0 trans-09">
-                            Shop Now
-                        </div>
-                    </div>
-                </a>
+                </div>
             </div>
+            @endforelse
         </div>
-
-        <div class="size-202 m-lr-auto respon4">
-            <!-- Block1 -->
-            <div class="block1 wrap-pic-w">
-                <img src="images/banner-06.jpg" alt="IMG-BANNER">
-
-                <a href="product.html" class="block1-txt ab-t-l s-full flex-col-l-sb p-lr-38 p-tb-34 trans-03 respon3">
-                    <div class="block1-txt-child1 flex-col-l">
-                        <span class="block1-name ltext-102 trans-04 p-b-8">
-                            Bags
-                        </span>
-
-                        <span class="block1-info stext-102 trans-04">
-                            New Trend
-                        </span>
-                    </div>
-
-                    <div class="block1-txt-child2 p-b-4 trans-05">
-                        <div class="block1-link stext-101 cl0 trans-09">
-                            Shop Now
-                        </div>
-                    </div>
-                </a>
-            </div>
-        </div> --}}
     </div>
 </div>
 
@@ -258,7 +174,7 @@
 
 @if($section->adminSectionProducts()->count() > 0)
 <section class="sec-product bg0 p-t-100 p-b-50">
-    <div class="container">
+    <div class="container-fluid">
         <div class="p-b-32">
             <h6 class="ltext-107 cl5 txt-left respon1">
                 {{$section['name']}}
@@ -281,13 +197,13 @@
 
                         <div class="block2-txt flex-w flex-t p-t-14 border p-3">
                             <div class="block2-txt-child1 flex-col-l">
+                                <a href="/market/vendor/{{$product->vendor_id}}" class="mtext-101 text-dark cl4 hov-cl1 trans-04 js-name-b2 p-b-6">
+                                    {{ $product->vendorName() }}
+                                </a>
+
                                 <a href="/market/product/{{$product->id}}" class="stext-104 cl4 hov-cl1 trans-04 js-name-b2 p-b-6">
                                     {{ $product->name }}
                                 </a>
-
-                                <span class="mtext-101 cl2">
-                                    ${{ $product->price }}
-                                </span>
                             </div>
 
                             @auth
@@ -316,7 +232,7 @@
 
 @if($section->products()->count() > 0)
 <section class="sec-product bg0 p-b-50">
-    <div class="container">
+    <div class="container-fluid">
         <div class="p-b-32">
             <h6 class="ltext-107 cl5 txt-left respon1">
                 {{$section['name']}}
@@ -340,13 +256,13 @@
 
                         <div class="block2-txt flex-w flex-t p-t-14 border p-3">
                             <div class="block2-txt-child1 flex-col-l">
+                                <a href="/market/vendor/{{$product->vendor_id}}" class="mtext-101 text-dark cl4 hov-cl1 trans-04 js-name-b2 p-b-6">
+                                    {{ $product->vendorName() }}
+                                </a>
+
                                 <a href="/market/product/{{$product->id}}" class="stext-104 cl4 hov-cl1 trans-04 js-name-b2 p-b-6">
                                     {{ $product->name }}
                                 </a>
-
-                                <span class="mtext-101 cl2">
-                                    ${{ $product->price }}
-                                </span>
                             </div>
 
                             @auth
@@ -369,5 +285,71 @@
 
 @endforeach
 @endif
+
+{{-- Spotlight --}}
+<section class="section-slide container-fluid mb-4 bg-light">
+    <div class="p-b-32">
+        <h6 class="ltext-107 cl5 txt-left respon1">
+            Spotlight on Nuday
+        </h6>
+    </div>
+    <div class="wrap-slick1 rs1-slick1">
+        <div class="slick1">
+            @forelse ($topVendors as $tv)
+            <div class="item-slick1" data-caption="{{$tv['business_name']}}" data-thumb="{{ file_exists(url('storage/' . $tv['business_banner'])) ? url('storage/' . $tv['business_banner']) : url('images/Welcome.png')}}">
+                <div class="container h-full">
+                    {{-- Business Banner --}}
+                    <a href="/market/vendor/{{$tv['vendor_id']}}">
+                        <div class="h-50" style="background-image: url({{ file_exists(url('storage/' . $tv['business_banner'])) ? url('storage/' . $tv['business_banner']) : url('images/Welcome.png')}}); background-size:cover; background-position: left center;">
+                        </div>
+                    </a>
+                    <div class="wrap-slick2">
+                        <div class="slick2">
+                        @foreach ($tv['products'] as $product)
+                           <a href="/market/product/{{$product['id']}}">
+                                <div class="item-slick2 p-l-15 p-r-15 p-t-15 p-b-15">
+                                    <!-- Block2 -->
+                                    <div class="block2">
+                                        <div class="block3-pic hov-img3">
+                                            <img src="{{ url('storage/products/'. json_decode($product['pics'],true)[0]) }}" alt="IMG-PRODUCT">
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
+                        @endforeach
+                        </div>
+                    </div>
+                </div>
+            </div>
+            @empty
+            <div class="item-slick1" style="background-image: url(images/slide-03.jpg);">
+                <div class="container h-full">
+                    <div class="flex-col-l-m h-full p-t-100 p-b-30">
+                        <div class="layer-slick1 animated visible-false" data-appear="fadeInDown" data-delay="0">
+                            <span class="ltext-202 cl2 respon2">
+                                Men Collection 2018
+                            </span>
+                        </div>
+
+                        <div class="layer-slick1 animated visible-false" data-appear="fadeInUp" data-delay="800">
+                            <h2 class="ltext-104 cl2 p-t-19 p-b-43 respon1">
+                                New arrivals
+                            </h2>
+                        </div>
+
+                        <div class="layer-slick1 animated visible-false" data-appear="zoomIn" data-delay="1600">
+                            <a href="{{ route('shop') }}" class="flex-c-m stext-101 cl0 size-101 bg1 bor1 hov-btn1 p-lr-15 trans-04">
+                                Shop Now
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            @endforelse
+        </div>
+        <div class="wrap-slick1-dots"></div>
+    </div>
+</section>
 
 @endsection

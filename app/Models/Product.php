@@ -72,6 +72,10 @@ class Product extends Model
     //     return $option;
     // }
 
+    public function item_listing(){
+        return json_decode($this->item_listing);
+    }
+
     public function vendor(){
         $vendor = User::find($this->vendor_id);
         return collect(['id'=>$this->vendor_id, 'name' => $vendor->business_name]);
@@ -102,6 +106,12 @@ class Product extends Model
         }
 
         return false;
+    }
+
+    public function vendorName(){
+        $vendorName = User::find($this->vendor_id);
+
+        return $vendorName->business_name;
     }
 
 }

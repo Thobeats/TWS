@@ -71,7 +71,6 @@ class VendorController extends Controller
         $otpModel = new OTPModel;
 
         $validate = $otpModel->verifyOTP($user->email,$request->token);
-
         if($validate->status == false){
             toastr()->error('Invalid OTP','Error');
 

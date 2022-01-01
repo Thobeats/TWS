@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Exception;
 use App\Models\Cart;
 use App\Models\Chat;
+use App\Models\Size;
+use App\Models\Color;
 use App\Models\Product;
 use App\Traits\AppTrait;
 use Illuminate\Http\Request;
@@ -71,16 +73,54 @@ class ProductController extends Controller
                 $chats = json_decode($chat->chat_message,true);
             }
 
+            $colors =[]; $sizes = []; $no_in_stock = 0;
+
+            if (!is_null($product->item_listing())){
+               foreach($product->item_listing() as $key => $value){
+                    $color = Color::find($key);
+                    $listing = $this->getItemsByColor($product->id,$color->id);
+
+                    $colors[] = [
+                        'name' => $color->name,
+                        'id' => $color->id,
+                        'listing' => $listing
+                    ]; 
+               }
+            }
+
             $data = [
                 'product'=> $product,
                 'images' => $product->images(),
-                'sizes' => $product->sizes(),
-                'colors' => $product->colors(),
+                'item' => $colors,
                 'user' => $user,
                 'chats' => $chats
             ];
+          //  dd($data);
+            return view('market.product',$data);
         }
-        return view('market.product',$data);
+        
+    }
+
+
+    public function getItemsByColor($productId, $colorId){
+        $product = Product::find($productId);
+        $listing = json_decode($product->item_listing,true);
+        $item = $listing[$colorId];
+
+        $items = []; $i = 0;
+        foreach($item[0] as $size){
+            $sizes = Size::find($size);
+            
+            $items[] = [
+                'size' => $sizes->size_code,
+                'size_id' => $sizes->id,
+                'no_in_stock' => $item[1][$i]
+            ];
+            $i++;
+        }
+        
+
+        return $items;
     }
 
     /**

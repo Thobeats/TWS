@@ -37,7 +37,7 @@ trait AppTrait{
     }
 
     protected function sendConfirmEmail($email,$token){
-        Mail::to($email)->send(new ConfirmEmailMarkdown($token));
+      //  Mail::to($email)->send(new ConfirmEmailMarkdown($token));
     }
 
     protected function generateUserCode(){

@@ -70,6 +70,22 @@
                                 <form action="/addCart" method="post">
                                     @csrf
                                     <input type="hidden" name="product_id" value="{{$product->id}}">
+                                    <div class="flex-w flex-r-m p-b-10">
+                                        <div class="size-203 flex-c-m respon6">
+                                            Color
+                                        </div>
+
+                                        <div class="size-204 respon6-next">
+                                            <div class="rs1-select2 bor8 bg0">
+                                                <select class="js-select2" name="color" id="product_modal_color" onchange="getListing(event)">
+                                                    @foreach ($item as $color)
+                                                        <option value="{{$color['id']}}">{{ $color['name'] }}</option>
+                                                    @endforeach
+                                                </select>
+                                                <div class="dropDownSelect2"></div>
+                                            </div>
+                                        </div>
+                                    </div>
                                     <div class="p-t-33">
                                         <div class="flex-w flex-r-m p-b-10">
                                             <div class="size-203 flex-c-m respon6">
@@ -78,23 +94,10 @@
 
                                             <div class="size-204 respon6-next">
                                                 <div class="rs1-select2 bor8 bg0">
-                                                    <select class="js-select2" name="size" id="product_modal_size">
-                                                        {!! $sizes !!}
-                                                    </select>
-                                                    <div class="dropDownSelect2"></div>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div class="flex-w flex-r-m p-b-10">
-                                            <div class="size-203 flex-c-m respon6">
-                                                Color
-                                            </div>
-
-                                            <div class="size-204 respon6-next">
-                                                <div class="rs1-select2 bor8 bg0">
-                                                    <select class="js-select2" name="color" id="product_modal_color">
-                                                        {!! $colors !!}
+                                                    <select class="js-select2" name="size" id="product_modal_size" onchange="getNoInStock(event)">
+                                                       @foreach ($item[0]['listing'] as $listing)
+                                                            <option data-max="{{$listing['no_in_stock']}}" value="{{$listing['size_id']}}">{{ $listing['size'] }}</option>
+                                                       @endforeach
                                                     </select>
                                                     <div class="dropDownSelect2"></div>
                                                 </div>
@@ -109,9 +112,8 @@
                                                     </button>
 
                                                     <input class="mtext-104 cl3 txt-center num-product" type="number" name="num_of_product" id="product_modal_description" value="1">
-
                                                     <button type="button" class="btn-num-product-up cl8 hov-btn3 trans-04 flex-c-m">
-                                                        <i class="fs-16 zmdi zmdi-plus" data-max="{{$product->no_in_stock}}" id="product_modal_stock"></i>
+                                                        <i class="fs-16 zmdi zmdi-plus" data-max="{{ $item[0]['listing'][0]['no_in_stock'] }}" id="product_modal_stock"></i>
                                                     </button>
                                                 </div>
 
@@ -151,7 +153,7 @@
                     </div>
                     <hr>
                     <div class="shipping-info">
-                        <label class="badge badge-warning">{{ $product->shipping_type() }}</label>
+                        <label class="badge badge-warning"></label>
                        <h6 class="mt-4 text-dark">14-15 days <br><span class="badge badge-info">Expected delivery Time</span></h6>
                     </div>
                     <hr>
@@ -574,6 +576,31 @@
                 data.chat_id = json.message.id;
                 socket.send(JSON.stringify(data));
             })
+        }
+
+
+        function getListing(e){
+            let id = e.target.value;
+            let product = "{{ $product->id }}"
+
+            fetch(`/market/listing/${product}/${id}`,{method: 'GET'})
+                .then(res => res.json())
+                .then(json => {
+                    let temp = '';
+                    for (i in json){
+                        temp += `<option data-max='${json[i].no_in_stock}' value='${json[i].size_id}'>${json[i].size}</option>`;
+                    }
+                    document.getElementById("product_modal_stock").dataset.max = json[0].no_in_stock;
+                    document.getElementById('product_modal_size').innerHTML = temp;
+                });
+            
+        }
+
+        function getNoInStock(e){
+            let max = e.target.options[e.target.selectedIndex].dataset.max;
+
+            //console.log(max);
+            document.getElementById("product_modal_stock").dataset.max = max;
         }
     </script>
 
