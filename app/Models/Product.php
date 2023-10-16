@@ -1,0 +1,116 @@
+<?php
+
+namespace App\Models;
+
+use App\Models\Size;
+use App\Models\Color;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Support\Facades\Auth;
+
+class Product extends Model
+{
+    use HasFactory;
+
+    protected $fillable = [
+        'name',
+        'vendor_id',
+        'category_id',
+        'section_id',
+        'tags',
+        'price',
+        'no_in_stock',
+        'pics',
+        'sizes',
+        'colors',
+        'description',
+        'shipping_type',
+        'shipping_fee',
+        'publish_status',
+        'ready_to_ship',
+        'discount_price',
+        'sku',
+        'created_at',
+        'updated_at'
+    ];
+
+    public function category(){
+        return $this->belongsTo(Category::class);
+    }
+
+    public function categories(){
+        $categories = Category::whereIn('id',json_decode($this->category_id,true))->select('id','name')->get();
+        return $categories;
+    }
+
+    public function images(){
+        $images = json_decode($this->pics,true);
+        $imgs =[];
+
+        foreach($images as $image){
+            $imgs[] = url('storage/products/'. $image);
+        }
+
+        return $imgs;
+    }
+
+    public function sizes(){
+        $sizes = Size::whereIn('id', json_decode($this->sizes,true))->select('id','size_code as name')->get();
+        $option = '<option>Choose Size</option>';
+
+        foreach($sizes as $size){
+            $option .= "<option value='$size->id'>$size->name</option>";
+        }
+
+        return $option;
+    }
+
+    public function colors(){
+        $colors = Color::whereIn('id', json_decode($this->colors,true))->select('id','name')->get();
+        $option = '<option>Choose Color</option>';
+        foreach($colors as $color){
+            $option .= "<option value='$color->id'>$color->name</option>";
+        }
+
+        return $option;
+    }
+
+    public function vendor(){
+        $vendor = User::find($this->vendor_id);
+        return collect(['id'=>$this->vendor_id, 'name' => $vendor->business_name]);
+    }
+
+    public function shipping_type(){
+        $type = ShippingType::where('id', $this->shipping_type)->first();
+
+        return $type->name . " shipping";
+    }
+
+    public function otherVendorProducts(){
+        $products = Product::where('vendor_id', $this->vendor_id)->whereNot('id', $this->id)->limit(10)->get();
+        return $products;
+    }
+
+    public function otherProducts(){
+        $products = Product::whereJsonContains('category_id', json_decode($this->category_id,true))->whereNot('id', $this->id)->limit(10)->get();
+
+        return $products;
+    }
+
+    public function inWishList(){
+        $user = Auth::user();
+        //User WishList
+        $wishlist = Wishlist::where('user_id', $user->id)->first();
+
+        if($wishlist){
+            $list = json_decode($wishlist->items, true);
+
+            if(array_key_exists($this->id,$list)){
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+}
