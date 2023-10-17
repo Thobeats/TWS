@@ -119,20 +119,7 @@
                         @error('sections') {{ $message }} @enderror
                     </div>
                   </div>
-                   <div class="col-lg-4">
-                       <label for="shipping_typ" class="form-label">Shipping Type</label>
-                       <select onchange="setShipCharge(event)" id="shipping_type" name='shipping_type' class="form-select @error('sections') is-invalid @enderror" data-ref="shipping_fee">
-                        <option>Select Shipping Type</option>
-                        @if(!empty($shipping))
-                            @foreach($shipping as $ship)
-                            <option {{ $product->shipping_type == $ship['id'] ? 'selected' : '' }} value="{{ $ship['id'] }}">{{ $ship['name'] }}</option>
-                            @endforeach
-                        @endif
-                      </select>
-                      <div class="invalid-feedback">
-                        @error('shipping_type') {{ $message }} @enderror
-                    </div>
-                  </div>
+                 
                   <div class="col-lg-4">
                     <label for="shipping_fee" class="form-label">Shipping Fee</label>
                         <input required type="number" value="{{ $product->shipping_fee}}" id="shipping_fee" name='shipping_fee' class="form-control @error('shipping_fee') is-invalid @enderror">
@@ -149,14 +136,6 @@
                       </div>
                   </div>
 
-                  <div class="col-lg-3 p-2">
-                      <div class="form-check">
-                        <input class="form-check-input" type="checkbox" id="ready_to_ship" value='1' name='ready_to_ship' {{ $product->ready_to_ship ? 'checked' : ''}}>
-                        <label class="form-check-label" for="status">
-                          Ready To Ship
-                      </label>
-                      </div>
-                  </div>
                 <div class="col-md-12">
                     <label for="description" class="form-label">Description</label>
                     <textarea name='description' rows="15" class="tinymce-editor form-control @error('description') is-invalid @enderror" id='product_description'>{!! $product->description !!}</textarea>

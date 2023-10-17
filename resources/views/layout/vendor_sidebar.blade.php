@@ -21,7 +21,12 @@
           </li>
           <li>
             <a href="/vendor/products">
-              <i class="bi bi-circle"></i><span>All Products</span>
+              <i class="bi bi-circle"></i><span>Active Products</span>
+            </a>
+          </li>
+          <li>
+            <a href="/vendor/products/drafts">
+              <i class="bi bi-circle"></i><span>Drafts</span>
             </a>
           </li>
         </ul>

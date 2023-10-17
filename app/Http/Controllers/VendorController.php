@@ -613,19 +613,21 @@ class VendorController extends Controller
     }
 
     public function create_product(){
-        $categories = Category::where(['categories.status' => '1'])
+        $categories = Category::where(['categories.status' => '1', 'parent_to_children.parent_id' => 0])
                                 ->join('parent_to_children', 'parent_to_children.category_id', '=', 'categories.id')
                                 ->select('categories.id', 'categories.name','parent_to_children.parent_id')->get()->toArray();
         $tags = Tag::where('status', 1)->get()->toArray();
         $sections = Section::where('for',2)->get();
         $shipping = ShippingType::select('id','name')->get();
-        $cats = $this->buildTree($categories);
-        $this->buildTemplate($cats);
-        $category_template = $this->category_template;
+        // $cats = $this->buildTree($categories);
+        // $this->buildTemplate($cats);
+        // $category_template = $this->category_template;
+
+
         //Sizes
         $sizes = Size::select('id', 'size_code')->get()->toArray();
         $colors = Color::select('id', 'name')->get()->toArray();
-        return view('vendor.products.new_product', compact('tags', 'category_template','sizes', 'colors','sections','shipping'));
+        return view('vendor.products.new_product', compact('tags', 'categories','sizes', 'colors','sections','shipping'));
     }
 
     protected function buildTree($elements, $parent_id = 0){
@@ -662,9 +664,14 @@ class VendorController extends Controller
     }
 
     public function store(Request $request){
-      //  return $request->all();
-            if(!$request->has('publish_status'))$request->merge(['publish_status' => 0]);
-            if(!$request->has('ready_to_ship'))$request->merge(['ready_to_ship' => 0]);
+      
+            if($request->has('save')){
+                $ps = 1;
+            }else{
+                $ps = 0;
+            }
+
+            $request->merge(['publish_status' => $ps]);
             $validator = Validator::make($request->all(),[
                 'name' => 'required|string',
                 'description' => 'required|string',
@@ -673,14 +680,11 @@ class VendorController extends Controller
                 'sizes' => 'required|array',
                 'colors' => 'required|array',
                 'price' => 'required|numeric',
-                'no_in_stock' => 'required|integer',
+                'no_in_stock' => 'required|array',
                 'pics' => 'required|array',
-                'publish_status' => 'required|boolean',
-                'shipping_type' => 'required|integer',
                 'shipping_fee' => 'integer',
                 'sections' => 'required|array',
-                'sku' => 'required|string',
-                'ready_to_ship' => 'required|boolean'
+                'sku' => 'nullable|string'
             ]);
 
           //  $user = Auth::user();
@@ -708,26 +712,36 @@ class VendorController extends Controller
             // }
 
             $pics = $request->pics;
+            $item_listing = [];
+            
+            for ($i=0; $i < count($request->colors); $i++) { 
+                $listing = [
+                    $request->colors[$i],
+                    $request->sizes[$i],
+                    $request->no_in_stock[$i],
+                ];
+
+                $item_listing[] = $listing;
+            }
             $user = Auth::user();
 
             // Attach the Vendor Id to the request
             $request->merge(['vendor_id' => $user->id,
                             'tags' => json_encode($request->tags),
-                            'sizes' => json_encode($request->sizes),
-                            'colors' => json_encode($request->sizes),
+                            'item_listing' => json_encode($item_listing),
                             'pics' => json_encode($pics),
                             'category_id' => json_encode($request->category_id),
                             'section_id' => json_encode($request->sections),
                         ]);
+            
             //Create a new product
             Product::create($request->only('vendor_id',
-                                            'name','description',
-                                            'tags','sizes','colors',
-                                            'pics','category_id','price',
-                                            'publish_status','no_in_stock','section_id',
-                                            'shipping_type', 'shipping_fee', 'sku',
-                                            'ready_to_ship',
-                                        ));
+                                'name','description',
+                                'tags',
+                                'pics','category_id','price',
+                                'publish_status','section_id',
+                                'shipping_fee', 'sku','item_listing'
+                            ));
 
             // Return view with Success report
             toastr()->success('New Product Saved');
@@ -737,8 +751,14 @@ class VendorController extends Controller
 
     public function all_products(){
         $user = Auth::user();
-        $products = Product::where("vendor_id", $user->id)->get();
+        $products = Product::where(["vendor_id" => $user->id, "publish_status" => 1])->get();
         return view('vendor.products.all_products', compact('products'));
+    }
+
+    public function all_drafts(){
+        $user = Auth::user();
+        $products = Product::where(["vendor_id" => $user->id, "publish_status" => 0])->get();
+        return view('vendor.products.all_drafts', compact('products'));
     }
 
     public function editProduct($id){
@@ -985,6 +1005,14 @@ class VendorController extends Controller
         }catch(Exception $e){
 
         }
+    }
+
+    public function getCategory($id){
+        $categories = Category::where(['categories.status' => '1', 'parent_to_children.parent_id' => $id])
+                                ->join('parent_to_children', 'parent_to_children.category_id', '=', 'categories.id')
+                                ->select('categories.id', 'categories.name','parent_to_children.parent_id')->get()->toArray();
+
+        return $categories;
     }
 
 }

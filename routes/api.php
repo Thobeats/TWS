@@ -1,8 +1,9 @@
 <?php
 
+use App\Models\FilePond;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Models\FilePond;
+use App\Http\Controllers\VendorController;
 
 
 /*
@@ -26,3 +27,5 @@ Route::delete('/deleteImage/{folder}', [FilePond::class, 'deleteImage']);
 
 Route::post('/saveDoc/{folder}', [FilePond::class, 'saveDoc']);
 Route::delete('/deleteDoc/{folder}', [FilePond::class, 'deleteDoc']);
+
+Route::get('/getCategory/{id}', [VendorController::class, 'getCategory']);

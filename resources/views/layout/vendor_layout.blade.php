@@ -43,7 +43,7 @@
         href="https://unpkg.com/filepond-plugin-file-poster/dist/filepond-plugin-file-poster.css"
         rel="stylesheet"
     />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/switchery/0.8.2/switchery.min.css" integrity="sha512-uyGg6dZr3cE1PxtKOCGqKGTiZybe5iSq3LsqOolABqAWlIRLo/HKyrMMD8drX+gls3twJdpYX0gDKEdtf2dpmw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    {{-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/switchery/0.8.2/switchery.min.css" integrity="sha512-uyGg6dZr3cE1PxtKOCGqKGTiZybe5iSq3LsqOolABqAWlIRLo/HKyrMMD8drX+gls3twJdpYX0gDKEdtf2dpmw==" crossorigin="anonymous" referrerpolicy="no-referrer" /> --}}
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/kartik-v/bootstrap-fileinput@5.5.0/css/fileinput-rtl.min.css">
   <!-- Template Main CSS File -->
   <link href="{{ asset('assets/css/style.css') }}" rel="stylesheet">
@@ -59,6 +59,7 @@
   * License: https://bootstrapmade.com/license/
   ======================================================== -->
   <script src="{{ asset('assets/vendor/tinymce/tinymce.min.js') }}"></script>
+
 
  <script>
 
@@ -118,11 +119,16 @@
 @livewireScripts
 
 
-     <script>
- $(document).ready(function() {
-            $('.js-example-basic-multiple').select2();
-        });
-        var steps = [
+<script>
+        // Get a file input reference
+        const pics = document.querySelector('#pics');
+        const business = document.querySelector('#business');
+         $(document).ready(function() {
+            $('.js-example-basic-multiple').select2(
+                
+            );
+
+            const steps = [
             {
                 title: "Hello",
                 content: "<p> Welcome to The Wholesale Lounge, Let's show you around</p>"
@@ -137,29 +143,14 @@
             }
         ];
 
-        var tour = new Tour(steps);
+            const tour = new Tour(steps);
 
-        document.getElementById('take-a-tour').addEventListener('click', function(){
-            tour.show();
+            document.getElementById('take-a-tour').addEventListener('click', function(){
+                tour.show();
+            });
         });
-
-
-
-        function setShipCharge(e){
-            let value = e.target.value;
-            let shipCharge = e.target.dataset.ref;
-
-            if(value == 3){
-                //set the shipping charge to zero and make it readonly
-                $("#"+ shipCharge).val("0.0").attr("readonly",true);
-            }else{
-                $("#"+ shipCharge).val("").attr("readonly",false);
-            }
-        }
-        // Get a file input reference
-        const input = document.querySelector('#pics');
-        const business = document.querySelector('#business');
-
+        
+        
         //Register FilePond functions
         FilePond.registerPlugin(
           FilePondPluginImagePreview,
@@ -168,7 +159,7 @@
         );
 
         // Create a FilePond instance
-        FilePond.create(input, {
+        FilePond.create(pics, {
             storeAsFile: true,
             acceptedFileTypes: ['image/png','image/jpg','image/jpeg'],
             allowImageValidateSize: true,
@@ -210,7 +201,7 @@
             var switchery = new Switchery(html,{size: 'small'});
         });
 
-    </script>
+</script>
 
 
 

@@ -173,6 +173,7 @@ Route::middleware(['auth'])->group(function () {
             //Product Route
             Route::group(['prefix' => 'products'],function(){
                 Route::get('/', [VendorController::class, 'all_products']);
+                Route::get('/drafts', [VendorController::class, 'all_drafts']);
                 Route::get('/create', [VendorController::class, 'create_product']);
                 Route::post('/store', [VendorController::class, 'store']);
                 Route::get('/edit/{id}', [VendorController::class, 'editProduct']);

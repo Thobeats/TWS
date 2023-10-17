@@ -19,17 +19,13 @@ class Product extends Model
         'section_id',
         'tags',
         'price',
-        'no_in_stock',
         'pics',
-        'sizes',
-        'colors',
         'description',
-        'shipping_type',
         'shipping_fee',
         'publish_status',
-        'ready_to_ship',
         'discount_price',
         'sku',
+        'item_listing',
         'created_at',
         'updated_at'
     ];
@@ -78,12 +74,6 @@ class Product extends Model
     public function vendor(){
         $vendor = User::find($this->vendor_id);
         return collect(['id'=>$this->vendor_id, 'name' => $vendor->business_name]);
-    }
-
-    public function shipping_type(){
-        $type = ShippingType::where('id', $this->shipping_type)->first();
-
-        return $type->name . " shipping";
     }
 
     public function otherVendorProducts(){
