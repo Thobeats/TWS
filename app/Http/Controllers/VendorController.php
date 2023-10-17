@@ -815,7 +815,7 @@ class VendorController extends Controller
             $subcatTemp  = "";
         }
 
-        if(count($cats) > 1){
+        if(count($cats) > 2){
             $subcats2 = Category::where(['categories.status' => '1', 'parent_to_children.parent_id' => $cats[1]])
                                 ->join('parent_to_children', 'parent_to_children.category_id', '=', 'categories.id')
                                 ->select('categories.id', 'categories.name','parent_to_children.parent_id')->get()->toArray();
@@ -834,56 +834,90 @@ class VendorController extends Controller
     }
 
     public function updateProduct(Request $request){
-        if(!$request->has('publish_status'))$request->merge(['publish_status' => 0]);
-        if(!$request->has('ready_to_ship'))$request->merge(['ready_to_ship' => 0]);
-        $validator = Validator::make($request->all(),[
-            'product_id' => 'required|integer',
-            'name' => 'required|string',
-            'description' => 'required|string',
-            'category_id' => 'required|array',
-            'tags' => 'required|array',
-            'sizes' => 'required|array',
-            'colors' => 'required|array',
-            'price' => 'required|numeric',
-            'no_in_stock' => 'required|integer',
-            'pics' => 'required|array',
-            'publish_status' => 'required|boolean',
-            'shipping_type' => 'required|integer',
-            'shipping_fee' => 'numeric',
-            'sections' => 'required|array',
-            'sku' => 'required|string',
-            'ready_to_ship' => 'required|boolean'
-        ]);
+        if($request->has('save')){
+            $ps = 1;
+
+            $validator = Validator::make($request->all(),[
+                'name' => 'required|string',
+                'description' => 'required|string',
+                'category_id' => 'required|array',
+                'tags' => 'required|array',
+                'sizes.*' => 'required|array',
+                'colors' => 'required|array',
+                'price' => 'required|numeric',
+                'no_in_stock.*' => 'required|array',
+                'pics' => 'required|array',
+                'shipping_fee' => 'integer',
+                'sections' => 'required|array',
+                'sku' => 'nullable|string',
+                'product_id' => 'required|integer'
+            ]);
+
+        }else{
+            $ps = 0;
+
+            $validator = Validator::make($request->all(),[
+                'name' => 'nullable|string',
+                'description' => 'nullable|string',
+                'category_id' => 'nullable|array',
+                'tags' => 'nullable|array',
+                'sizes.*' => 'nullable|array',
+                'colors' => 'nullable|array',
+                'price' => 'nullable|numeric',
+                'no_in_stock.*' => 'nullable|array',
+                'pics' => 'nullable|array',
+                'shipping_fee' => 'integer',
+                'sections' => 'nullable|array',
+                'sku' => 'nullable|string',
+                'product_id' => 'required|integer'
+            ]);
+        }
+
+        $request->merge(['publish_status' => $ps]);
 
         $product = Product::find($request->product_id);
 
         if($validator->fails()){
             return redirect()->back()->withErrors($validator->errors());
         }
-        $pics = $request->pics;
-        $user = Auth::user();
 
-        // Attach the Vendor Id to the request
-        $request->merge(['vendor_id' => $user->id,
-                        'tags' => json_encode($request->tags),
-                        'sizes' => json_encode($request->sizes),
-                        'colors' => json_encode($request->sizes),
-                        'pics' => json_encode($pics),
-                        'category_id' => json_encode($request->category_id),
-                        'section_id' => json_encode($request->sections),
-                    ]);
-        //Update the Product
+        $pics = $request->pics;
+            $item_listing = [];
+            
+            for ($i=0; $i < count($request->colors); $i++) { 
+                $listing = [
+                    $request->sizes[$i],
+                    $request->no_in_stock[$i],
+                ];
+
+                $item_listing[$request->colors[$i]] = $listing;
+            }
+
+            $user = Auth::user();
+
+            // Attach the Vendor Id to the request
+            $request->merge(['vendor_id' => $user->id,
+                            'tags' => json_encode($request->tags),
+                            'item_listing' => json_encode($item_listing),
+                            'pics' => json_encode($pics),
+                            'category_id' => json_encode($request->category_id),
+                            'section_id' => json_encode($request->sections),
+                        ]);
+
+                        //Update the Product
         Product::where('id', $product->id)->update($request->only('vendor_id',
                                                 'name','description',
-                                                'tags','sizes','colors',
+                                                'tags','item_listing',
                                                 'pics','category_id','price',
-                                                'publish_status','no_in_stock','section_id',
-                                                'shipping_type', 'shipping_fee', 'sku',
-                                                'ready_to_ship',
+                                                'publish_status','section_id',
+                                                'shipping_fee', 'sku'
                                             ));
 
         // Return view with Success report
         toastr()->success('Updated Saved');
+        if(!$ps){
+            return redirect('/vendor/products/drafts');
+        }
         return redirect('/vendor/products');
     }
 

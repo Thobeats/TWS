@@ -60,13 +60,13 @@
                   </div>
                   <div class="col-md-4 {{ count($cats) > 1 ? '' : 'd-none' }} subcatwrapper">
                     <label for="category" id="sub_cat" class="form-label">Sub Category</label>
-                    <select id="subcategory" name='category_id[]' class="form-select @error('category_id') is-invalid @enderror" onchange="getCategory(event, 2)">
+                    <select {{ count($cats) > 1 ? '' : 'disable' }} id="subcategory" name='category_id[]' class="form-select @error('category_id') is-invalid @enderror" onchange="getCategory(event, 2)">
                         {!! $subcatTemp !!}
                     </select>
                   </div>
                   <div class="col-md-4 {{ count($cats) > 2 ? '' : 'd-none' }} subsubcatwrapper">
                     <label for="category" id="sub_cat" class="form-label">Sub Category</label>
-                    <select id="subsubcategory" name='category_id[]' class="form-select @error('category_id') is-invalid @enderror">
+                    <select {{ count($cats) > 2 ? '' : 'disable' }} id="subsubcategory" name='category_id[]' class="form-select @error('category_id') is-invalid @enderror">
                       {!! $subcatTemp2 !!}
                     </select>
                   </div> 
@@ -165,10 +165,9 @@
                             </thead>
                             <tbody id="record{{$index}}">
                               @php
-                                $newArray = array_combine($item[0], $item[1]);
                                 $index2 = 0;
                               @endphp
-                              @foreach ($newArray as $key => $itemRecord)
+                              @foreach ($item[1] as $key => $itemRecord)
                               <tr id="record{{$index.$index2}}">
                                 <td>
                                   <input type="number" value="{{$itemRecord}}" name="no_in_stock[{{$index}}][]" required class="form-control @error('no_in_stock') is-invalid @enderror">
@@ -178,7 +177,7 @@
                                     <option value="">Select Size</option>
                                     @if(!empty($sizes))
                                         @foreach($sizes as $size)
-                                        <option {{ $key == $size['id'] ? 'selected' : '' }} value="{{ $size['id'] }}">{{ $size['size_code'] }}</option>
+                                        <option {{ $item[0][$key] == $size['id'] ? 'selected' : '' }} value="{{ $size['id'] }}">{{ $size['size_code'] }}</option>
                                         @endforeach
                                     @endif
                                   </select>
