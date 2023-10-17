@@ -667,25 +667,43 @@ class VendorController extends Controller
       
             if($request->has('save')){
                 $ps = 1;
+
+                $validator = Validator::make($request->all(),[
+                    'name' => 'required|string',
+                    'description' => 'required|string',
+                    'category_id' => 'required|array',
+                    'tags' => 'required|array',
+                    'sizes.*' => 'required|array',
+                    'colors' => 'required|array',
+                    'price' => 'required|numeric',
+                    'no_in_stock.*' => 'required|array',
+                    'pics' => 'required|array',
+                    'shipping_fee' => 'integer',
+                    'sections' => 'required|array',
+                    'sku' => 'nullable|string'
+                ]);
+
             }else{
                 $ps = 0;
+
+                $validator = Validator::make($request->all(),[
+                    'name' => 'nullable|string',
+                    'description' => 'nullable|string',
+                    'category_id' => 'nullable|array',
+                    'tags' => 'nullable|array',
+                    'sizes.*' => 'nullable|array',
+                    'colors' => 'nullable|array',
+                    'price' => 'nullable|numeric',
+                    'no_in_stock.*' => 'nullable|array',
+                    'pics' => 'nullable|array',
+                    'shipping_fee' => 'integer',
+                    'sections' => 'nullable|array',
+                    'sku' => 'nullable|string'
+                ]);
             }
 
             $request->merge(['publish_status' => $ps]);
-            $validator = Validator::make($request->all(),[
-                'name' => 'required|string',
-                'description' => 'required|string',
-                'category_id' => 'required|array',
-                'tags' => 'required|array',
-                'sizes' => 'required|array',
-                'colors' => 'required|array',
-                'price' => 'required|numeric',
-                'no_in_stock' => 'required|array',
-                'pics' => 'required|array',
-                'shipping_fee' => 'integer',
-                'sections' => 'required|array',
-                'sku' => 'nullable|string'
-            ]);
+           
 
           //  $user = Auth::user();
 
@@ -716,13 +734,13 @@ class VendorController extends Controller
             
             for ($i=0; $i < count($request->colors); $i++) { 
                 $listing = [
-                    $request->colors[$i],
                     $request->sizes[$i],
                     $request->no_in_stock[$i],
                 ];
 
-                $item_listing[] = $listing;
+                $item_listing[$request->colors[$i]] = $listing;
             }
+
             $user = Auth::user();
 
             // Attach the Vendor Id to the request
@@ -745,6 +763,10 @@ class VendorController extends Controller
 
             // Return view with Success report
             toastr()->success('New Product Saved');
+
+            if(!$ps){
+                return redirect('/vendor/products/drafts');
+            }
             return redirect('/vendor/products');
 
     }
@@ -763,15 +785,11 @@ class VendorController extends Controller
 
     public function editProduct($id){
         $product = Product::find($id);
-        $categories = Category::where(['categories.status' => '1'])
+        $categories = Category::where(['categories.status' => '1', 'parent_to_children.parent_id' => 0])
                                 ->join('parent_to_children', 'parent_to_children.category_id', '=', 'categories.id')
                                 ->select('categories.id', 'categories.name','parent_to_children.parent_id')->get()->toArray();
 
         $tags = Tag::where('status', 1)->get()->toArray();
-        $cats = $this->buildTree($categories);
-        $this->buildTemplate($cats,json_decode($product->category_id,true));
-        $category_template = $this->category_template;
-        $shipping = ShippingType::select('id','name')->get();
         $sections = Section::where('for',2)->get();
 
         //Sizes
@@ -781,7 +799,38 @@ class VendorController extends Controller
         //Images
         $images = json_decode($product->pics,true);
 
-        return view('vendor.products.edit_product', compact('product','tags', 'category_template','sizes', 'colors', 'images', 'shipping', 'sections'));
+
+        ///category settings
+        $cats = json_decode($product->category_id);
+        if(count($cats) > 1){
+            $subcats = Category::where(['categories.status' => '1', 'parent_to_children.parent_id' => $cats[0]])
+                                ->join('parent_to_children', 'parent_to_children.category_id', '=', 'categories.id')
+                                ->select('categories.id', 'categories.name','parent_to_children.parent_id')->get()->toArray();
+            $subcatTemp = "<option>Select</option>";
+            foreach($subcats as $sb){
+                $selected = in_array($sb['id'], $cats) ? 'selected' : '';
+                $subcatTemp .= "<option $selected value='" .$sb['id'] . "'>" . $sb['name'] . "</option>";
+            }
+        }else{
+            $subcatTemp  = "";
+        }
+
+        if(count($cats) > 1){
+            $subcats2 = Category::where(['categories.status' => '1', 'parent_to_children.parent_id' => $cats[1]])
+                                ->join('parent_to_children', 'parent_to_children.category_id', '=', 'categories.id')
+                                ->select('categories.id', 'categories.name','parent_to_children.parent_id')->get()->toArray();
+            $subcatTemp2 = "<option>Select</option>";
+            foreach($subcats2 as $sb){
+                $selected = in_array($sb['id'], $cats) ? 'selected' : '';
+                $subcatTemp2 .= "<option $selected value='" .$sb['id'] . "'>" . $sb['name'] . "</option>";
+            }
+        }else{
+            $subcatTemp2  = "";
+        }
+
+
+
+        return view('vendor.products.edit_product', compact('product','tags', 'categories','sizes', 'colors', 'images', 'sections', 'subcatTemp', 'subcatTemp2', 'cats'));
     }
 
     public function updateProduct(Request $request){

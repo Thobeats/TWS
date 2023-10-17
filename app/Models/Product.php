@@ -50,26 +50,26 @@ class Product extends Model
         return $imgs;
     }
 
-    public function sizes(){
-        $sizes = Size::whereIn('id', json_decode($this->sizes,true))->select('id','size_code as name')->get();
-        $option = '<option>Choose Size</option>';
+    // public function sizes(){
+    //     $sizes = Size::whereIn('id', json_decode($this->sizes,true))->select('id','size_code as name')->get();
+    //     $option = '<option>Choose Size</option>';
 
-        foreach($sizes as $size){
-            $option .= "<option value='$size->id'>$size->name</option>";
-        }
+    //     foreach($sizes as $size){
+    //         $option .= "<option value='$size->id'>$size->name</option>";
+    //     }
 
-        return $option;
-    }
+    //     return $option;
+    // }
 
-    public function colors(){
-        $colors = Color::whereIn('id', json_decode($this->colors,true))->select('id','name')->get();
-        $option = '<option>Choose Color</option>';
-        foreach($colors as $color){
-            $option .= "<option value='$color->id'>$color->name</option>";
-        }
+    // public function colors(){
+    //     $colors = Color::whereIn('id', json_decode($this->colors,true))->select('id','name')->get();
+    //     $option = '<option>Choose Color</option>';
+    //     foreach($colors as $color){
+    //         $option .= "<option value='$color->id'>$color->name</option>";
+    //     }
 
-        return $option;
-    }
+    //     return $option;
+    // }
 
     public function vendor(){
         $vendor = User::find($this->vendor_id);
