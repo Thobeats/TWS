@@ -112,11 +112,18 @@
                   </div>
                 </div>
 
-                <div class="col-lg-6 mb-3">
+                <div class="col-lg-3 mb-3">
                   <label for="shipping_fee" class="form-label">Shipping Fee</label>
                       <input required type="number" value="{{$product->shipping_fee}}" id="shipping_fee" name='shipping_fee' class="form-control @error('shipping_fee') is-invalid @enderror">
                       <div class="invalid-feedback">
                           @error('shipping_fee') {{ $message }} @enderror
+                      </div>
+                </div>
+                <div class="col-lg-3 mb-3">
+                  <label for="moq" class="form-label">Minimum Order Quantity</label>
+                      <input required type="number" value="{{$product->moq}}"  id="moq" name='moq' class="form-control @error('moq') is-invalid @enderror">
+                      <div class="invalid-feedback">
+                          @error('moq') {{ $message }} @enderror
                       </div>
                 </div>
               </div>

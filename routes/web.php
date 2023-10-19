@@ -194,6 +194,11 @@ Route::middleware(['auth'])->group(function () {
                 Route::get('/', [VendorController::class, 'mySubscription']);
             });
 
+            Route::group(['prefix' => 'store'], function(){
+                Route::get('/', [VendorController::class, 'myStore']);
+                Route::get('/setup', [VendorController::class, 'myStoreSetup']);
+            });
+
             Route::get('/chat', [VendorController::class, 'chat']);
             Route::post('/chatHistory', [VendorController::class, 'chatHistory']);
             Route::post('/saveChat', [VendorController::class, 'saveChat']);

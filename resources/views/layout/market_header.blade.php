@@ -79,7 +79,7 @@
                                 @if (Auth::user()->role == 2)
                                     <div class="dropdown-menu p-2">
                                         <a class="dropdown-item p-2" href="/vendor/profile"><i class="zmdi zmdi-account"></i> My Profile</a>
-                                        <a class="dropdown-item p-2" href="#"><i class="zmdi zmdi-store"></i> My Store</a>
+                                        <a class="dropdown-item p-2" href="/vendor/store"><i class="zmdi zmdi-store"></i> My Store</a>
                                         <a class="dropdown-item p-2" href="/vendor/chat"><i class="zmdi zmdi-inbox"></i> Inbox</a>
                                     </div>
                                 @endif

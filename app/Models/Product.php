@@ -25,6 +25,7 @@ class Product extends Model
         'publish_status',
         'discount_price',
         'sku',
+        'moq',
         'item_listing',
         'created_at',
         'updated_at'

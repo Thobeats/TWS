@@ -44,3 +44,8 @@ function uploadImage(e){
     let target = e.target.dataset.target;
     document.getElementById(target).src = URL.createObjectURL(src);
 }
+
+function resetForm(id){
+    let form = document.getElementById(id);
+    form.reset();
+}

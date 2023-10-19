@@ -32,6 +32,24 @@
         </ul>
       </li><!-- End Categories -->
 
+      <li class="nav-item" id="first">
+        <a class="nav-link collapsed" data-bs-target="#store" data-bs-toggle="collapse" href="#">
+          <i class="bi bi-shop"></i><span>Store</span><i class="bi bi-chevron-down ms-auto"></i>
+        </a>
+        <ul id="store" class="nav-content collapse" data-bs-parent="#sidebar-nav">
+          <li>
+            <a href="/vendor/store">
+              <i class="bi bi-circle"></i><span>My Store</span>
+            </a>
+          </li>
+          {{-- <li>
+            <a href="/vendor/store/setup">
+              <i class="bi bi-circle"></i><span>Setup</span>
+            </a>
+          </li> --}}
+        </ul>
+      </li><!-- End Store -->
+
        <li class="nav-item" id="second">
         <a class="nav-link collapsed" data-bs-target="#orders" data-bs-toggle="collapse" href="#">
           <i class="bi bi-gift"></i><span>My Orders</span><i class="bi bi-chevron-down ms-auto"></i>

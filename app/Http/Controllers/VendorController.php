@@ -540,7 +540,8 @@ class VendorController extends Controller
             'twitter' => 'nullable',
             'facebook' => 'nullable|url',
             'instagram' => 'nullable|url',
-            'website' => 'nullable|url'
+            'website' => 'nullable|url',
+            'products' => 'required|array'
         ],[
             'bphone.required' => 'Please enter a phone number',
             'bphone.numeric' => 'Wrong phone number format'
@@ -561,6 +562,7 @@ class VendorController extends Controller
             'twitter' => $request->twitter,
             'facebook' => $request->facebook,
             'instagram' => $request->instgram,
+            'products' => json_encode($request->products)
         ]);
 
         if(!$vendor){
@@ -680,7 +682,8 @@ class VendorController extends Controller
                     'pics' => 'required|array',
                     'shipping_fee' => 'integer',
                     'sections' => 'required|array',
-                    'sku' => 'nullable|string'
+                    'sku' => 'nullable|string',
+                    'moq' => 'required|integer'
                 ]);
 
             }else{
@@ -698,7 +701,8 @@ class VendorController extends Controller
                     'pics' => 'nullable|array',
                     'shipping_fee' => 'integer',
                     'sections' => 'nullable|array',
-                    'sku' => 'nullable|string'
+                    'sku' => 'nullable|string',
+                    'moq' => 'nullable|integer'
                 ]);
             }
 
@@ -758,7 +762,7 @@ class VendorController extends Controller
                                 'tags',
                                 'pics','category_id','price',
                                 'publish_status','section_id',
-                                'shipping_fee', 'sku','item_listing'
+                                'shipping_fee', 'sku','item_listing','moq'
                             ));
 
             // Return view with Success report
@@ -850,7 +854,8 @@ class VendorController extends Controller
                 'shipping_fee' => 'integer',
                 'sections' => 'required|array',
                 'sku' => 'nullable|string',
-                'product_id' => 'required|integer'
+                'product_id' => 'required|integer',
+                'moq' => 'required|integer'
             ]);
 
         }else{
@@ -869,7 +874,8 @@ class VendorController extends Controller
                 'shipping_fee' => 'integer',
                 'sections' => 'nullable|array',
                 'sku' => 'nullable|string',
-                'product_id' => 'required|integer'
+                'product_id' => 'required|integer',
+                'moq' => 'nullable|integer'
             ]);
         }
 
@@ -910,7 +916,7 @@ class VendorController extends Controller
                                                 'tags','item_listing',
                                                 'pics','category_id','price',
                                                 'publish_status','section_id',
-                                                'shipping_fee', 'sku'
+                                                'shipping_fee', 'sku','moq'
                                             ));
 
         // Return view with Success report
@@ -1096,6 +1102,22 @@ class VendorController extends Controller
                                 ->select('categories.id', 'categories.name','parent_to_children.parent_id')->get()->toArray();
 
         return $categories;
+    }
+
+    public function myStore(){
+        $user = Auth::user();
+
+        $products = Category::whereIn('id', json_decode($user->vendor()->products))
+                                ->select('name')
+                                ->get()->toArray();
+        
+        return view('vendor.store.store', compact('user','products'));
+    }
+
+    public function myStoreSetup(){
+        $user = Auth::user();
+        $products = Category::select('id','name')->get();
+        return view('vendor.store.setup', compact('user','products'));
     }
 
 }
