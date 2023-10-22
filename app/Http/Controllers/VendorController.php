@@ -23,6 +23,7 @@ use App\Models\VendorCard;
 use App\Models\ShippingType;
 use App\Models\Subscription;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Storage;
@@ -45,23 +46,19 @@ class VendorController extends Controller
     public function verify_email(){
         $user = Auth::user();
 
-        if($user->email_verified_at != null){
-            return redirect('/vendor/dashboard');
-        }
+        // if($user->email_verified_at != null){
+        //     return redirect('/vendor/dashboard');
+        // }
 
         //Send OTP to user's email
         $otpModel = new OTPModel;
         $token  = $otpModel->getOTP($user->email);
 
-        $this->sendConfirmEmail($user->email,$token);
+        $check_otp = DB::table('otps')->where(['identifier' => $user->email, 'token' => $token])->first();
 
-        // $send = Http::post("http://127.0.0.1:8000/api/sendMail", [
-        //     "otp" => $token,
-        //     "logo" => "https://test.thewholesalelounge.com/images/logo.png",
-        //     "email" => $user->email,
-        //     "website" => "The Wholesale Lounge",
-        //     "website_url" => "https://test.thewholesalelounge.com"
-        // ]);
+        if($check_otp){
+            $this->sendConfirmEmail($user->email,$token);
+        }
 
         return view('vendor.verify.email');
     }
@@ -71,11 +68,11 @@ class VendorController extends Controller
         $otpModel = new OTPModel;
 
         $validate = $otpModel->verifyOTP($user->email,$request->token);
-        if($validate->status == false){
-            toastr()->error('Invalid OTP','Error');
+        // if($validate->status == false){
+        //     toastr()->error('Invalid OTP','Error');
 
-            return redirect()->back();
-        }
+        //     return redirect()->back();
+        // }
 
         $user->email_verified_at = now();
         $user->save();
@@ -665,7 +662,7 @@ class VendorController extends Controller
     }
 
     public function store(Request $request){
-      
+
             if($request->has('save')){
                 $ps = 1;
 
@@ -706,7 +703,7 @@ class VendorController extends Controller
             }
 
             $request->merge(['publish_status' => $ps]);
-           
+
 
           //  $user = Auth::user();
 
@@ -734,8 +731,8 @@ class VendorController extends Controller
 
             $pics = $request->pics;
             $item_listing = [];
-            
-            for ($i=0; $i < count($request->colors); $i++) { 
+
+            for ($i=0; $i < count($request->colors); $i++) {
                 $listing = [
                     $request->sizes[$i],
                     $request->no_in_stock[$i],
@@ -754,7 +751,7 @@ class VendorController extends Controller
                             'category_id' => json_encode($request->category_id),
                             'section_id' => json_encode($request->sections),
                         ]);
-            
+
             //Create a new product
             Product::create($request->only('vendor_id',
                                 'name','description',
@@ -888,8 +885,8 @@ class VendorController extends Controller
 
         $pics = $request->pics;
             $item_listing = [];
-            
-            for ($i=0; $i < count($request->colors); $i++) { 
+
+            for ($i=0; $i < count($request->colors); $i++) {
                 $listing = [
                     $request->sizes[$i],
                     $request->no_in_stock[$i],
@@ -1109,7 +1106,7 @@ class VendorController extends Controller
         $products = Category::whereIn('id', json_decode($user->vendor()->products))
                                 ->select('name')
                                 ->get()->toArray();
-        
+
         return view('vendor.store.store', compact('user','products'));
     }
 

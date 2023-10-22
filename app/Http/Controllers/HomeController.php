@@ -89,23 +89,23 @@ class HomeController extends Controller
                                     "products" => $products
                                 ];
                             });
-        
-        $spotLight = Vendor::whereIn()
-                            ->join('users','users.id','=','vendors.user_id')
-                            ->groupBy('users.id', 'vendors.business_banner')
-                            ->orderBy('users.id', 'DESC')
-                            ->limit(5)
-                            ->get()
-                            ->map(function($item){
-                                $products = Product::where('vendor_id', $item->id)->limit(5)->get()->toArray();
-                                return [
-                                    "vendor_id" => $item->id,
-                                    "business_name" => $item->business_name,
-                                    "profile" => $item->profile,
-                                    "business_banner" => $item->business_banner,
-                                    "products" => $products
-                                ];
-                            });
+
+        // $spotLight = Vendor::whereIn()
+        //                     ->join('users','users.id','=','vendors.user_id')
+        //                     ->groupBy('users.id', 'vendors.business_banner')
+        //                     ->orderBy('users.id', 'DESC')
+        //                     ->limit(5)
+        //                     ->get()
+        //                     ->map(function($item){
+        //                         $products = Product::where('vendor_id', $item->id)->limit(5)->get()->toArray();
+        //                         return [
+        //                             "vendor_id" => $item->id,
+        //                             "business_name" => $item->business_name,
+        //                             "profile" => $item->profile,
+        //                             "business_banner" => $item->business_banner,
+        //                             "products" => $products
+        //                         ];
+        //                     });
 
 
         return view('market.home',compact('vendors','sections','new_arrivals', 'adminSections','topVendors', 'categories'));
@@ -244,6 +244,6 @@ class HomeController extends Controller
     }
 
     public function subscribeVendor(){
-        
+
     }
 }

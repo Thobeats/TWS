@@ -287,10 +287,10 @@
 @endif
 
 {{-- Spotlight --}}
-<section class="section-slide container-fluid mb-4 bg-light">
+{{-- <section class="section-slide container-fluid mb-4 bg-light">
     <div class="p-b-32">
         <h6 class="ltext-107 cl5 txt-left respon1">
-            Spotlight on Nuday
+            Spotlight
         </h6>
     </div>
     <div class="wrap-slick1 rs1-slick1">
@@ -298,7 +298,7 @@
             @forelse ($topVendors as $tv)
             <div class="item-slick1" data-caption="{{$tv['business_name']}}" data-thumb="{{ file_exists(url('storage/' . $tv['business_banner'])) ? url('storage/' . $tv['business_banner']) : url('images/Welcome.png')}}">
                 <div class="container h-full">
-                    {{-- Business Banner --}}
+                    {{-- Business Banner 
                     <a href="/market/vendor/{{$tv['vendor_id']}}">
                         <div class="h-50" style="background-image: url({{ file_exists(url('storage/' . $tv['business_banner'])) ? url('storage/' . $tv['business_banner']) : url('images/Welcome.png')}}); background-size:cover; background-position: left center;">
                         </div>
@@ -350,6 +350,6 @@
         </div>
         <div class="wrap-slick1-dots"></div>
     </div>
-</section>
+</section> --}}
 
 @endsection

@@ -52,14 +52,14 @@
                     <div class="col-md-4 d-none subcatwrapper">
                       <label for="category" id="sub_cat" class="form-label">Sub Category</label>
                       <select id="subcategory" name='category_id[]' class="form-select @error('category_id') is-invalid @enderror" onchange="getCategory(event, 2)">
-                      
+
                       </select>
                     </div>
                     <div class="col-md-4 d-none subsubcatwrapper">
                       <label for="category" id="sub_cat" class="form-label">Sub Category</label>
                       <select id="subsubcategory" name='category_id[]' class="form-select @error('category_id') is-invalid @enderror">
                       </select>
-                    </div> 
+                    </div>
                    </div>
                 </div>
 
@@ -88,7 +88,7 @@
 
                   {{-- <div class="col-lg-6">
                     <label for="tag" class="form-label">Sizes</label>
-                   
+
                       <div class="invalid-feedback">
                           @error('sizes') {{ $message }} @enderror
                       </div>
@@ -132,7 +132,7 @@
                   </div>
 
                   <div class="col-12">
-                    <table class="table table-bordered">
+                    <table class="table table-borderless border">
                       <thead>
                         <tr>
                           <th scope="col"></th>
@@ -225,10 +225,10 @@
                     <button type="button" onclick="addInventory()" class="btn btn-primary btn-sm">Add Inventory</button>
                   </div>
 
-                    
+
                 </div>
 
-         
+
 
                 <div class="row mt-3">
                   <div class="col-12">
@@ -270,12 +270,12 @@
               let subsubcategories = document.querySelector(".subsubcatwrapper");
                 if(json.length > 0){
                   // create new form element
-          
+
                   if(step == 1){
                     if(subcategories.classList.contains('d-none')){
                       subcategories.classList.remove('d-none');
                     }
-                    
+
                     if(!subsubcategories.classList.contains('d-none')){
                       subsubcategories.classList.add('d-none');
                     }
@@ -291,7 +291,7 @@
                     if(subsubcategories.classList.contains('d-none')){
                       subsubcategories.classList.remove('d-none');
                     }
-                  
+
                     let subcat = document.querySelector("#subsubcategory");
                     let options = "<option>Select</option>";
 
@@ -317,7 +317,7 @@
                       subsubcategories.classList.add('d-none');
                   }
                   }
-                 
+
                 }
             });
   }
@@ -337,7 +337,6 @@
           <select id="colors" name='colors[]' required class="form-select @error('colors') is-invalid @enderror"style="width: 100%">
             <option value="">Select Color</option>
             @if(!empty($colors))
-
                 @foreach($colors as $color)
                 <option value="{{ $color['id'] }}">{{ $color['name'] }}</option>
                 @endforeach
@@ -345,10 +344,12 @@
           </select>
         </td>
         <td>
-          <table class="table table-bordered">
+          <table class="table table-borderless border">
             <thead>
               <tr>
-                <th>no in stock</th>
+                <th>
+                    no in stock
+                </th>
                 <th>Size</th>
                 <th></th>
               </tr>

@@ -127,7 +127,7 @@
         const business = document.querySelector('#business');
          $(document).ready(function() {
             $('.js-example-basic-multiple').select2(
-                
+
             );
 
             const steps = [
@@ -151,8 +151,8 @@
                 tour.show();
             });
         });
-        
-        
+
+
         //Register FilePond functions
         FilePond.registerPlugin(
           FilePondPluginImagePreview,
@@ -165,8 +165,6 @@
             storeAsFile: true,
             acceptedFileTypes: ['image/png','image/jpg','image/jpeg'],
             allowImageValidateSize: true,
-            maxFileSize: "1MB",
-            minFileSize: "100KB",
             imagePreviewHeight: 170,
             maxFiles : 3,
             files : [
