@@ -10,10 +10,10 @@
 
   <div class="row">
     <div class="col-lg-12">
-        <div class="d-flex justify-content-end" style="height:300px; background-image: url({{ file_exists(url('storage/' . $user->vendor()->business_banner)) ? url('storage/' . $user->vendor()->business_banner) : url('images/Welcome.png')}}); background-position: center center; background-size:cover;"></div>
+        <div class="d-flex justify-content-end" style="height:300px; background-image: url({{ $user->vendor()->business_banner != "" ? url('storage/' . $user->vendor()->business_banner) : url('images/Welcome.png')}}); background-position: center center; background-size:cover;"></div>
     </div>
   </div>
-  
+
   <div class="profile-overview" id="profile-overview">
     <h5 class="card-title">Business Details</h5>
 
@@ -73,6 +73,6 @@
       <i class="bi bi-shop"></i>
       Edit Store</a>
   </div>
- 
+
 </section>
 @endsection

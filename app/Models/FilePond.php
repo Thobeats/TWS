@@ -31,7 +31,6 @@ class FilePond extends Model
             }
         }
 
-
         //Upload Single Pics
         if($request->hasFile('pic')){
             $image = $request->file('pic');

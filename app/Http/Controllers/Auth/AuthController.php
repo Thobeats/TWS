@@ -236,13 +236,10 @@ class AuthController extends Controller
                 // redirect to the respective routes
                 if($user->role == 1){
                     // redirect to Customer Page
-
                     return redirect('/customer/profile');
-
                 }elseif($user->role == 2){
                     // redirect to vendor's page
                     return redirect('/vendors/dashboard');
-
                 }elseif($user->role == 3){
                     return  redirect('/admin');
                 }

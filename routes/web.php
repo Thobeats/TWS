@@ -326,11 +326,6 @@ Route::post('/subscribe', [ChargeBee::class, 'subscribe']);
 Route::get('/testOTP/{email}', [OTPModel::class, 'getOTP']);
 Route::get('/verifyOTP/{email}/{code}', [OTPModel::class, 'verifyOTP']);
 
-Route::get('/approveAccounts', function(){
-    (new Vendor)->update([
-        "verified" => 1,
-        "verify_ein" => 1,
-        "verify_business" => 1,
-        "verify_customer_review" => 1
-    ]);
+Route::get('/fileExists', function(){
+    return file_exists($_SERVER['DOCUMENT_ROOT'] . "/storage/businessBanners/A35C58ED-7F63-40BE-B52A-1F6512638568.PNG");
 });

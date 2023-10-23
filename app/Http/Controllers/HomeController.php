@@ -80,7 +80,7 @@ class HomeController extends Controller
                             ->limit(5)
                             ->get()
                             ->map(function($item){
-                                $products = Product::where('vendor_id', $item->id)->limit(5)->get()->toArray();
+                                $products = Product::where('vendor_id', $item->id)->limit(4)->get()->toArray();
                                 return [
                                     "vendor_id" => $item->id,
                                     "business_name" => $item->business_name,

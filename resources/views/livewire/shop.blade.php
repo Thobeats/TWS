@@ -19,7 +19,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-lg-9">
+        <div class="col-lg-10">
             <div class="bg0 m-t-23 p-b-140">
                 <div class="container-fluid">
                     <div class="flex-w flex-sb-m p-b-52">
