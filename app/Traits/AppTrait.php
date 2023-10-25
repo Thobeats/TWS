@@ -2,15 +2,18 @@
 
 namespace App\Traits;
 
+use App\Models\User;
 use App\Models\SecretKey;
 use App\Mail\ConfirmEmail;
 use Illuminate\Http\Request;
 use Ichtrojan\Otp\Otp as OTP;
 use App\Mail\ConfirmEmailMarkdown;
+use \Stripe\StripeClient as Stripe;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
-use \Stripe\StripeClient as Stripe;
+use App\Notifications\AppNotification;
+use Illuminate\Support\Facades\Notification;
 
 
 trait AppTrait{
@@ -37,7 +40,7 @@ trait AppTrait{
     }
 
     protected function sendConfirmEmail($email,$token){
-      //  Mail::to($email)->send(new ConfirmEmailMarkdown($token));
+      Mail::to($email)->send(new ConfirmEmailMarkdown($token));
     }
 
     protected function generateUserCode(){
@@ -48,6 +51,20 @@ trait AppTrait{
         $key = new SecretKey;
         $stripe = new Stripe($key->getSecret());
         return $stripe;
+    }
+
+    protected function notifyUser($message,$ref,$recipientID,$type,$title="New Order"){
+
+        $data = [
+            "title" => $title,
+            "message" => $message,
+            "ref" => $ref,
+            "from" => auth()->user()->id,
+            "time" => now()->format('l F Y h:i:s '),
+            "type" => $type
+        ];
+
+        Notification::send(User::find($recipientID), new AppNotification($data));
     }
 }
 

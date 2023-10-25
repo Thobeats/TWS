@@ -5,6 +5,7 @@ namespace App\Http\Livewire;
 use App\Models\Chat;
 use App\Models\User;
 use Livewire\Component;
+use Illuminate\Support\Facades\Auth;
 
 class NotificationAndMessage extends Component
 {
@@ -14,10 +15,15 @@ class NotificationAndMessage extends Component
     public $user_id;
     public $type;
     public $route;
-    protected $listeners = ['incoming-message' => 'incomingMessage', 'read-message' => 'readMessage'];
+
+    public $notificationCount;
+    public $notifications;
+
+    protected $listeners = ['incoming-message' => 'incomingMessage', 'read-message' => 'readMessage','read_notification' => 'readNotifications'];
 
     public function mount(){
         $this->incomingMessage();
+        $this->incomingNotification('unread');
     }
 
     public function incomingMessage(){
@@ -54,15 +60,41 @@ class NotificationAndMessage extends Component
             $this->messages = [];
             $this->messageCount = 0;
         }
-       
+
     }
 
     public function readMessage(){
         $this->incomingMessage();
+    }
+    
+
+    public function incomingNotification($filter){
+        $user = Auth::user();
+
+        if($filter == 'all'){
+            $this->notifications = $user->notifications;
+        }
+
+        if ($filter == 'unread'){
+            $this->notifications = $user->unreadNotifications;
+        }
+
+        $this->notificationCount = count($this->notifications) > 0 ? count($this->notifications) : 'no';
+    }
+
+    public function readNotifications($id){
+        $user = Auth::user();
+        $user->notifications->find($id)->markAsRead();
+        $this->incomingNotification('unread');
+    }
+
+    public function showAllNotification(){
+        $this->incomingNotification('all');
     }
 
     public function render()
     {
         return view('livewire.notification-and-message');
     }
+
 }

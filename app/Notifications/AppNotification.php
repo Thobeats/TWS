@@ -11,14 +11,16 @@ class AppNotification extends Notification
 {
     use Queueable;
 
+    public $message;
+
     /**
      * Create a new notification instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct($message)
     {
-        //
+        $this->message = $message;
     }
 
     /**
@@ -55,7 +57,7 @@ class AppNotification extends Notification
     public function toArray($notifiable)
     {
         return [
-            "data" => "This is a test Notification"
+            "noty" => $this->message
         ];
     }
 }

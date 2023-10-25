@@ -145,6 +145,7 @@ class CheckoutController extends Controller
                 $item['payment_status'] = true;
 
                 $product = Product::find($key);
+                $refno = uniqid("REF");
 
                 //Create Order
                 Order::create([
@@ -153,19 +154,24 @@ class CheckoutController extends Controller
                     "order_details" => json_encode($item),
                     "total_price" => $item['price'],
                     "customer_id" => $user->id,
-                    "reference_number" => uniqid("REF"),
+                    "reference_number" => $ref,
                     "status" => 1
                 ]);
 
                 //Initiate Transfer to Vendor
                 $vendor = Vendor::where('user_id', $product->vendor_id)->first();
                 $accountId = json_decode($vendor->account_details,true);
-                // $stripe->transfers->create([
-                //     'amount' => $item['price'],
-                //     'currency' => 'usd',
-                //     'destination' => $accountId['id'],
-                //     'transfer_group' => $intent->transfer_group,
-                // ]);
+                $stripe->transfers->create([
+                    'amount' => $item['price'],
+                    'currency' => 'usd',
+                    'destination' => $accountId['id'],
+                    'transfer_group' => $intent->transfer_group,
+                ]);
+
+                 //Notify the Vendor
+                $message = "A new Order";
+                $ref = "";
+                $this->notifyUser($message, $ref,$product->vendor_id);
 
                 //Remove from the Cart
                 unset($cart_items[$key]);

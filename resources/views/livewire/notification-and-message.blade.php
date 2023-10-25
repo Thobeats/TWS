@@ -15,71 +15,43 @@
           </a>
           <!-- End Notification Icon -->
 
-          {{-- <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow notifications">
+          <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow notifications">
             <li class="dropdown-header">
-              You have 4 new notifications
-              <a href="#"><span class="badge rounded-pill bg-primary p-2 ms-2">View all</span></a>
+              You have {{$notificationCount}} new notifications
+              <a wire:click='showAllNotification'><span class="badge rounded-pill bg-primary p-2 ms-2">View all</span></a>
             </li>
             <li>
               <hr class="dropdown-divider">
             </li>
 
-            <li class="notification-item">
-              <i class="bi bi-exclamation-circle text-warning"></i>
+            @forelse ($notifications as $notification)
+            <li class="notification-item {{ $notification->read_at != NULL ? 'bg-light' : '' }}" onclick="readNotification('{{$notification->id}}')">
+              <i class="
+                    {{ 
+                    ($notification->data['noty']['type'] == 'success' ? 'bi bi-check-circle text-success' : ($notification->data['noty']['type'] == 'warning' ? 'bi bi-exclamation-circle text-warning' : ($notification->data['noty']['type'] == 'info' ? 'bi bi-info-circle text-primary' : 'bi bi-x-circle text-danger')))
+                    }}
+                    "></i>
               <div>
-                <h4>Lorem Ipsum</h4>
-                <p>Quae dolorem earum veritatis oditseno</p>
-                <p>30 min. ago</p>
+                <h4>{{$notification->data['noty']['title']}}</h4>
+                <p>{{$notification->data['noty']['message']}}</p>
+                <p>{{ $notification->data['noty']['time']}}</p>
               </div>
             </li>
-
             <li>
               <hr class="dropdown-divider">
             </li>
-
-            <li class="notification-item">
-              <i class="bi bi-x-circle text-danger"></i>
-              <div>
-                <h4>Atque rerum nesciunt</h4>
-                <p>Quae dolorem earum veritatis oditseno</p>
-                <p>1 hr. ago</p>
-              </div>
-            </li>
-
-            <li>
-              <hr class="dropdown-divider">
-            </li>
-
-            <li class="notification-item">
-              <i class="bi bi-check-circle text-success"></i>
-              <div>
-                <h4>Sit rerum fuga</h4>
-                <p>Quae dolorem earum veritatis oditseno</p>
-                <p>2 hrs. ago</p>
-              </div>
-            </li>
-
-            <li>
-              <hr class="dropdown-divider">
-            </li>
-
-            <li class="notification-item">
-              <i class="bi bi-info-circle text-primary"></i>
-              <div>
-                <h4>Dicta reprehenderit</h4>
-                <p>Quae dolorem earum veritatis oditseno</p>
-                <p>4 hrs. ago</p>
-              </div>
-            </li>
+            @empty
+              
+            @endforelse
 
             <li>
               <hr class="dropdown-divider">
             </li>
             <li class="dropdown-footer">
-              <a href="#">Show all notifications</a>
+              <a wire:click='showAllNotification'>Show all notifications</a>
             </li>
 
-          </ul> --}}
+          </ul>
           <!-- End Notification Dropdown Items -->
 
         </li><!-- End Notification Nav -->
@@ -212,3 +184,11 @@
 
     </ul>
 </div>
+
+<script>
+  if(!window.readNotification){
+      function readNotification(id){
+          Livewire.emit('read_notification',id);
+      }
+  }
+</script>

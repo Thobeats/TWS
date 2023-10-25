@@ -277,6 +277,12 @@
 
         <!-- Right side columns -->
         <div class="col-lg-4">
+           <!-- Right side columns -->
+
+          {{-- Notification Tray --}}
+
+          @livewire('notification-tray')
+
 
           <!-- Recent Activity -->
           {{-- <div class="card">

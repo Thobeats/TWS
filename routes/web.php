@@ -7,6 +7,7 @@ use App\Models\Product;
 use App\Models\Section;
 use App\Models\OTPModel;
 use App\Models\ChargeBee;
+use App\Notifications\AppNotification;
 use Illuminate\Routing\RouteGroup;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Route;
@@ -328,4 +329,16 @@ Route::get('/verifyOTP/{email}/{code}', [OTPModel::class, 'verifyOTP']);
 
 Route::get('/fileExists', function(){
     return file_exists($_SERVER['DOCUMENT_ROOT'] . "/storage/businessBanners/A35C58ED-7F63-40BE-B52A-1F6512638568.PNG");
+});
+
+Route::get('testNotification', function(){
+    $data = [
+        "title" => "New Deals",
+        "message" => "New deals in place",
+        "ref" => "ORDER#123344",
+        "from" => auth()->user()->id,
+        "time" => now()->format('l F Y h:i:s '),
+        "type" => "info"
+    ];
+    Notification::send(User::find(14), new AppNotification($data));
 });
