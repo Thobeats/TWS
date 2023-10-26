@@ -7,6 +7,15 @@
 @section('content')
 
 <section class="section dashboard">
+    <div class="card">
+      <div class="card-body">
+        <div class="mt-3 text-center">
+          <span>You can upload</span>
+          <a class="ml-3 btn btn-outline-primary btn-sm" href="uploadFile">Upload Products</a>
+        </div>
+      </div>
+    </div>
+  
      <div class="card">
             <div class="card-body">
               <h5 class="card-title">Add New Product</h5>
@@ -254,7 +263,8 @@
               </form><!-- End Multi Columns Form -->
 
             </div>
-          </div>
+     </div>
+
 </section>
 
 

@@ -20,6 +20,11 @@
             </a>
           </li>
           <li>
+            <a href="/vendor/products/uploadFile">
+              <i class="bi bi-circle"></i><span>Upload Products</span>
+            </a>
+          </li>
+          <li>
             <a href="/vendor/products">
               <i class="bi bi-circle"></i><span>Active Products</span>
             </a>

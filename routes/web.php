@@ -92,6 +92,8 @@ Route::prefix('market')->group(function () {
 Route::middleware(['auth'])->group(function () {
     Route::put('/setProfile', [AuthController::class, 'setProfileImage']);
     Route::put('/updateProfile', [AuthController::class, 'updateProfile']);
+    Route::put('/updateCustomerProfile', [AuthController::class, 'updateCustomerProfile']);
+    
     //Auth Market
     Route::get('/addWishList/{id}', [WishListController::class, 'add']);
     //Market
@@ -123,7 +125,8 @@ Route::middleware(['auth'])->group(function () {
 
 
     Route::group(['prefix' => 'customer'], function(){
-        Route::get('/profile', [CustomerController::class, 'index'])->name('customer_profile');
+        Route::get('/',[CustomerController::class, 'index'])->name('customer_profile');
+        Route::get('/profile', [CustomerController::class, 'getProfile']);
         Route::post('/edit', [CustomerController::class, 'editPersonalDetails'])->name('customer_edit_details');
         Route::get('/orders', [CustomerController::class, 'orders'])->name('customer_orders');
         Route::get('/new_address',[CustomerController::class, 'newAddress'])->name('customer_new_address');
@@ -183,6 +186,8 @@ Route::middleware(['auth'])->group(function () {
                 Route::put('/update', [VendorController::class, 'updateProduct']);
                 Route::get('/delete/{id}', [VendorController::class, 'deleteProduct']);
                 Route::get('/toggle_active/{id}', [VendorController::class, 'toggleActive']);
+                Route::get('/uploadFile', [VendorController::class, 'uploadFile']);
+                Route::post('/upload', [VendorController::class, 'importProducts']);
             });
 
             //Orders Route
@@ -327,18 +332,25 @@ Route::post('/subscribe', [ChargeBee::class, 'subscribe']);
 Route::get('/testOTP/{email}', [OTPModel::class, 'getOTP']);
 Route::get('/verifyOTP/{email}/{code}', [OTPModel::class, 'verifyOTP']);
 
-Route::get('/fileExists', function(){
-    return file_exists($_SERVER['DOCUMENT_ROOT'] . "/storage/businessBanners/A35C58ED-7F63-40BE-B52A-1F6512638568.PNG");
-});
 
-Route::get('testNotification', function(){
-    $data = [
-        "title" => "New Deals",
-        "message" => "New deals in place",
-        "ref" => "ORDER#123344",
-        "from" => auth()->user()->id,
-        "time" => now()->format('l F Y h:i:s '),
-        "type" => "info"
-    ];
-    Notification::send(User::find(14), new AppNotification($data));
+
+// Route::get('testNotification', function(){
+//     $data = [
+//         "title" => "New Deals",
+//         "message" => "New deals in place",
+//         "ref" => "ORDER#123344",
+//         "from" => auth()->user()->id,
+//         "time" => now()->format('l F Y h:i:s '),
+//         "type" => "info"
+//     ];
+//     Notification::send(User::find(14), new AppNotification($data));
+// });
+
+Route::get('/updateVendors', function(){
+    Vendor::query()->update([
+        "verified" => 1,
+        "verify_ein" => 1,
+        "verify_business" => 1,
+        "verify_customer_review" => 1
+    ]);
 });

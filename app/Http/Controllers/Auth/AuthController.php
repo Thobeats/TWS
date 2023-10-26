@@ -340,11 +340,11 @@ class AuthController extends Controller
             'firstname' => 'required|string',
             'lastname' => 'required|string',
             'phone' => 'nullable|numeric',
-            'country' => 'required|string',
+           // 'country' => 'required|string',
             'state' => 'required|string',
             'city' => 'required|string',
             'address' => 'required|string',
-            'zip' => 'required|numeric'
+            'zip' => 'required|numeric',
         ]);
 
         if($validate->fails()){
@@ -361,6 +361,29 @@ class AuthController extends Controller
         $user->phone = $request->phone;
         $user->zip_code = $request->zip;
 
+        $user->save();
+
+        toastr()->success('Profile Updated', 'Update Successful');
+        return redirect()->back();
+    }
+
+    public function updateCustomerProfile(Request $request){
+        $user = Auth::user();
+        $validate = Validator::make($request->all(),[
+            'firstname' => 'required|string',
+            'lastname' => 'required|string',
+            'phone' => 'nullable|numeric',
+        ]);
+
+        if($validate->fails()){
+            toastr()->error($validate->errors()->first(), 'Validation Error');
+            return redirect()->back()->with('tab', 'edit_profile');
+        }
+
+        $user->firstname = $request->firstname;
+        $user->lastname = $request->lastname;
+        $user->phone = $request->phone;
+        
         $user->save();
 
         toastr()->success('Profile Updated', 'Update Successful');

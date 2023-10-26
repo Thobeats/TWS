@@ -23,6 +23,8 @@ use App\Models\VendorCard;
 use App\Models\ShippingType;
 use App\Models\Subscription;
 use Illuminate\Http\Request;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Imports\ProductImport;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
@@ -799,10 +801,10 @@ class VendorController extends Controller
         //Images
         $images = json_decode($product->pics,true);
 
-
+        $cats =[];
         ///category settings
-        $cats = json_decode($product->category_id);
-        if(count($cats) > 1){
+        if($product->category_id && count(json_decode($product->category_id)) > 1){
+            $cats = json_decode($product->category_id);
             $subcats = Category::where(['categories.status' => '1', 'parent_to_children.parent_id' => $cats[0]])
                                 ->join('parent_to_children', 'parent_to_children.category_id', '=', 'categories.id')
                                 ->select('categories.id', 'categories.name','parent_to_children.parent_id')->get()->toArray();
@@ -815,7 +817,8 @@ class VendorController extends Controller
             $subcatTemp  = "";
         }
 
-        if(count($cats) > 2){
+        if($product->category_id && count(json_decode($product->category_id)) > 2){
+            $cats = json_decode($product->category_id);
             $subcats2 = Category::where(['categories.status' => '1', 'parent_to_children.parent_id' => $cats[1]])
                                 ->join('parent_to_children', 'parent_to_children.category_id', '=', 'categories.id')
                                 ->select('categories.id', 'categories.name','parent_to_children.parent_id')->get()->toArray();
@@ -1114,6 +1117,14 @@ class VendorController extends Controller
         $user = Auth::user();
         $products = Category::select('id','name')->get();
         return view('vendor.store.setup', compact('user','products'));
+    }
+
+    public function importProducts(Request $request){
+        Excel::import(new ProductImport, request()->file('csv_file'), null,\Maatwebsite\Excel\Excel::CSV);
+    }
+
+    public function uploadFile(){
+        return view('vendor.products.upload_file');
     }
 
 }

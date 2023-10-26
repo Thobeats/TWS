@@ -3,7 +3,7 @@
     <ul class="sidebar-nav" id="sidebar-nav">
 
       <li class="nav-item">
-        <a class="nav-link {{ $link == 'dashboard' ? 'active' : ''}}" href="/customer/profile">
+        <a class="nav-link {{ $link == 'dashboard' ? 'active' : ''}}" href="/customer">
           <i class="bi bi-grid"></i>
           <span>Dashboard</span>
         </a>
@@ -50,7 +50,7 @@
       <li class="nav-heading">Pages</li>
 
       <li class="nav-item">
-        <a class="nav-link collapsed" href="/vendor/profile">
+        <a class="nav-link {{ $link == 'profile' ? 'active' : ''}}" href="/customer/profile">
           <i class="bi bi-person"></i>
           <span>My Profile</span>
         </a>

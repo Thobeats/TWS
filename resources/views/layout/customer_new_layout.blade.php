@@ -86,7 +86,7 @@
       <h1>@yield('pagetitle')</h1>
       <nav>
         <ol class="breadcrumb">
-          <li class="breadcrumb-item"><a href="/customer/profile">Home</a></li>
+          <li class="breadcrumb-item"><a href="/customer">Home</a></li>
           <li class="breadcrumb-item active">@yield('pagetitle')</li>
         </ol>
       </nav>

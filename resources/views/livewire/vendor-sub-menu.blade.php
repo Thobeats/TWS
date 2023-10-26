@@ -9,16 +9,20 @@
 
                 <div class="mt-3 product-wrapper d-flex justify-content-left">
                     @forelse ($vendors as $vendor)
-                        <div class="card mx-2" style="height: auto; width: 200px;">
-                            <div class="img-wrapper" style="height: 90%;">
-                                <img src="{{ $vendor->profile != null ? url('storage/'. $vendor->profile)  : asset('images/blank.jpg') }}" class="card-img-top h-100" alt="...">
+                        <div class="block2">
+                            <div class="block3-pic hov-img0">
+                                <img src="{{ $vendor->profile != null ? url('storage/'. $vendor->profile)  : asset('images/blank.jpg') }}" alt="TWSL-VENDDOR">
+    
+                                <a href="/market/vendor/{{$vendor->id}}" class="block2-btn flex-c-m stext-103 cl2 size-102 bg0 bor2 hov-btn1 p-lr-15 trans-04 js-show-modal1">
+                                    Quick View
+                                </a>
                             </div>
-                            <div class="row p-2 new_arrival">
-                                <div class="col-7">
-                                    <h6 class="my-2">{{ $vendor->business_name }}</h6>
-                                </div>
-                                <div class="col-5">
-                                    <a class="btn btn-outline-dark btn-sm" href="/market/vendor/{{$vendor->id}}">View</a>
+    
+                            <div class="block2-txt flex-w flex-t p-t-14 border p-3">
+                                <div class="block2-txt-child1 flex-col-l">
+                                    <a href="/market/vendor/{{$vendor->id}}">
+                                        <h6 class="my-2">{{ $vendor->business_name }}</h6>
+                                    </a>
                                 </div>
                             </div>
                         </div>
@@ -59,17 +63,20 @@
                         Vendor of the week
                     </h4>
                     @if ($votw)
-
-                        <div class="card my-3" style="height: auto;">
-                            <div class="img-wrapper" style="height: 90%; width:200px;">
-                                <img src="{{ $votw->profile != null ? url('storage/'. $votw->profile)  : asset('images/blank.jpg') }}" class="card-img-top h-100" alt="...">
+                        <div class="block2">
+                            <div class="block2-pic hov-img0">
+                                <img src="{{ $votw->profile != null ? url('storage/'. $votw->profile)  : asset('images/blank.jpg') }}" alt="TWSL-VENDDOR">
+    
+                                <a href="/market/vendor/{{$votw->id}}" class="block2-btn flex-c-m stext-103 cl2 size-102 bg0 bor2 hov-btn1 p-lr-15 trans-04 js-show-modal1">
+                                    Quick View
+                                </a>
                             </div>
-                            <div class="row p-2 new_arrival">
-                                <div class="col-7">
-                                    <h6 class="my-2">{{ $votw->business_name }}</h6>
-                                </div>
-                                <div class="col-5">
-                                    <a class="btn btn-outline-dark btn-sm" href="/market/vendor/{{$votw->vendor_id}}">View</a>
+    
+                            <div class="block2-txt flex-w flex-t p-t-14 border p-3">
+                                <div class="block2-txt-child1 flex-col-l">
+                                    <a href="/market/vendor/{{$votw->id}}">
+                                        <h6 class="my-2">{{ $votw->business_name }}</h6>
+                                    </a>
                                 </div>
                             </div>
                         </div>

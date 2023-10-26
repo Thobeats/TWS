@@ -1,4 +1,4 @@
-@extends('layout.vendor_layout')
+@extends('layout.customer_new_layout')
 
 @section('pagetitle','Profile')
 
@@ -20,28 +20,12 @@
 
             <img src="{{ $user->profileImg() }}" alt="Profile" class="rounded-circle">
             <h2>{{ $user->fullname() }}</h2>
-            {{-- <h3>Web Designer</h3> --}}
-            {{-- <div class="social-links mt-2">
-              <a href="#" class="twitter"><i class="bi bi-twitter"></i></a>
-              <a href="#" class="facebook"><i class="bi bi-facebook"></i></a>
-              <a href="#" class="instagram"><i class="bi bi-instagram"></i></a>
-              <a href="#" class="linkedin"><i class="bi bi-linkedin"></i></a>
-            </div> --}}
           </div>
         </div>
 
         <div class="card">
             <div class="card-body profile-card pt-4 d-flex flex-column align-items-center">
-
-              <img src="{{ $user->vendor()->business_logo() }}" alt="Profile" class="rounded-circle">
               <h2>{{ $user->business_name }}</h2>
-              {{-- <h3>Web Designer</h3> --}}
-              <div class="social-links mt-2">
-                <a href="{{ $user->vendor()->twitter }}" class="twitter"><i class="bi bi-twitter"></i></a>
-                <a href="{{ $user->vendor()->facebook }}" class="facebook"><i class="bi bi-facebook"></i></a>
-                <a href="{{ $user->vendor()->instagram }}" class="instagram"><i class="bi bi-instagram"></i></a>
-                {{-- <a href="#" class="linkedin"><i class="bi bi-linkedin"></i></a> --}}
-              </div>
             </div>
           </div>
 
@@ -94,13 +78,6 @@
                 </div>
 
                 <div class="row">
-                  <div class="col-lg-3 col-md-4 label">Address</div>
-                  <div class="col-lg-9 col-md-8">
-                    {{ $user->address()['address']}}
-                  </div>
-                </div>
-
-                <div class="row">
                   <div class="col-lg-3 col-md-4 label">Phone</div>
                   <div class="col-lg-9 col-md-8">
                     {{ $user->phone }}
@@ -136,7 +113,7 @@
                     </div>
                 </form>
                 <hr>
-                <form method="POST" action="/updateProfile">
+                <form method="POST" action="/updateCustomerProfile">
                     @method('PUT')
                     @csrf
 
@@ -160,43 +137,13 @@
                       <input name="company" type="text" class="form-control" id="company" value="Lueilwitz, Wisoky and Leuschke">
                     </div>
                   </div> --}}
-
-                  {{-- <div class="row mb-3">
+                  {{-- 
+                  <div class="row mb-3">
                     <label for="Country" class="col-md-4 col-lg-3 col-form-label">Country</label>
                     <div class="col-md-8 col-lg-9">
                       <input name="country" type="text" class="form-control" id="Country" value="USA">
                     </div>
                   </div> --}}
-
-                  <div class="row mb-3">
-                    <label for="Zip" class="col-md-4 col-lg-3 col-form-label">Zip</label>
-                    <div class="col-md-8 col-lg-9">
-                      <input name="zip" type="number" class="form-control" id="zip" value="{{ $user->zip_code }}">
-                    </div>
-                  </div>
-
-                  <div class="row mb-3">
-                    <label for="Address" class="col-md-4 col-lg-3 col-form-label">Address</label>
-                    <div class="col-md-8 col-lg-9">
-                      <input name="address" type="text" class="form-control" id="Address" value="A108 Adam Street, New York, NY 535022">
-                    </div>
-                  </div>
-
-                  <div class="row mb-3">
-                    <label for="state" class="col-md-4 col-lg-3 col-form-label">State</label>
-                    <div class="col-md-8 col-lg-9">
-                        <select name="state" id="state" class="form-select" onchange="selectCity(event)"></select>
-                    </div>
-                  </div>
-
-                  <div class="row mb-3">
-                    <label for="city" class="col-md-4 col-lg-3 col-form-label">City</label>
-                    <div class="col-md-8 col-lg-9">
-                        <select name="city" id="city" class="form-select">
-                            <option value="{{ $user->address()['city']}}">{{ $user->address()['city']}}</option>
-                        </select>
-                    </div>
-                  </div>
 
                   <div class="row mb-3">
                     <label for="Phone" class="col-md-4 col-lg-3 col-form-label">Phone</label>
@@ -301,10 +248,5 @@
       </div>
     </div>
   </section>
-
-
-
-  <script>  var selectedStateValue = "{{ $user->address()['state'] }}";</script>
-  <script src="{{ asset('assets/js/apicalls.js')}}"></script>
 
 @endsection

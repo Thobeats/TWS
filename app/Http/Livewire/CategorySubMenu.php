@@ -44,7 +44,7 @@ class CategorySubMenu extends Component
             $this->active = $category_id;
 
             $this->new_arrivals = Product::whereJsonContains('products.category_id', "$category_id")
-                                ->select('products.pics','products.name','products.id', 'products.price')
+                                ->select('products.pics','products.name','products.id', 'products.price', 'products.vendor_id')
                                 ->orderBy('id', 'DESC')
                                 ->limit(3)
                                 ->get();
@@ -57,7 +57,7 @@ class CategorySubMenu extends Component
             $this->active2 = $category_id;
 
             $this->new_arrivals = Product::whereJsonContains('products.category_id', "$category_id")
-                                ->select('products.pics','products.name','products.id', 'products.price')
+                                ->select('products.pics','products.name','products.id', 'products.price', 'products.vendor_id')
                                 ->orderBy('id', 'DESC')
                                 ->limit(3)
                                 ->get();

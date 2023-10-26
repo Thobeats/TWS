@@ -8,7 +8,7 @@
 
         <div class="row">
             <div class="col-lg-12">
-                <div class="d-flex justify-content-end" style="height:300px; background-image: url({{ url('storage/' . $vendor->business_banner)}}); background-position: top center;"></div>
+                <div class="d-flex justify-content-end" style="height:300px; background-image: url('{{ url('storage/' . $vendor->business_banner)}}'); background-position: top center;"></div>
             </div>
         </div>
 

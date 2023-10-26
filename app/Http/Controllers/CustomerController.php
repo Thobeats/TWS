@@ -268,5 +268,12 @@ class CustomerController extends Controller
         }
     }
 
+    public function getProfile(Request $request){
+        $user = Auth::user();
+        $tab = $request->tab ? $request->tab : "profile";
+        $link = "profile";
+        return view('customer.profile', compact('user', 'tab', 'link'));
+    }
+
 
 }

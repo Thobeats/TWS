@@ -51,17 +51,24 @@
                 </h4>
                 <div class="mt-3 product-wrapper d-flex">
                     @forelse ($new_arrivals as $new)
-                        <div class="card mx-2" style="height: 400px; width: 220px;">
-                            <div class="img-wrapper" style="height: 90%;">
-                                <img src="{{ url('storage/products/'. json_decode($new->pics,true)[0]) }}" class="card-img-top h-100" alt="...">
+                        <div class="block2">
+                            <div class="block3-pic hov-img0">
+                                <img src="{{ url('storage/products/'. json_decode($new->pics,true)[0]) }}" alt="IMG-PRODUCT">
+    
+                                <a href="/market/product/{{$new->id}}" class="block2-btn flex-c-m stext-103 cl2 size-102 bg0 bor2 hov-btn1 p-lr-15 trans-04 js-show-modal1" data-product="{{$new->id}}">
+                                    Quick View
+                                </a>
                             </div>
-                            <div class="row p-2 new_arrival">
-                                <div class="col-7">
-                                    <h6>{{ substr($new->name,0,10)."...." }}</h6>
-                                    <h4 class="mt-1">${{ $new->price}}</h6>
-                                </div>
-                                <div class="col-5">
-                                    <a class="btn btn-outline-dark btn-sm" href="/market/product/{{$new->id}}">View</a>
+    
+                            <div class="block2-txt flex-w flex-t p-t-14 border p-3">
+                                <div class="block2-txt-child1 flex-col-l">
+                                    <a href="/market/vendor/{{$new->vendor_id}}" class="mtext-101 text-dark cl4 hov-cl1 trans-04 js-name-b2 p-b-6">
+                                        {{ $new->vendorName() }}
+                                    </a>
+    
+                                    <a href="/market/product/{{$new->id}}" class="stext-104 cl4 hov-cl1 trans-04 js-name-b2 p-b-6">
+                                        {{ substr($new->name,0,10)."...." }}
+                                    </a>
                                 </div>
                             </div>
                         </div>

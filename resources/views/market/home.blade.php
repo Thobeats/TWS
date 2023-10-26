@@ -25,7 +25,7 @@
                                         <!-- Block2 -->
                                         <div class="block2">
                                             <div class="block3-pic hov-img3">
-                                                <img src="{{ url('storage/products/'. json_decode($product['pics'],true)[0]) }}" alt="IMG-PRODUCT">
+                                                <img src="{{ json_decode($product['pics'],true) != [] ? url('storage/products/'. json_decode($product['pics'],true)[0]) : '' }}" alt="IMG-PRODUCT">
                                             </div>
                                         </div>
                                     </div>

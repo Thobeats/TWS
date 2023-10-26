@@ -103,7 +103,7 @@
                       <select id="sections" name='sections[]' class="form-select @error('sections') is-invalid @enderror js-example-basic-multiple" multiple style="width: 100%">
                       @if(!empty($sections))
                           @foreach($sections as $section)
-                          <option {{ in_array($section['id'],json_decode($product->section_id)) ? 'selected' : '' }} value="{{ $section['id'] }}">{{ $section['name'] }}</option>
+                          <option {{ $product->section_id && in_array($section['id'],json_decode($product->section_id)) ? 'selected' : '' }} value="{{ $section['id'] }}">{{ $section['name'] }}</option>
                           @endforeach
                       @endif
                     </select>
@@ -146,6 +146,7 @@
                       @php
                         $index = 0;
                       @endphp
+                      @if($product->item_listing)
                       @forelse (json_decode($product->item_listing) as $key => $item)
                       <tr id="{{$index}}">
                         <td>
@@ -266,6 +267,7 @@
                        </td>
                       </tr>
                       @endforelse
+                      @endif
                       
                     </tbody>
                   </table>

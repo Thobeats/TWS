@@ -66,6 +66,18 @@ trait AppTrait{
 
         Notification::send(User::find($recipientID), new AppNotification($data));
     }
+
+    protected function deleteFile($fileName){
+        $destination = storage_path("app/public/storage");
+
+        if(file_exists($destination . "/" . $fileName)){
+            unlink($destination . "/" . $fileName);
+
+            return true;
+        }
+
+        return false;
+    }
 }
 
 
