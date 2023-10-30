@@ -26,7 +26,7 @@
                 </li>
             </ul>
         </div> --}}
-        <div class="vendor_search mt-2 p-3">
+        <div class="vendor_search p-3">
             <h4 class="my-3 p-2">Vendors By Categories</h4>
             <ul class="list-group list-group-flush">
                 @forelse ($categories as $category)
@@ -49,22 +49,23 @@
         <div class="row mt-2">
             @forelse ($vendors as $vendor)
                 <div class="col-lg-3 mt-2">
-                    <div class="card">
+                    <div class="block2">
                         <div class="img-wrapper" style="height: 300px;">
                             <img src="{{ $vendor->profile != null ? url('storage/'. $vendor->profile)  : asset('images/blank.jpg') }}" class="card-img-top h-100" alt="...">
                         </div>
-                        <div class="d-flex justify-content-between p-2">
-                            <div>
-                                <h6 class="my-2">{{ $vendor->business_name }}</h6>
-                            </div>
-                            <div>
-                                <a class="btn btn-outline-dark btn-sm" href="/market/vendor/{{$vendor->id}}">View</a>
+                        <div class="p-2">
+                            <div class="d-flex justify-content-between">
+                                <div>
+                                    <h6 class="my-2">{{ $vendor->business_name }}</h6>
+                                </div>
+                                <div>
+                                    <a class="btn btn-outline-dark btn-sm" href="/market/vendor/{{$vendor->id}}">View</a>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             @empty
-           
                 <div class="col-lg-12">
                     <p class="m-3">No Vendor Found</p>
                 </div>

@@ -107,13 +107,24 @@ class HomeController extends Controller
         //                         ];
         //                     });
 
+        $firstTimeBuyers = Product::where('publish_status', 1)->inRandomOrder()->get();
 
-        return view('market.home',compact('vendors','sections','new_arrivals', 'adminSections','topVendors', 'categories'));
+        $freeShipping = Product::where(['publish_status' => 1, 'shipping_fee' => 0])->inRandomOrder()->get();
+
+        $newVendors = User::where(['users.role' => 2, 'users.account_status' => 0, 'vendors.verified' => 0])
+                                ->join('vendors','vendors.user_id','=','users.id')
+                                ->select('users.business_name','users.id', 'users.profile')
+                                ->orderBy('vendors.created_at', 'DESC')
+                                ->limit(10)
+                                ->get();
+
+        return view('market.home',compact('vendors','sections','new_arrivals', 'adminSections','topVendors', 'categories', 'firstTimeBuyers', 'freeShipping', 'newVendors'));
     }
 
-    public function shop(){
+    public function shop(Request $request){
+        $catgry = $request->get('query');
         $vendors = User::where('role', 2)->select('id', 'business_name as name')->get();
-        return view('market.shop',compact('vendors'));
+        return view('market.shop',compact('vendors', 'catgry'));
     }
 
     public function addToWishList($id){

@@ -9,30 +9,26 @@
 
                 <div class="mt-3 product-wrapper d-flex justify-content-left">
                     @forelse ($vendors as $vendor)
-                        <div class="block2">
-                            <div class="block3-pic hov-img0">
-                                <img src="{{ $vendor->profile != null ? url('storage/'. $vendor->profile)  : asset('images/blank.jpg') }}" alt="TWSL-VENDDOR">
-    
-                                <a href="/market/vendor/{{$vendor->id}}" class="block2-btn flex-c-m stext-103 cl2 size-102 bg0 bor2 hov-btn1 p-lr-15 trans-04 js-show-modal1">
-                                    Quick View
-                                </a>
+                        <div class="block2" style="width: 300px;">
+                            <div class="block2-pic hov-img0">
+                                <img src="{{ $vendor->profile != null ? url('storage/'. $vendor->profile)  : asset('images/blank.jpg') }}" alt="TWSL-VENDOR">
                             </div>
-    
-                            <div class="block2-txt flex-w flex-t p-t-14 border p-3">
-                                <div class="block2-txt-child1 flex-col-l">
-                                    <a href="/market/vendor/{{$vendor->id}}">
-                                        <h6 class="my-2">{{ $vendor->business_name }}</h6>
-                                    </a>
+                            <div class="p-2">
+                                <div class="d-flex justify-content-between">
+                                   <div>
+                                        <a href="/market/vendor/{{$vendor->id}}">
+                                            <h6 class="my-2">{{ $vendor->business_name }}</h6>
+                                        </a>
+                                   </div>
+
+                                   <div>
+                                     <a href="/market/vendor/{{$vendor->id}}" class="btn btn-outline-dark btn-sm">View</a>
+                                   </div>
                                 </div>
                             </div>
                         </div>
                     @empty
-                        <div class="card my-3" style="height: auto; width: 200px;">
-                            <div class="img-wrapper" style="height: 90%;">
-                                <img src="{{  asset('assets/img/who.png') }}" class="card-img-top h-100" alt="...">
-                            </div>
-                        </div>
-
+                      
                     @endforelse
                 </div>
             </div>
@@ -65,18 +61,19 @@
                     @if ($votw)
                         <div class="block2">
                             <div class="block2-pic hov-img0">
-                                <img src="{{ $votw->profile != null ? url('storage/'. $votw->profile)  : asset('images/blank.jpg') }}" alt="TWSL-VENDDOR">
-    
-                                <a href="/market/vendor/{{$votw->id}}" class="block2-btn flex-c-m stext-103 cl2 size-102 bg0 bor2 hov-btn1 p-lr-15 trans-04 js-show-modal1">
-                                    Quick View
-                                </a>
+                                <img src="{{ $votw->profile != null ? url('storage/'. $votw->profile)  : asset('images/blank.jpg') }}" alt="TWSL-VENDOR">
                             </div>
-    
-                            <div class="block2-txt flex-w flex-t p-t-14 border p-3">
-                                <div class="block2-txt-child1 flex-col-l">
-                                    <a href="/market/vendor/{{$votw->id}}">
-                                        <h6 class="my-2">{{ $votw->business_name }}</h6>
-                                    </a>
+                            <div class="p-2">
+                                <div class="d-flex justify-content-between">
+                                   <div>
+                                        <a href="/market/vendor/{{$votw->id}}">
+                                            <h6 class="my-2">{{ $votw->business_name }}</h6>
+                                        </a>
+                                   </div>
+
+                                   <div>
+                                     <a href="/market/vendor/{{$votw->id}}" class="btn btn-outline-dark btn-sm">View</a>
+                                   </div>
                                 </div>
                             </div>
                         </div>
@@ -90,7 +87,7 @@
 
 
                     @guest
-                        <a class="btn btn-home text-light align-item-right" href="{{ url('/seller_signup')}}">
+                        <a class="btn home-btn-outline align-item-right mt-5" href="{{ url('/seller_signup')}}">
                             Become a vendor
                             <span class="ml-2"><i class="zmdi zmdi-chevron-right"></i></span>
                         </a>

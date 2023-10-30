@@ -54,24 +54,29 @@
                         @php
                             $pic = isset(json_decode($new->pics,true)[0]) ? json_decode($new->pics,true)[0] : ""
                         @endphp
-                        <div class="block2">
-                            <div class="block3-pic hov-img0">
-                                <img src="{{ url('storage/products/'. $pic) }}" alt="IMG-PRODUCT">
+                        <div class="block2" style="width: 300px;">
+                            <div class="block2-image hov-img0">
+                                <img src="{{ url('storage/products/'. $pic) }}" alt="IMG-PRODUCT" class="img-fluid">
     
                                 <a href="/market/product/{{$new->id}}" class="block2-btn flex-c-m stext-103 cl2 size-102 bg0 bor2 hov-btn1 p-lr-15 trans-04 js-show-modal1" data-product="{{$new->id}}">
                                     Quick View
                                 </a>
                             </div>
-    
-                            <div class="block2-txt flex-w flex-t p-t-14 border p-3">
-                                <div class="block2-txt-child1 flex-col-l">
-                                    <a href="/market/vendor/{{$new->vendor_id}}" class="mtext-101 text-dark cl4 hov-cl1 trans-04 js-name-b2 p-b-6">
-                                        {{ $new->vendorName() }}
-                                    </a>
-    
-                                    <a href="/market/product/{{$new->id}}" class="stext-104 cl4 hov-cl1 trans-04 js-name-b2 p-b-6">
-                                        {{ substr($new->name,0,10)."...." }}
-                                    </a>
+                            <div class="p-2">
+                                <div class="d-flex justify-content-between">
+                                   <div>
+                                        <a href="/market/vendor/{{$new->vendor_id}}" class="mtext-101 text-dark cl4 hov-cl1 trans-04 js-name-b2">
+                                            {{ $new->vendorName() }}
+                                        </a>
+        
+                                        <a href="/market/product/{{$new->id}}" class="stext-104 cl4 hov-cl1 trans-04 js-name-b2">
+                                            {{ $new->name }}
+                                        </a>
+                                   </div>
+
+                                   <div>
+                                     <a href="/market/product/{{$new->id}}" class="btn btn-outline-dark btn-sm mt-3">View in Shop</a>
+                                   </div>
                                 </div>
                             </div>
                         </div>

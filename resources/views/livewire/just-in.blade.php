@@ -2,6 +2,14 @@
     <div class="container-fluid h-100">
         <div class="row h-100 mt-3">
             <div class="col-lg-2 border border-left-0 border-top-0">
+                <hr>
+                <div class="just-in">JUST IN <b class="home-text">TODAY</b></div>
+                <h1 class="just-in-amount">{{ $today }}</h1>
+                <hr>
+                <div class="just-in">Last <b class="home-text">7 days</b></div>
+                <h1 class="just-in-amount">{{ $last7days }}</h1>
+                <hr>
+
                 <h4 class="sub-menu-title text-left">
                     Categories
                 </h4>

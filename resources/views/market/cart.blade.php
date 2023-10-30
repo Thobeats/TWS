@@ -15,7 +15,4 @@
     <div class="container">
         @livewire('cart-item', ['user' => $user])
     </div>
-
-
-
 @endsection

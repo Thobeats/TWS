@@ -20,7 +20,7 @@
 </style>
 <!-- Product -->
 @if (isset($catgry))
-    @livewire('shop',['cats' => [$catgry]])
+    @livewire('shop',['cats' => explode(",", $catgry)])
 @else
     @livewire('shop')
 @endif

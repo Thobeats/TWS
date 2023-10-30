@@ -4,6 +4,7 @@ Website Theme
 Primary Color : #fffff
 Secondary Color: #e39ff6
 */
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@600&family=Titillium+Web:ital,wght@0,200;0,400;0,700;1,600&family=Work+Sans:wght@100;200;300;400&display=swap');
 
 .home-btn-outline{
     border-color: #710193;
@@ -140,10 +141,44 @@ Secondary Color: #e39ff6
     border-bottom: 1px solid #710193;
 }
 
-/* .view-all{
-    position: absolute;
-    bottom: 150px;
-    right: 30px;
-} */
+.trending_categories{
+    list-style-type: none;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.trending_categories li{
+    background: #F7F7F7;
+    border-radius: 24px;
+    height: 36px;
+    line-height: 36px;
+    padding: 0 24px;
+    font-weight: 600;
+    font-size: 16px;
+    text-align: center;
+    color: #333333;
+    margin: 0 16px 24px 0;
+    cursor: pointer;
+}
+
+.trending_badge{
+    color: #000;
+}
+
+.just-in {
+    font-size: 18px;
+    font-weight: 300;
+    font-family: 'Titillium Web', sans-serif;
+    text-transform: uppercase;
+}
+
+.just-in-amount{
+    font-weight: 600;
+    font-family: 'Titillium Web', sans-serif;
+    text-transform: uppercase;
+    margin-top: 5px;
+}
+
+
 
 

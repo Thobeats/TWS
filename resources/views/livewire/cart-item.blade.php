@@ -13,7 +13,7 @@
                                     <th class="column-2"></th>
                                     <th class="column-3">Quantity</th>
                                     <th class="column-4">Total</th>
-                                    <th class="column-5">Manage</th>
+                                    <th class="column-5">Action</th>
                                 </tr>
 
                                 @if(count($item['cartItems']) > 0)
@@ -25,8 +25,7 @@
                                         <td class="column-1">
                                             <div class="how-itemcart1">
                                                 {{-- Attach Vendor ID and Product ID --}}
-                                                <input type="hidden" value="{{$product->id}}" name="product_id[]">
-
+                                                <input type="hidden" value="{{$cartItem['id']}}" name="cartId[]">
                                                 <img src="{{ url('storage/products/'. json_decode($product->pics,true)[0]) }}" alt="IMG">
                                             </div>
                                         </td>
@@ -47,8 +46,6 @@
                                         </td>
                                         <td class="column-4" data-price="{{$product->name}}">
                                             $ {{ number_format($cartItem['price'],2) }}
-                                            <input type="hidden" name="total_price[]" value="{{ $cartItem['price'] }}">
-                                            <input type="hidden" name="shipping_total[]" value="{{ $cartItem['shipping_fee'] }}">
                                         </td>
                                         <td class="column-5">
                                             <a wire:click='remove({{$cartItem['id']}})' class="text-danger ltext-102 mt-4 cl3 hov-cl1 trans-04 lh-10 p-lr-5 p-tb-2 js-addwish-detail tooltip100" data-tooltip="Remove from cart">
@@ -140,10 +137,7 @@
 
                 <form method="POST" action="/setCartSession">
                     @csrf
-                    <input type="hidden" name="product_id" value="{{ $product_id }}">
-                    <input type="hidden" name="total" value="{{ $sum }}">
-                    <input type="hidden" name="shipping_total" value="{{$shipping_fee}}">
-    
+                    <input type="hidden" name="cart_id" value="{{ $cart_id }}">
                     <button type="submit" class="flex-c-m stext-101 cl0 size-116 bg3 bor14 hov-btn3 p-lr-15 trans-04 pointer">
                         Proceed to Checkout
                     </button>

@@ -13,7 +13,7 @@ class CartItem extends Component
     public $items;
     public $sum;
     public $shipping_fee;
-    public $product_id;
+    public $cart_id;
 
 
     public function mount()
@@ -24,7 +24,7 @@ class CartItem extends Component
     public function getCartItems()
     {
         $user_id = $this->user->id;
-        $this->items = Cart::where('user_id', $this->user->id)->select('vendor_id', 'product_id')
+        $this->items = Cart::where('user_id', $this->user->id)->select('vendor_id', 'id')
                         ->get()
                         ->map(function($item)use($user_id){
                             $cartItems = Cart::where(['user_id' => $user_id, 'vendor_id' => $item->vendor_id])
@@ -41,7 +41,7 @@ class CartItem extends Component
                         });
         $this->sum = Cart::where('user_id', $this->user->id)->sum('price');
         $this->shipping_fee = Cart::where('user_id', $this->user->id)->sum('shipping_fee');
-        $this->product_id = json_encode(array_column($this->items->toArray(), 'product_id'));
+        $this->cart_id = json_encode(array_column($this->items->toArray(), 'id'));
     }
 
     public function Increase($id){

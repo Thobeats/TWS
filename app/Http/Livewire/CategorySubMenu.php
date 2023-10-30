@@ -46,7 +46,7 @@ class CategorySubMenu extends Component
             $this->new_arrivals = Product::whereJsonContains('products.category_id', "$category_id")
                                 ->select('products.pics','products.name','products.id', 'products.price', 'products.vendor_id')
                                 ->orderBy('id', 'DESC')
-                                ->limit(3)
+                                ->limit(2)
                                 ->get();
             $this->sub_categories2 = [];
         }elseif($step == 2){

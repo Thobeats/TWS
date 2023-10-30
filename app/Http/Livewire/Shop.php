@@ -42,7 +42,6 @@ class Shop extends Component
     public function products(){
         $query = Product::where('publish_status',1);
 
-
         if(count($this->cats) > 0){
             $QC = $this->cats;
             $query->where(function(Builder $query)use($QC){

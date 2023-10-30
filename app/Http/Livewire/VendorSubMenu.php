@@ -23,19 +23,13 @@ class VendorSubMenu extends Component
     }
 
     public function topVendors(){
-        // $this->vendors = Order::selectRaw("count(orders.vendor_id) as cnt, users.business_name, users.profile, users.id")
-        //                             ->join('users','users.id','=','orders.vendor_id')
-        //                             ->groupBy('users.id')
-        //                             ->orderBy('cnt', 'DESC')
-        //                             ->limit(3)
-        //                             ->get();
         $this->vendors = Vendor::where('users.account_status', 0)
                                 ->join('users','users.id','=','vendors.user_id')
                                 ->leftJoin('orders','orders.vendor_id','=','vendors.user_id')
                                 ->selectRaw("count(orders.vendor_id) as cnt, users.business_name, users.profile, users.id")
                                 ->groupBy('users.id')
                                 ->orderBy('cnt', 'DESC')
-                                ->limit(4)
+                                ->limit(2)
                                 ->get();
 
     }

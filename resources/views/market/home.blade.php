@@ -116,64 +116,38 @@
 
 <!-- Banner -->
 <div class="sec-banner bg0 p-b-40 mt-5">
+   <div class="container-">
     <div class="p-b-32">
         <h6 class="ltext-107 cl5 txt-left respon1">
             Trending Categories
         </h6>
     </div>
 
-    <div class="wrap-slick2">
-        <div class="slick2">
+    <div class="wrap-slick">
+       <ul class="trending_categories">
             @forelse ($categories as $category)
-            <div class="size-202 m-lr-auto respon4">
-               <a href="">
-                    <div class="card">
-                        <div class="card-body">
-                            <span class="block1-name ltext-102 trans-04 p-b-8">
-                                {{ $category->name }}
-                            </span>
-                        </div>
-                    </div>
-               </a>
-            </div>
+                <li>
+                    <a href="/shop?query={{$category->id}}" class="trending_badge">
+                        {{ $category->name }}
+                    </a>
+                </li>
             @empty
-            <div class="size-202 m-lr-auto respon4">
-                <div class="card">
-                    <div class="card-body">
-                        <span class="block1-name ltext-102 trans-04 p-b-8">
-                            Women
-                        </span>
-                    </div>
-                </div>
-            </div>
-            <div class="size-202 m-lr-auto respon4">
-                <div class="card">
-                    <div class="card-body">
-                        <span class="block1-name ltext-102 trans-04 p-b-8">
-                            Women
-                        </span>
-                    </div>
-                </div>
-            </div>
-            <div class="size-202 m-lr-auto respon4">
-                 <div class="card">
-                    <div class="card-body text-center">
-                        <span class="block1-name ltext-102 trans-04 p-b-8">
-                            Women
-                        </span>
-                    </div>
-                </div>
-            </div>
+                <li>
+                    <a href="" class="trending_badge">
+                        Women
+                    </a>
+                </li>
             @endforelse
-        </div>
+        </ul>
     </div>
+   </div>
 </div>
 
 @if (count($adminSections) > 0)
 @foreach ($adminSections as $section)
 
 @if($section->adminSectionProducts()->count() > 0)
-<section class="sec-product bg0 p-t-100 p-b-50">
+<section class="sec-product bg0 p-b-50">
     <div class="container-fluid">
         <div class="p-b-32">
             <h6 class="ltext-107 cl5 txt-left respon1">
@@ -351,5 +325,145 @@
         <div class="wrap-slick1-dots"></div>
     </div>
 </section> --}}
+
+
+<section class="sec-product bg0 p-b-50">
+    <div class="container-fluid">
+        <div class="p-b-32">
+            <h6 class="ltext-107 cl5 txt-left respon1">
+                First-Time Buyer Deals
+            </h6>
+        </div>
+
+        <div class="wrap-slick2">
+            <div class="slick2">
+
+                @foreach ($firstTimeBuyers as $product)
+                <div class="item-slick2 p-l-15 p-r-15 p-t-15 p-b-15">
+                    <!-- Block2 -->
+                    <div class="block2">
+                        <div class="block2-pic hov-img0">
+                            <img src="{{ url('storage/products/'. json_decode($product->pics,true)[0]) }}" alt="IMG-PRODUCT">
+
+                            <a href="/market/product/{{$product->id}}" class="block2-btn flex-c-m stext-103 cl2 size-102 bg0 bor2 hov-btn1 p-lr-15 trans-04" data-product="{{$product->id}}">
+                                Quick View
+                            </a>
+                        </div>
+
+                        <div class="block2-txt flex-w flex-t p-t-14 border p-3">
+                            <div class="block2-txt-child1 flex-col-l">
+                                <a href="/market/vendor/{{$product->vendor_id}}" class="mtext-101 text-dark cl4 hov-cl1 trans-04 js-name-b2 p-b-6">
+                                    {{ $product->vendorName() }}
+                                </a>
+
+                                <a href="/market/product/{{$product->id}}" class="stext-104 cl4 hov-cl1 trans-04 js-name-b2 p-b-6">
+                                    {{ $product->name }}
+                                </a>
+                            </div>
+
+                            @auth
+                            <div class="block2-txt-child2 flex-r p-t-3">
+                                <a href="#" class="btn-addwish-b2 dis-block pos-relative js-addwish-b2 mtext-101" data-product="{{$product->id}}">
+                                    <i class="zmdi {{ $product->inWishList() ? "zmdi-favorite" : "zmdi-favorite-outline" }} icon-heart1 dis-block trans-04"></i>
+                                </a>
+                            </div>
+                            @endauth
+                        </div>
+                    </div>
+                </div>
+                @endforeach
+
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="sec-product bg0 p-b-50">
+    <div class="container-fluid">
+        <div class="p-b-32">
+            <h6 class="ltext-107 cl5 txt-left respon1">
+                Free Shipping Deals
+            </h6>
+        </div>
+
+        <div class="wrap-slick2">
+            <div class="slick2">
+
+                @forelse ($freeShipping as $product)
+                <div class="item-slick2 p-l-15 p-r-15 p-t-15 p-b-15">
+                    <!-- Block2 -->
+                    <div class="block2">
+                        <div class="block2-pic hov-img0">
+                            <img src="{{ url('storage/products/'. json_decode($product->pics,true)[0]) }}" alt="IMG-PRODUCT">
+
+                            <a href="/market/product/{{$product->id}}" class="block2-btn flex-c-m stext-103 cl2 size-102 bg0 bor2 hov-btn1 p-lr-15 trans-04" data-product="{{$product->id}}">
+                                Quick View
+                            </a>
+                        </div>
+
+                        <div class="block2-txt flex-w flex-t p-t-14 border p-3">
+                            <div class="block2-txt-child1 flex-col-l">
+                                <a href="/market/vendor/{{$product->vendor_id}}" class="mtext-101 text-dark cl4 hov-cl1 trans-04 js-name-b2 p-b-6">
+                                    {{ $product->vendorName() }}
+                                </a>
+
+                                <a href="/market/product/{{$product->id}}" class="stext-104 cl4 hov-cl1 trans-04 js-name-b2 p-b-6">
+                                    {{ $product->name }}
+                                </a>
+                            </div>
+
+                            @auth
+                            <div class="block2-txt-child2 flex-r p-t-3">
+                                <a href="#" class="btn-addwish-b2 dis-block pos-relative js-addwish-b2 mtext-101" data-product="{{$product->id}}">
+                                    <i class="zmdi {{ $product->inWishList() ? "zmdi-favorite" : "zmdi-favorite-outline" }} icon-heart1 dis-block trans-04"></i>
+                                </a>
+                            </div>
+                            @endauth
+                        </div>
+                    </div>
+                </div>
+                @empty
+                @endforelse
+
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="sec-product bg0 p-b-50">
+    <div class="container-fluid">
+        <div class="p-b-32">
+            <h6 class="ltext-107 cl5 txt-left respon1">
+                New Vendors
+            </h6>
+        </div>
+
+        <div class="wrap-slick2">
+            <div class="slick2">
+
+                @forelse ($newVendors as $vendor)
+                <div class="item-slick2 p-l-15 p-r-15 p-t-15 p-b-15">
+                    <!-- Block2 -->
+                    <div class="block2">
+                        <div class="block2-pic hov-img0">
+                            <img src="{{ $vendor->profileImg() }}" alt="TWSL-VENDOR">
+                        </div>
+
+                        <div class="block2-txt flex-w flex-t p-t-14 border p-3">
+                            <div class="block2-txt-child1 flex-col-l">
+                                <a href="/market/vendor/{{$vendor->id}}" class="mtext-101 text-dark cl4 hov-cl1 trans-04 js-name-b2 p-b-6">
+                                    {{ $vendor->business_name }}
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                @empty
+                @endforelse
+
+            </div>
+        </div>
+    </div>
+</section>
 
 @endsection

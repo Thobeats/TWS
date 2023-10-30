@@ -2,19 +2,23 @@
 
 namespace App\Http\Livewire;
 
-use App\Models\Category;
+use Carbon\Carbon;
 use App\Models\Product;
 use Livewire\Component;
+use App\Models\Category;
 
 class JustIn extends Component
 {
     public $categories;
     public $newProducts;
+    public $today;
+    public $last7days;
     protected $listeners = ['get_products' => 'getNewProducts'];
 
     public function mount(){
         $this->getCategories();
         $this->getNewProducts();
+        $this->countNewProducts();
     }
 
     public function getCategories(){
@@ -43,6 +47,18 @@ class JustIn extends Component
                                     ->orderBy('created_at','DESC')
                                     ->limit(5)
                                     ->get();
+    }
+
+    public function countNewProducts(){
+        $currentDate = Carbon::now();
+        $sevenDaysAgo = Carbon::now()->subDays(7);
+        $this->today = Product::where('publish_status', 1)
+                                ->whereDate('created_at', $currentDate->toDateString())
+                                ->count();
+
+        $this->last7days =  Product::where('publish_status', 1)
+                                    ->whereBetween('created_at', [$sevenDaysAgo->toDateString(), $currentDate->toDateString()])
+                                    ->count();
     }
 
     public function render()
