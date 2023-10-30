@@ -80,8 +80,9 @@ class CartController extends Controller
     }
 
     public function setCartSession(Request $request){
-        $request->session()->put(['cartItems' => $request->only('_token','product_id', 'total','shipping_total')]);
+        return $request->all();
+        // $request->session()->put(['cartItems' => $request->only('_token','product_id', 'total','shipping_total')]);
 
-        return redirect('/checkout');
+        // return redirect('/checkout');
     }
 }

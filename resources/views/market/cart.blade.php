@@ -12,12 +12,10 @@
 </div>
 
 <!-- Shopping Cart -->
-<form method="POST" action="/setCartSession" class="bg0 p-t-75 p-b-85">
-    @csrf
     <div class="container">
         @livewire('cart-item', ['user' => $user])
     </div>
-</form>
+
 
 
 @endsection
