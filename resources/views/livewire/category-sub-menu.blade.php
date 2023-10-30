@@ -51,9 +51,12 @@
                 </h4>
                 <div class="mt-3 product-wrapper d-flex">
                     @forelse ($new_arrivals as $new)
+                        @php
+                            $pic = isset(json_decode($new->pics,true)[0]) ? json_decode($new->pics,true)[0] : ""
+                        @endphp
                         <div class="block2">
                             <div class="block3-pic hov-img0">
-                                <img src="{{ url('storage/products/'. json_decode($new->pics,true)[0]) }}" alt="IMG-PRODUCT">
+                                <img src="{{ url('storage/products/'. $pic) }}" alt="IMG-PRODUCT">
     
                                 <a href="/market/product/{{$new->id}}" class="block2-btn flex-c-m stext-103 cl2 size-102 bg0 bor2 hov-btn1 p-lr-15 trans-04 js-show-modal1" data-product="{{$new->id}}">
                                     Quick View

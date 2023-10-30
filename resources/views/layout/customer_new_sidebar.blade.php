@@ -35,14 +35,14 @@
       </li><!-- End Vendors -->
 
       <li class="nav-item">
-        <a class="nav-link " href="">
+        <a class="nav-link {{ $link == 'saved_items' ? 'active' : ''}}" href="">
           <i class="bi bi-grid"></i>
           <span>Saved Items</span>
         </a>
       </li>
 
       <li class="nav-item">
-        <a class="nav-link" href="/customer/address">
+        <a class="nav-link {{ $link == 'address' ? 'active' : ''}}" href="/customer/address">
             <i class="bi bi-chat"></i><span>Address Book</span>
         </a>
       </li>

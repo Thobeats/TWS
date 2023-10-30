@@ -1121,6 +1121,9 @@ class VendorController extends Controller
 
     public function importProducts(Request $request){
         Excel::import(new ProductImport, request()->file('csv_file'), null,\Maatwebsite\Excel\Excel::CSV);
+
+        toastr()->success('Upload Successful');
+        return redirect('/vendor/products/drafts');
     }
 
     public function uploadFile(){

@@ -111,7 +111,7 @@
                                                         <i class="fs-16 zmdi zmdi-minus"></i>
                                                     </button>
 
-                                                    <input class="mtext-104 cl3 txt-center num-product" type="number" name="num_of_product" id="product_modal_description" value="1">
+                                                    <input class="mtext-104 cl3 txt-center num-product" type="number" name="quantity" id="product_modal_description" value="1">
                                                     <button type="button" class="btn-num-product-up cl8 hov-btn3 trans-04 flex-c-m">
                                                         <i class="fs-16 zmdi zmdi-plus" data-max="{{ $item[0]['listing'][0]['no_in_stock'] }}" id="product_modal_stock"></i>
                                                     </button>
@@ -210,11 +210,11 @@
                             </li>
 
                             <li class="nav-item p-b-10">
-                                <a class="nav-link" data-toggle="tab" href="#information" role="tab">Additional information</a>
+                                <a class="nav-link" data-toggle="tab" href="#information" role="tab">Reviews</a>
                             </li>
 
                             <li class="nav-item p-b-10">
-                                <a class="nav-link" data-toggle="tab" href="#reviews" role="tab">Reviews</a>
+                                <a class="nav-link" data-toggle="tab" href="#reviews" role="tab">Add Review</a>
                             </li>
                         </ul>
 
@@ -401,11 +401,14 @@
                 <div class="wrap-slick2">
                     <div class="slick2">
                         @foreach ($product->otherVendorProducts() as $product)
+                            @php
+                                $pic = isset(json_decode($product->pics,true)[0]) ? json_decode($product->pics,true)[0] : "";
+                            @endphp
                              <div class="item-slick2 p-l-15 p-r-15 p-t-15 p-b-15">
                             <!-- Block2 -->
                             <div class="block2">
                                 <div class="block2-pic hov-img0">
-                                    <img src="{{ url('storage/products/'. json_decode($product->pics,true)[0]) }}" alt="IMG-PRODUCT">
+                                    <img src="{{ url('storage/products/'. $pic) }}" alt="IMG-PRODUCT">
 
                                     <a href="/market/product/{{$product->id}}" class="block2-btn flex-c-m stext-103 cl2 size-102 bg0 bor2 hov-btn1 p-lr-15 trans-04" data-product="{{$product->id}}">
                                         Quick View
@@ -454,11 +457,14 @@
                     <div class="slick2">
 
                         @foreach ($product->otherProducts() as $product)
+                        @php
+                            $pic = isset(json_decode($product->pics,true)[0]) ? json_decode($product->pics,true)[0] : "";
+                        @endphp
                          <div class="item-slick2 p-l-15 p-r-15 p-t-15 p-b-15">
                             <!-- Block2 -->
                             <div class="block2">
                                 <div class="block2-pic hov-img0">
-                                    <img src="{{ url('storage/products/'. json_decode($product->pics,true)[0]) }}" alt="IMG-PRODUCT">
+                                    <img src="{{ url('storage/products/'. $pic) }}" alt="IMG-PRODUCT">
 
                                     <a href="/market/product/{{$product->id}}" class="block2-btn flex-c-m stext-103 cl2 size-102 bg0 bor2 hov-btn1 p-lr-15 trans-04" data-product="{{$product->id}}">
                                         Quick View

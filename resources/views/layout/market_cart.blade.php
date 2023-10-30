@@ -1,17 +1,4 @@
 @auth
-@php
-    $cart = \App\Models\Cart::where('user_id', auth()->user()->id)->first();
-
-    if($cart){
-        $count = count(json_decode($cart->items,true));
-        $sum = array_reduce(array_column(array_values(json_decode($cart->items,true)),'price'), function($v1, $v2){
-            return $v1+$v2;
-        });
-    }else{
-        $count = 0;
-    }
-
-@endphp
 <div class="wrap-header-cart js-panel-cart">
     <div class="s-full js-hide-cart"></div>
 
@@ -29,9 +16,9 @@
         <div class="header-cart-content flex-w js-pscroll">
             @if ($count > 0)
             <ul class="header-cart-wrapitem w-full">
-                @foreach (json_decode($cart->items,true) as $key => $item)
+                @foreach ($cart as $key => $item)
                     @php
-                        $product = \App\Models\Product::find($item['product_id']);
+                        $product = \App\Models\Product::find($item->product_id);
                     @endphp
                     <li class="header-cart-item flex-w flex-t m-b-12">
                         <div class="header-cart-item-img">
@@ -44,7 +31,7 @@
                             </a>
 
                             <span class="header-cart-item-info">
-                                {{ $item['num_of_product'] }} x ${{$product->price}}
+                                {{ $item->quantity }} x ${{$product->price}}
                             </span>
                         </div>
                     </li>

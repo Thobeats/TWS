@@ -1,26 +1,4 @@
 
-@auth
-    @php
-    $cart = \App\Models\Cart::where('user_id', auth()->user()->id)->first();
-
-    if($cart){
-        $count = count(json_decode($cart->items,true));
-    }else{
-        $count = 0;
-    }
-
-    $wishList = \App\Models\Wishlist::where('user_id', auth()->user()->id)->first();
-    if($wishList){
-        $wcount = count(json_decode($wishList->items,true));
-    }else{
-        $wcount = 0;
-    }
-
-    @endphp
-@endauth
-
-
-
 <header class="header-v2">
     <!-- Header desktop -->
     <div class="container-menu-desktop trans-03" style="border:1px solid #0000">

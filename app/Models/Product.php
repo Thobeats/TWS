@@ -114,4 +114,16 @@ class Product extends Model
         return $vendorName->business_name;
     }
 
+    public function quantityAvailable($color, $size){
+        $item_listing = json_decode($this->item_listing, true);
+
+        $colorRecord = $item_listing[$color];
+        $sizeIndex = array_search($size, $colorRecord[0]);
+        $num_in_stock = $colorRecord[1][$sizeIndex];
+
+        return $num_in_stock;
+    }
+
+
+
 }

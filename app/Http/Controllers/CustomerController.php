@@ -133,7 +133,8 @@ class CustomerController extends Controller
 
     public function address(){
         $user = Auth::user();
-        return view('customer.address',['user' => $user]);
+        $link = "address";
+        return view('customer.address',compact('user', 'link'));
     }
 
     public function editAddress($index){
@@ -273,6 +274,10 @@ class CustomerController extends Controller
         $tab = $request->tab ? $request->tab : "profile";
         $link = "profile";
         return view('customer.profile', compact('user', 'tab', 'link'));
+    }
+
+    public function savedItems(){
+        $user = Auth::user();
     }
 
 

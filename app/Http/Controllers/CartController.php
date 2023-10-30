@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Exception;
 use App\Models\Cart;
+use App\Models\User;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -13,76 +14,64 @@ class CartController extends Controller
 {
     public function index(){
         $user = Auth::user();
-        $cart = Cart::where('user_id', $user->id)->first();
-        $items = json_decode($cart->items,true);
+        $cart = Cart::where("user_id", $user->id)->first();
 
-        $sum = array_reduce(array_column(array_values($items),'price'), function($v1, $v2){
-            return $v1+$v2;
-        });
+        if(!$cart){
+            
+            toastr()->error("No item in cart");
 
-        $shipping_fee = array_reduce(array_column(array_values($items),'shipping_fee'), function($v1, $v2){
-            return $v1+$v2;
-        });
-
-        return view('market.cart',compact('items','sum','shipping_fee'));
+            return redirect()->back();
+        }
+        return view('market.cart',compact('user', 'cart'));
     }
 
     public function store(Request $request){
         try{
             $user = Auth::user();
-            //Validate the request and add to Cart
-            $validated = Validator::make($request->only('product_id','size','color','num_of_product'),[
-                                            'product_id' => 'required|integer',
-                                            'size' => 'required|integer',
-                                            'color' => 'required|integer',
-                                            'num_of_product' => 'required|integer'
-                                        ]);
-            if($validated->fails()){
-                return redirect("/market/product/$request->product_id");
-            }
+            
+            // Validate the Cart Item
+            $validated = Validator::make($request->only('product_id', 'quantity', 'color', 'size'),[
+                                        "product_id" => "required|integer|exists:products,id",
+                                        "quantity"=> "required|numeric",
+                                        "color" => "required|numeric",
+                                        "size" => "required|numeric"
+                                    ]);
 
-            // Add To Cart
-            $user_cart = Cart::where('user_id', $user->id)->first();
-
-            if($user_cart){
-                $cart_items = json_decode($user_cart->items, true);
-            }else{
-                $user_cart = new Cart;
-                $cart_items = [];
-                $user_cart->user_id = $user->id;
-            }
-
-            // Check if Product is still valid
+            // CHeck if the quantity is still available
             $product = Product::find($request->product_id);
 
-            if(!$product){
-                toastr()->error('Product has been removed by the vendor');
-                return redirect("/market/product/$request->product_id");
+            $num_in_stock = $product->quantityAvailable($request->color, $request->size);
+
+            if ($num_in_stock < $request->quantity)
+            {
+                toastr()->error("Quantity ordered is more than the available stock quantity");
+                return redirect()->back();
             }
 
-            //Cart Product
-            $new_product = [
-                'product_id' => $request->product_id,
-                'size' => $request->size,
-                'color' => $request->color,
-                'num_of_product' => $request->num_of_product,
-                'price' => floatval($request->num_of_product) * floatval($product->price),
-                'shipping_fee' => floatval($request->num_of_product) * floatval($product->shipping_fee)
-            ];
+            // Check if the the product, color and size has been added already
 
-            //Check if the Product has been added
-            if(array_key_exists($request->product_id,$cart_items)){
-                toastr()->error('Product added already');
-                return redirect("/market/product/$request->product_id");
+            $check = Cart::where(['product_id' => $request->product_id, 'color' => $request->color, 'size' => $request->size, 'user_id' => $user->id])->first();
+
+            if ($check){
+                $check->quantity += $request->quantity;
+                $check->price = $check->quantity *  $product->price;
+                $check->save();
+            }else{
+
+                $cart = new Cart;
+                $cart->user_id = $user->id;
+                $cart->vendor_id = $product->vendor_id;
+                $cart->product_id = $request->product_id;
+                $cart->quantity = $request->quantity;
+                $cart->color = $request->color;
+                $cart->size = $request->size;
+                $cart->price = $product->price * $request->quantity;
+                $cart->shipping_fee = $product->shipping_fee;
+                $cart->save();
             }
-
-            //Append to the List of Cart Items
-            $cart_items[$request->product_id] = $new_product;
-            $user_cart->items = json_encode($cart_items);
-            $user_cart->save();
 
             toastr()->success('Added to Cart');
-            return redirect('/');
+            return redirect()->back();
 
 
         }catch(Exception $e){

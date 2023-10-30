@@ -207,7 +207,16 @@
                 document.getElementById('inbox').innerHTML += '<span class="badge badge-danger">new</span>';
             };
         </script>
+
+		<script>
+			function addToWishList(){
+
+			}
+		</script>
+
     @endauth
+
+
 
 </body>
 </html>

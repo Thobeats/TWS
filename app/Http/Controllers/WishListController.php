@@ -26,8 +26,8 @@ class WishListController extends Controller
 
         if($product){
             //Add Or Remove
-            if(in_array($id, $items)){
-                unset($items[array_search($id,$items)]);
+            if(key_exists($id, $items)){
+                unset($items[$id]);
                 $items = array_values($items);
 
                 if(count($items) == 0){
