@@ -769,6 +769,17 @@ class VendorController extends Controller
             if(!$ps){
                 return redirect('/vendor/products/drafts');
             }
+
+
+            // Add the Category to the list of Products
+            $vendorProfile = Vendor::where('user_id', $user->id)->first();
+            $vendorProducts = json_decode($vendorProfile->products,true);
+            foreach( $request->category_id as $cat){
+                if(!array_search($cat, $vendorProducts)){
+                    $vendorProducts[] = "$cat";
+                }
+            }
+            
             return redirect('/vendor/products');
 
     }

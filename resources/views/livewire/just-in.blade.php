@@ -36,14 +36,13 @@
                                 <div class="img-wrapper" style="height: 90%;">
                                     <img src="{{ url('storage/products/'. json_decode($new->pics,true)[0]) }}" class="card-img-top h-100" alt="...">
                                 </div>
-                                <div class="row p-2 new_arrival">
-                                    <div class="col-7">
-                                        <h6>{{ substr($new->name,0,12)."..." }}</h6>
-                                        <h4 class="mt-1">${{ $new->price}}</h6>
-                                    </div>
-                                    <div class="col-5">
-                                        <a class="btn btn-outline-dark btn-sm" href="/market/product/{{$new->id}}">View</a>
-                                    </div>
+                                <div class="p-2 new_arrival">
+                                    <a href="/market/vendor/{{$new->vendor_id}}" class="mtext-101 text-dark cl4 hov-cl1 trans-04 js-name-b2">
+                                        {{ $new->vendorName() }}
+                                    </a> 
+                                    <a class="stext-104 cl4 hov-cl1 trans-04 js-name-b2" href="/market/product/{{$new->id}}">
+                                        {{ $new->name }}  
+                                    </a>
                                 </div>
                             </div>
                         @empty

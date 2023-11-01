@@ -36,12 +36,13 @@ class CartItem extends Component
                                 "vendor_id" => $item->vendor_id,
                                 "vendor_name" => $vendorName->business_name,
                                 "cartItems" => $cartItems,
-                                "product_id" => $item->product_id
+                                "product_id" => $item->product_id,
+                                "cart_id" => $item->id
                             ];
                         });
         $this->sum = Cart::where('user_id', $this->user->id)->sum('price');
         $this->shipping_fee = Cart::where('user_id', $this->user->id)->sum('shipping_fee');
-        $this->cart_id = json_encode(array_column($this->items->toArray(), 'id'));
+        $this->cart_id = json_encode(array_column($this->items->toArray(), 'cart_id'));
     }
 
     public function Increase($id){

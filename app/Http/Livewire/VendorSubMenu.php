@@ -35,7 +35,7 @@ class VendorSubMenu extends Component
     }
 
     public function newVendors(){
-        $this->new_vendors = User::where(['users.role' => 2, 'users.account_status' => 0, 'vendors.verified' => 0])
+        $this->new_vendors = User::where(['users.role' => 2, 'users.account_status' => 0, 'vendors.verified' => 1])
                                     ->join('vendors','vendors.user_id','=','users.id')
                                     ->select('users.business_name','users.id')
                                     ->orderBy('vendors.created_at', 'DESC')

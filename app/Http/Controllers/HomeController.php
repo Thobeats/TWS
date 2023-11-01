@@ -111,7 +111,7 @@ class HomeController extends Controller
 
         $freeShipping = Product::where(['publish_status' => 1, 'shipping_fee' => 0])->inRandomOrder()->get();
 
-        $newVendors = User::where(['users.role' => 2, 'users.account_status' => 0, 'vendors.verified' => 0])
+        $newVendors = User::where(['users.role' => 2, 'users.account_status' => 0, 'vendors.verified' => 1])
                                 ->join('vendors','vendors.user_id','=','users.id')
                                 ->select('users.business_name','users.id', 'users.profile')
                                 ->orderBy('vendors.created_at', 'DESC')
@@ -212,6 +212,21 @@ class HomeController extends Controller
                                             "products" => $products
                                         ];
                                     });
+
+        // $vendorProducts = Product::where(['publish_status' => 1, 'vendor_id' => $id])
+        //                             ->get()
+        //                             ->map(function($items)use($id){
+        //                                 $products = Product::whereJsonContains('category_id', "$items->id")
+        //                                                     ->where('vendor_id', $id)
+        //                                                     ->where('publish_status', 1)
+        //                                                     ->select('name', 'pics', 'id')
+        //                                                     ->get()
+        //                                                     ->toArray();
+        //                                 return [
+        //                                     "category_name" => $items->name,
+        //                                     "products" => $products
+        //                                 ];
+        //                             });
         $step = $request->step ? $request->step : 'about';
 
         return view('market.vendor',compact('id', 'vendor', 'cProducts', 'step'));
