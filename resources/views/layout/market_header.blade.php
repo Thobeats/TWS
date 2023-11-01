@@ -273,7 +273,7 @@
         </button>
 
         <div class="container text-dark">
-            <section class="my-3 p-3">
+            {{-- <section class="my-3 p-3">
                 <div class="row">
                     <div class="col-lg-12">
                         <p class="display-4 p-2">
@@ -284,7 +284,7 @@
                         </p>
                     </div>
                 </div>
-            </section>
+            </section> --}}
 
             <section class="my-3 p-3">
                 <div class="register-cards mx-auto text-light">

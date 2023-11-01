@@ -11,23 +11,16 @@
         <div class="sidebar-content flex-w w-full p-lr-65 js-pscroll">
             <ul class="sidebar-link w-full">
                 <li class="p-b-13">
-                    <a href="index.html" class="stext-102 cl2 hov-cl1 trans-04">
+                    <a href="{{url('/')}}" class="stext-102 cl2 hov-cl1 trans-04">
                         Home
                     </a>
                 </li>
-
                 <li class="p-b-13">
-                    <a href="#" class="stext-102 cl2 hov-cl1 trans-04">
-                        My Wishlist
-                    </a>
-                </li>
-
-                <li class="p-b-13">
-                    <a href="#" class="stext-102 cl2 hov-cl1 trans-04">
+                    <a href="{{ route('customer_profile')}}" class="stext-102 cl2 hov-cl1 trans-04">
                         My Account
                     </a>
                 </li>
-
+{{-- 
                 <li class="p-b-13">
                     <a href="#" class="stext-102 cl2 hov-cl1 trans-04">
                         Track Oder
@@ -38,7 +31,7 @@
                     <a href="#" class="stext-102 cl2 hov-cl1 trans-04">
                         Refunds
                     </a>
-                </li>
+                </li> --}}
 
                 <li class="p-b-13">
                     <a href="#" class="stext-102 cl2 hov-cl1 trans-04">
@@ -47,7 +40,7 @@
                 </li>
                 @auth
                 <li class="p-b-13">
-                    <a class='btn home-bg-color home-text js-show-modal-sign-up' {{ route('customer_profile') }}>
+                    <a class='btn home-bg-color text-light js-show-modal-sign-up' {{ route('customer_profile') }}>
                         <i class="zmdi zmdi-account"></i>
                         View Profile
                     </a>
