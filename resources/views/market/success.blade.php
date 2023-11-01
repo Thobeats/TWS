@@ -22,7 +22,7 @@
             Your Order was successful. <br> We will be in touch shortly.
         </p>
 
-         <a  href="/home" class="btn btn-outline-success w-100 mt-5">Home</a>
+         <a  href="{{ url('/') }}" class="btn btn-outline-success w-100 mt-5">Home</a>
    </div>
 
    <script>

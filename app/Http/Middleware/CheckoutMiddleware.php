@@ -16,7 +16,7 @@ class CheckoutMiddleware
      */
     public function handle(Request $request, Closure $next)
     {
-        if(!$request->session()->has('cartItems')){
+        if(!$request->session()->has('cartId')){
             return redirect('/');
         }
         return $next($request);

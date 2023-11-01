@@ -25,7 +25,7 @@
                                         <td class="column-1">
                                             <div class="how-itemcart1">
                                                 {{-- Attach Vendor ID and Product ID --}}
-                                                <input type="hidden" value="{{$cartItem['id']}}" name="cartId[]">
+                                                <input type="hidden" value="{{ (int) $cartItem['id']}}" name="cartId[]">
                                                 <img src="{{ url('storage/products/'. json_decode($product->pics,true)[0]) }}" alt="IMG">
                                             </div>
                                         </td>
@@ -137,7 +137,7 @@
 
                 <form method="POST" action="/setCartSession">
                     @csrf
-                    <input type="hidden" name="cart_id" value="{{ $cart_id }}">
+                    <input type="hidden" name="cartId" value="{{ $cart_id }}">
                     <button type="submit" class="flex-c-m stext-101 cl0 size-116 bg3 bor14 hov-btn3 p-lr-15 trans-04 pointer">
                         Proceed to Checkout
                     </button>

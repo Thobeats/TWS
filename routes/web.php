@@ -119,6 +119,7 @@ Route::middleware(['auth'])->group(function () {
     });
 
     Route::get('/success', [CheckoutController::class, 'success']);
+    Route::get('/error', [CheckoutController::class, 'error']);
 
 
     Route::get('/logout', [AuthController::class, 'logout'])->name('logout');

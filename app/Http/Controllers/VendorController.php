@@ -977,9 +977,9 @@ class VendorController extends Controller
 
     // Orders
     public function allOrders(){
-       // $user = Auth::user();
-       // $orders = Order::where("vendor_id", $user->id)->get();
-       $orders = collect([]);
+       $user = Auth::user();
+       $orders = Order::where("vendor_id", $user->id)->get();
+       //$orders = collect([]);
         return view('vendor.orders.all_orders', compact('orders'));
     }
 

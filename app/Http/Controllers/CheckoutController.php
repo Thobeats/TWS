@@ -70,53 +70,44 @@ class CheckoutController extends Controller
                 'address' => $address
             ];
 
-            return view('market.checkout',compact('data'));
+            $item = session('cartId');
+
+            $query = Cart::whereIn('id', $item);
+
+            $items['total'] = $query->sum('price');
+            $items['shipping_total'] = $query->sum('shipping_fee');
+
+            return view('market.checkout',compact('data', 'items'));
         }catch(Exception $e){
             // return exception route
         }
     }
 
-    public function purchase(){
-        $items = session('cartItems');
-        $request = new Request($items);
-
+    public function purchase(Request $request){
+        $items = session('cartId');
        return view('market.purchase', compact('request'));
     }
 
     public function process_checkout(Request $request){
         try{
             $user = Auth::user();
-
-            $order_details = $request->all();
+            $item = session('cartId');
+            $query = Cart::whereIn('id', $item);
+            $total = $query->sum('price') + $query->sum('shipping_fee');
 
             /// Create Payment Intent then save into the Orders Table
             $stripe = $this->initialiseStripe();
             $uniqID = uniqid('ORDER_');
             $intent = $stripe->paymentIntents->create([
-                'amount' => $request->total,
+                'amount' => $total,
                 'currency' => 'usd',
                 'transfer_group' => $uniqID,
                 'automatic_payment_methods' => ['enabled' => true],
                 'receipt_email' => $user->email
             ]);
 
-            //Update the Cart with transfer group ID
-
-            $user_cart = Cart::where('user_id',$user->id)->first();
-
-            if($user_cart){
-                // Update the product id with the transfer_group key
-                $items = json_decode($user_cart->items, true);
-
-                foreach($request->product_id as $prd){
-                    if(array_key_exists($prd, $items)){
-                        $items[$prd]['transfer_group'] = $uniqID;
-                    }
-                }
-
-                $user_cart->items = json_encode($items);
-                $user_cart->save();
-            }
+            //Create Session with Transfer Group ID
+            $request->session()->put(['transferGroupId' => $uniqID]);
             return $intent;
         }catch(Exception $e){
             return $e->getMessage();
@@ -129,32 +120,40 @@ class CheckoutController extends Controller
         $stripe = $this->initialiseStripe();
         $user = Auth::user();
 
-        $user_cart = Cart::where('user_id', $user->id)->first();
-
-        if(!$user_cart){
-            return redirect('/shop');
+        if (!$request->session()->has('transferGroupId')){
+            return redirect('/');
         }
 
         //if the purchase was successful ...Update Payment Status and add them to Orders ...notify the Vendors
         //Retrieve the Payment Intent
         $intent = $stripe->paymentIntents->retrieve($request->payment_intent);
 
-        $cart_items = json_decode($user_cart->items,true);
-        foreach($cart_items as $key => $item){
-            if($item['transfer_group'] == $intent->transfer_group){
-                $item['payment_status'] = true;
+        if ($intent->status == 'succeeded'){
+            $item = session('cartId');
+            $transferGroupId = session('transferGroupId');
+            $query = Cart::whereIn('id', $item);
 
-                $product = Product::find($key);
+            $products = $query->get();
+
+            foreach ($products as $product){
                 $refno = uniqid("REF");
-
+                $orderedProduct = Product::find($product->product_id);
+                $orderDetails = [
+                    "price" => $product->price + $product->shipping_fee,
+                    "size" => $product->size,
+                    "color" => $product->color,
+                    "quantity" => $product->quantity,
+                    "payment_status" => 1
+                ];
+                // Save the Orders into the Orders Table
                 //Create Order
                 Order::create([
-                    "vendor_id" =>  $product->vendor_id,
-                    "order_number" => $intent->transfer_group,
-                    "order_details" => json_encode($item),
-                    "total_price" => $item['price'],
+                    "vendor_id" =>  $orderedProduct->vendor_id,
+                    "order_number" => $transferGroupId,
+                    "order_details" => json_encode($orderDetails),
+                    "total_price" => $product->price + $product->shipping_fee,
                     "customer_id" => $user->id,
-                    "reference_number" => $ref,
+                    "reference_number" => $refno,
                     "status" => 1
                 ]);
 
@@ -162,31 +161,47 @@ class CheckoutController extends Controller
                 $vendor = Vendor::where('user_id', $product->vendor_id)->first();
                 $accountId = json_decode($vendor->account_details,true);
                 $stripe->transfers->create([
-                    'amount' => $item['price'],
+                    'amount' => $product->price + $product->shipping_fee,
                     'currency' => 'usd',
                     'destination' => $accountId['id'],
                     'transfer_group' => $intent->transfer_group,
                 ]);
 
-                 //Notify the Vendor
-                $message = "A new Order";
-                $ref = "";
-                $this->notifyUser($message, $ref,$product->vendor_id);
 
-                //Remove from the Cart
-                unset($cart_items[$key]);
+                // Notify the Vendor
+                $message = "New Order From $user->firstname $user->lastname";
+                $type = "info";
+                $recipientID = $product->vendor_id;
+                $this->notifyUser($message,$refno,$recipientID,$type,$title="New Order");
+
+                // Remove From the Cart
+                $product->delete();
             }
+
+        }else{
+             // Notify the User
+             $message = "Order not succesful, Payment Failed";
+             $type = "danger";
+             $recipientID = $user->id;
+             $this->notifyUser($message,"",$recipientID,$type,$title="Payment Failed");
+
+             $request->session()->forget('cartId');
+             $request->session()->has('transferGroupId');
+             return redirect('/error');
         }
 
-        $user_cart->items = json_encode($cart_items);
-        $user_cart->save();
-
         // Return to Success Page and remove the Session
-        $request->session()->forget('cartItems');
+        $request->session()->forget('cartId');
+        $request->session()->has('transferGroupId');
         return redirect('/success');
     }
 
     public function success(){
         return view('market.success');
+    }
+
+    public function error(){
+        toastr()->error('Payment Failed');
+        return redirect('/');
     }
 }

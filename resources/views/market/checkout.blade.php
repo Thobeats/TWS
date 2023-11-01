@@ -132,11 +132,6 @@
                         <div class="card-body mt-4">
                            <form action="/purchase" method="post">
                                 @csrf
-                                @php
-                                    $items = session('cartItems');
-
-                                    $shipping_total = $items['shipping_total'];
-                                @endphp
                                 <table class="table">
                                     <tr>
                                         <th>
@@ -152,7 +147,7 @@
                                             Shipping Amount
                                         </th>
                                         <td class="text-right">
-                                            ${{number_format($shipping_total)}}
+                                            ${{number_format($items['shipping_total'], 2)}}
                                         </td>
                                     </tr>
                                     <tr>
@@ -160,7 +155,7 @@
                                             Grand Total
                                         </th>
                                         <td class="text-right">
-                                            ${{ number_format(($items['total'] + $shipping_total),2) }}
+                                            ${{ number_format(($items['total'] + $items['shipping_total']),2) }}
                                         </td>
                                     </tr>
 

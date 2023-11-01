@@ -1,6 +1,6 @@
-var stripe = Stripe('pk_test_51JDQeGK8ulhDI3CCfH8CtMRV3XUQq5YXGrLDVk5hnipMPMGdENm7AAEeHkuvZPiTrFBizZErg93qGxWVfeOOYTJf00Wm2TrPWt');
+//var stripe = Stripe('pk_test_51JDQeGK8ulhDI3CCfH8CtMRV3XUQq5YXGrLDVk5hnipMPMGdENm7AAEeHkuvZPiTrFBizZErg93qGxWVfeOOYTJf00Wm2TrPWt');
+var stripe = Stripe('pk_live_51NDrKkGQDXoy7rGv0BGikXyVPqDXDtw1O81wFh5LcADDVfNnAQX6KjVuhZePLytwsOpgivGdItkH8Tyy1uEHOLLc00Xu8qxR8M');
 // The items the customer wants to buy
-const items = document.getElementById('request').value;
 
 let elements;
 
@@ -11,12 +11,14 @@ document
   .querySelector("#payment-form")
   .addEventListener("submit", handleSubmit);
 
-let emailAddress = document.getElementById('userEmail');
+
+
 // Fetches a payment intent and captures the client secret
 async function initialize() {
+  items = document.getElementById('request').value;
   const clientSecret = await fetch("/process_checkout", {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    headers: { "Content-Type": "application/json"},
     body: items,
   }).then((r) => r.json());
 
@@ -36,6 +38,8 @@ async function initialize() {
 async function handleSubmit(e) {
   e.preventDefault();
   setLoading(true);
+
+  const emailAddress = document.getElementById('userEmail');
 
   const { error } = await stripe.confirmPayment({
     elements,
