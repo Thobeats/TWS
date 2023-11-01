@@ -1,0 +1,5 @@
+---
+deployment:
+  tasks:
+    - export DEPLOYPATH=/home/pcf3igoccn7l/public_html/TheWholeSaleLounge
+    - /bin/cp -r * $DEPLOYPATH
