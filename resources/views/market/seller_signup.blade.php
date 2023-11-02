@@ -48,14 +48,29 @@
             <input type="text" name="ein" value="{{ old('ein') }} @error('ein') {{ $message }} @enderror" required class="form-control @error('ein') is-invalid text-danger @enderror">
         </div> --}}
         <div class="form-group">
+            <label for="address">Address <span class='text-danger'>*</span> </label>
+            <input name="address" id="address" value="{{ old('address') }} @error('address') {{ $message }} @enderror" required class="form-control @error('address') is-invalid text-danger @enderror" oninput="getAddress(event)">
+            <div class="address_card">
+                <ul class="address_listing">
+            
+                </ul>
+            </div>
+        </div>
+        <div class="form-group">
             <label for="zip_code">Zip Code <span class='text-danger'>*</span> </label>
             <input type="number" name="zip_code" value="{{ old('zip_code') }} @error('zip_code') {{ $message }} @enderror" required class="form-control @error('zip_code') is-invalid text-danger @enderror">
         </div>
-        <div class="form-group">
-            <label for="address">Address <span class='text-danger'>*</span> </label>
-            <textarea name="address" value="{{ old('address') }} @error('address') {{ $message }} @enderror" required class="form-control @error('address') is-invalid text-danger @enderror" rows="5"></textarea>
-        </div>
 
+        
+        <div class="form-group">
+            <label for="city">City <span class='text-danger'>*</span> </label>
+            <input id="city" type="number" name="city" value="{{ old('city') }} @error('city') {{ $message }} @enderror" required class="form-control @error('city') is-invalid text-danger @enderror">
+        </div>
+        <div class="form-group">
+            <label for="state">State <span class='text-danger'>*</span> </label>
+            <input id="state" name="state"  value="{{ old('state') }} @error('state') {{ $message }} @enderror" required class="form-control @error('state') is-invalid text-danger @enderror" id="location-input">
+        </div>
+{{--     
         <div class="row">
             <div class="col">
                 <div class="form-group">
@@ -79,7 +94,7 @@
                     @enderror
                 </div>
             </div>
-        </div>
+        </div> --}}
 
         <div class="form-group">
             <label for="products">What kind of products do you offer? <span class='text-danger'>*</span> </label>

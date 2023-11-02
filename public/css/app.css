@@ -179,6 +179,22 @@ Secondary Color: #e39ff6
     margin-top: 5px;
 }
 
+.address_listing li{
+    padding:4px;
+    cursor: pointer;
+}
+
+.address_listing li:hover{
+    background: #ccc;
+}
+
+.address_listing{
+    position: absolute;
+    height: auto;
+    background: #fff;
+    width: 500px;
+}
+
 
 
 

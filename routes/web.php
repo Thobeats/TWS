@@ -355,3 +355,18 @@ Route::get('/updateVendors', function(){
         "verify_customer_review" => 1
     ]);
 });
+
+// Route::get('/address', function(){
+//     $client = new \GuzzleHttp\Client();
+
+//     $response = $client->request('GET', 'https://address-completion.p.rapidapi.com/v1/geocode/autocomplete?text=Wiebkestieg%201%20Hamburg&limit=1&lang=en&countrycodes=de', [
+//         'headers' => [
+//             'X-RapidAPI-Host' => 'address-completion.p.rapidapi.com',
+//             'X-RapidAPI-Key' => '7f063eed88msh4724b3cc06730c1p1204b2jsn3fcdec979f05',
+//         ],
+//     ]);
+    
+//     echo $response->getBody();
+// });
+
+Route::get('address', [AuthController::class, 'getAddress']);

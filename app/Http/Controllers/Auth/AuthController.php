@@ -394,6 +394,13 @@ class AuthController extends Controller
         $this->sendConfirmEmail('tobiy23@gmail.com', "5555");
     }
 
+    public function getAddress(Request $request){
+        $api_key = env('ADDRESS_API');
+        $httpRequest = Http::get("https://maps.googleapis.com/maps/api/place/autocomplete/json?input=$request->address&types=address&key=$api_key");
+
+        return $httpRequest->json();
+    }
+
 
 
 }
