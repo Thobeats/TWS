@@ -229,7 +229,7 @@ Route::middleware(['auth'])->group(function () {
 
 
     //Product Routes
-    Route::resource('product', 'ProductController');
+    //Route::resource('product', 'ProductController');
 
     // Admin
     Route::middleware(['admin'])->group(function(){
