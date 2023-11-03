@@ -425,23 +425,22 @@ class VendorController extends Controller
         //Recent Sales
         $recent_sales = Order::where("orders.vendor_id", $user->id)
                                 ->join('users', 'users.id', '=', 'orders.customer_id')
-                                ->join('products', 'products.id', '=', 'orders.order_details->product_id')
+                                ->join('products', 'products.id', '=', 'orders.product_id')
                                 ->join('order_status', 'order_status.id', '=', 'orders.status')
                                 ->select('orders.id', 'products.name','orders.total_price',
                                         'orders.status','users.id as user_id', 'users.firstname',
-                                        'users.lastname','orders.order_details->num_of_product as num_products',
+                                        'users.lastname','orders.order_details->quantity as num_products',
                                         'order_status.name as status',
                                         'orders.status as status_id',
-                                        'orders.order_details->product_id as prodID')
+                                        'orders.product_id as prodID')
                                 ->limit(5)
                                 ->orderBy('orders.created_at', 'desc')
                                 ->get()
                                 ->toArray();
-
         //Top Selling Products
         $top_selling = Order::where("orders.vendor_id", $user->id)
-                        ->join('products', 'products.id', '=', 'orders.order_details->product_id')
-                        ->selectRaw("SUM(orders.order_details->'$.num_of_product') as sold, products.pics as picture, products.name , products.price , SUM(orders.total_price) as revenue")
+                        ->join('products', 'products.id', '=', 'orders.product_id')
+                        ->selectRaw("SUM(orders.order_details->'$.quantity') as sold, products.pics as picture, products.name , products.price , SUM(orders.total_price) as revenue")
                         ->groupBy('products.id')
                         ->orderBy('sold', 'desc')
                         ->get()
@@ -978,19 +977,78 @@ class VendorController extends Controller
     // Orders
     public function allOrders(){
        $user = Auth::user();
-       $orders = Order::where("vendor_id", $user->id)->get();
+       $orders = Order::where("orders.vendor_id", $user->id)
+                        ->join('users', 'users.id', '=', 'orders.customer_id')
+                        ->join('products', 'products.id', '=', 'orders.product_id')
+                        ->join('order_status', 'order_status.id', '=', 'orders.status')
+                        ->select('orders.id', 'products.name as product_name','orders.total_price',
+                                 'users.firstname', 'orders.order_number',
+                                'users.lastname','order_status.name as status',
+                                'orders.status as status_id',
+                                'orders.product_id as prodID')
+                        ->get();
        //$orders = collect([]);
         return view('vendor.orders.all_orders', compact('orders'));
     }
 
     public function showOrder($id){
-        $order = Order::find($id);
+        $order = Order::where('orders.id',$id)->join('users', 'users.id', '=', 'orders.customer_id')
+        ->join('products', 'products.id', '=', 'orders.product_id')
+        ->join('order_status', 'order_status.id', '=', 'orders.status')
+        ->select('orders.id', 'products.name as product_name','orders.total_price',
+                 'users.firstname', 'orders.order_number', 'products.pics', 'orders.customer_id',
+                'users.lastname','order_status.name as status',
+                'orders.status as status_id',
+                'orders.order_details->quantity as quantity','users.business_name','users.phone','users.email',
+                'orders.product_id as prodID')->first();
         $details = json_decode($order->order_details,true);
         return view('vendor.orders.show_order',compact('order','details'));
     }
 
 
     //Customers
+
+    public function customers(){
+        $user = Auth::user();
+
+        $customers = Order::where(['orders.vendor_id' => $user->id])
+        ->join('users', 'users.id', '=', 'orders.customer_id')
+        ->selectRaw('COUNT(orders.id) as total_orders, SUM(orders.total_price) as total_price, users.id, users.business_name')
+        ->groupBy('users.id')
+        ->get();
+
+        return view('vendor.customers.customer', compact('customers'));
+    }
+
+    public function customer($id){
+        $user = Auth::user();
+
+        $customer = Order::where(['orders.vendor_id' => $user->id, 'orders.customer_id' => $id])
+                            ->join('users', 'users.id', '=', 'orders.customer_id')
+                            ->select('orders.customer_id', 'users.*')
+                            ->groupBy('orders.customer_id')
+                            ->get()
+                            ->map(function($item)use($id){
+                                $query = Order::where('customer_id', $id);
+                                $total_orders = $query->count();
+                                $total_purchase = $query->sum('total_price');
+                                $orders = $query->get()->toArray();
+
+                               // $review = 
+                                return [
+                                    "orders" => $orders,
+                                    "business_name" => $item->business_name,
+                                    "profile" => $item->profile,
+                                    "total_orders" => $total_orders,
+                                    "total_purchase" => $total_purchase,
+                                   // "reviews" => $review
+                                ];
+                            });
+
+                            $customer = $customer[0]; 
+
+        return view('vendor.customers.view_customer', compact('customer'));
+    }
 
 
 

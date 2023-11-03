@@ -4,7 +4,7 @@
     <div class="row">
         <div class="col-lg-3">
             <aside id="sidebar" class="bg-white border-dark p-2" style="height: 80vh;">
-                <p class="text-center p-3 home-bg-color text-light">All Conversations</p>
+                <p class="text-center p-3 bg-primary text-light">All Conversations</p>
                 <ul class="sidebar-nav text-center" id="chat-sidebar">
                     @forelse ($chats as $chat)
                         <li class="nav-item">
@@ -55,8 +55,7 @@
                                 </div>
                                 @endif
                             @empty
-                                <div class="mt-4 text-center bg-light">
-                                    <p class="p-1 text-dark">No Message</p>
+                                <div class="mt-2 text-center bg-light">
                                 </div>
                             @endforelse
                         @elseif($type == 'customer')
@@ -78,7 +77,6 @@
                                 @endif
                             @empty
                                 <div class="mt-4 text-center bg-light">
-                                    <p class="p-1 text-dark">No Message</p>
                                 </div>
                             @endforelse
                         @endif
@@ -87,7 +85,7 @@
                     </div>
                     <div class="chat-form text-end" style="height: 20%;">
                         <textarea name="" id="textArea" cols="30" rows="1" class="form-control mb-1 p-2 border border-primary-subtle border-2"></textarea>
-                        <button onclick="chat()" class="btn btn-home btn-sm px-3"> Send <i class="bi bi-send-fill"></i></button>
+                        <button onclick="chat()" class="btn btn-primary btn-sm p-2 w-100"> Send <i class="bi bi-send-fill"></i></button>
                     </div>
                 </div>
             </div>

@@ -154,7 +154,9 @@ class CheckoutController extends Controller
                     "total_price" => $product->price + $product->shipping_fee,
                     "customer_id" => $user->id,
                     "reference_number" => $refno,
-                    "status" => 1
+                    "status" => 1,
+                    "product_id" => $product->id,
+                    "delivery_status" => 0
                 ]);
 
                 //Initiate Transfer to Vendor
