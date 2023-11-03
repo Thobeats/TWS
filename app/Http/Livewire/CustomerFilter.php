@@ -20,7 +20,7 @@ class CustomerFilter extends Component
         $currentDate = Carbon::now();
 
         $this->customerCount = Order::where('vendor_id', $user->id)
-                                    ->whereMonth('created_at', $currentDate->month)
+                                    ->whereMonth('created_at', $currentDate->toDateString())
                                     ->count();
     }
 

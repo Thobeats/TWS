@@ -20,11 +20,6 @@
             </a>
           </li>
           <li>
-            <a href="/vendor/products/uploadFile">
-              <i class="bi bi-circle"></i><span>Upload Products</span>
-            </a>
-          </li>
-          <li>
             <a href="/vendor/products">
               <i class="bi bi-circle"></i><span>Active Products</span>
             </a>
@@ -73,7 +68,7 @@
         </a>
         <ul id="customers" class="nav-content collapse " data-bs-parent="#sidebar-nav">
           <li>
-            <a href="">
+            <a href="/vendor/customer/">
               <i class="bi bi-circle"></i><span>All Customers</span>
             </a>
           </li>

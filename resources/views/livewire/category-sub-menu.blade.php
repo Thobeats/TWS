@@ -68,7 +68,6 @@
                                         <a href="/market/vendor/{{$new->vendor_id}}" class="mtext-101 text-dark cl4 hov-cl1 trans-04 js-name-b2">
                                             {{ $new->vendorName() }}
                                         </a>
-        
                                         <a href="/market/product/{{$new->id}}" class="stext-104 cl4 hov-cl1 trans-04 js-name-b2">
                                             {{ $new->name }}
                                         </a>

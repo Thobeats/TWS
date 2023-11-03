@@ -208,6 +208,12 @@ Route::middleware(['auth'])->group(function () {
                 Route::get('/setup', [VendorController::class, 'myStoreSetup']);
             });
 
+            // Customers
+            Route::group(['prefix' => 'customer'], function(){
+                Route::get('/', [VendorController::class, 'customers']);
+                Route::get('/view/{id}', [VendorController::class, 'customer']);
+            });
+
             Route::get('/chat', [VendorController::class, 'chat']);
             Route::post('/chatHistory', [VendorController::class, 'chatHistory']);
             Route::post('/saveChat', [VendorController::class, 'saveChat']);
