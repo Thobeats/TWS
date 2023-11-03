@@ -64,7 +64,7 @@
         
         <div class="form-group">
             <label for="city">City <span class='text-danger'>*</span> </label>
-            <input id="city" type="number" name="city" value="{{ old('city') }} @error('city') {{ $message }} @enderror" required class="form-control @error('city') is-invalid text-danger @enderror">
+            <input id="city" type="text" name="city" value="{{ old('city') }} @error('city') {{ $message }} @enderror" required class="form-control @error('city') is-invalid text-danger @enderror">
         </div>
         <div class="form-group">
             <label for="state">State <span class='text-danger'>*</span> </label>

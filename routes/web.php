@@ -368,5 +368,5 @@ Route::get('/updateVendors', function(){
     
 //     echo $response->getBody();
 // });
-
+Route::get('/add',function(){ return "hh"; });
 Route::get('address', [AuthController::class, 'getAddress']);
