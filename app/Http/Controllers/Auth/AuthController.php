@@ -45,12 +45,8 @@ class AuthController extends Controller
                 'lastname' => 'required|string',
                 'email' => 'required|email',
                 'password' => 'required|string|between:8,16',
-                'zip_code' => 'required|integer',
                 'business_name' => 'required|string',
                 'address' => 'required|string',
-                'state' => 'required|string',
-                'city' => 'required|string',
-                // 'ein' => 'required|numeric|digits:9',
                 'products' => 'required|array',
                 'consent' => 'required|string'
             ]);
@@ -67,13 +63,12 @@ class AuthController extends Controller
              * */
             $user_code = $this->generateUserCode();
             $request->merge(['role' => 2,'account_status' => 0,'password' => Hash::make($request->password), 'user_code' => $user_code]);
-            $address[] = $request->only('address','state','city');
+            $address[] = $request->only('address');
             // Save to Users and Customers Table
             $users_data = [
                 'firstname' => $request->firstname,
                 'lastname' => $request->lastname,
                 'email' => $request->email,
-                'password' => $request->password,
                 'zip_code' => $request->zip_code,
                 'business_name' => $request->business_name,
                 'address' => json_encode($address),

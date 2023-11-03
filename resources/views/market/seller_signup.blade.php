@@ -56,7 +56,7 @@
                 </ul>
             </div>
         </div>
-        <div class="form-group">
+        {{-- <div class="form-group">
             <label for="zip_code">Zip Code <span class='text-danger'>*</span> </label>
             <input type="number" name="zip_code" value="{{ old('zip_code') }} @error('zip_code') {{ $message }} @enderror" required class="form-control @error('zip_code') is-invalid text-danger @enderror">
         </div>
@@ -69,7 +69,7 @@
         <div class="form-group">
             <label for="state">State <span class='text-danger'>*</span> </label>
             <input id="state" name="state"  value="{{ old('state') }} @error('state') {{ $message }} @enderror" required class="form-control @error('state') is-invalid text-danger @enderror" id="location-input">
-        </div>
+        </div> --}}
 {{--     
         <div class="row">
             <div class="col">
