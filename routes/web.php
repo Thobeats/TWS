@@ -45,23 +45,6 @@ Route::get('/register', function () {
     return view('welcome');
 });
 
-Route::get('/createAdmin', function(){
-    User::create(
-        [
-            'firstname' => 'Admin',
-        'lastname' => 'Admin',
-        'phone' => '090998822222',
-        'email' => 'admin@thewholesalelounge.com',
-        'password' => Hash::make('123Password!'),
-        'zip_code' => '0000',
-        'business_name' => 'Admin Business',
-        'role' => 3,
-        'account_status' => 1,
-        'user_code' => '0000000'
-        ]
-    );
-});
-
 //v=spf1 include:dc-aa8e722993._spfm.thewholesalelounge.com ~all
 
 Route::get('/testEvent', function(){
