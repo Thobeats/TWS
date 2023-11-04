@@ -212,6 +212,13 @@ Route::middleware(['auth'])->group(function () {
             Route::group(['prefix' => 'customer'], function(){
                 Route::get('/', [VendorController::class, 'customers']);
                 Route::get('/view/{id}', [VendorController::class, 'customer']);
+                Route::any('/switch', [VendorController::class, 'switch']);
+            });
+
+            // Reports
+            Route::group(['prefix' => 'report'], function(){
+                Route::any('/', [VendorController::class, 'reports']);
+                Route::get('/download', [VendorController::class, 'downloadReport']);
             });
 
             Route::get('/chat', [VendorController::class, 'chat']);

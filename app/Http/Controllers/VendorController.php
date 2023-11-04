@@ -15,6 +15,7 @@ use App\Models\Package;
 use App\Models\Product;
 use App\Models\Section;
 use App\Models\Category;
+use App\Models\Customer;
 use App\Models\EINModel;
 use App\Models\OTPModel;
 use App\Traits\AppTrait;
@@ -23,11 +24,11 @@ use App\Models\VendorCard;
 use App\Models\ShippingType;
 use App\Models\Subscription;
 use Illuminate\Http\Request;
-use Maatwebsite\Excel\Facades\Excel;
 use App\Imports\ProductImport;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
+use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 
@@ -1195,8 +1196,84 @@ class VendorController extends Controller
         return redirect('/vendor/products/drafts');
     }
 
-    public function uploadFile(){
-        return view('vendor.products.upload_file');
+    public function switch(Request $request){
+        try{
+            $user = Auth::user();
+
+            if($request->method() == "POST"){
+                // Upload the reseller certificate for approval
+                $file = $this->uploadFile($request, 'reseller_cert', 'customer');
+                $newCustomer = new Customer();
+                $newCustomer->user_id = $user->id;
+                $newCustomer->add_cert = "";
+                $newCustomer->cert = $file;
+
+                $newCustomer->save();
+
+                toastr()->success('Document Uploaded for approval');
+                return redirect('/vendor/dashboard');
+            }
+
+            if ($user->can_switch){
+                $user->role = 1;
+                $user->save();
+
+                toastr()->success('Switched to a customer');
+
+                return redirect('/customer');
+            }else{
+                // Route to the become a customer form
+                $hasUploaded = Customer::where('user_id', $user->id)->first();
+
+                return view('vendor.customers.switch', compact('hasUploaded'));
+            }
+
+
+        }catch(Exception $e){
+            return;
+        }
+
     }
 
+    public function reports(Request $request){
+        try{
+
+            $user = Auth::user();
+            $orders = [];
+            $from = ""; $to = "";
+
+            if ($request->method() == "POST"){
+        
+                //Query the Database
+                $orderRequest = Order::where('orders.vendor_id', $user->id)
+                                ->join('users', 'users.id', '=', 'orders.customer_id')
+                                ->join('products', 'products.id', '=', 'orders.product_id')
+                                ->join('order_status', 'order_status.id', '=', 'orders.status')
+                                ->join('sizes', 'sizes.id', '=', 'orders.order_details->size')
+                                ->join('colors', 'colors.id', '=', 'orders.order_details->color')
+                                ->whereBetween('orders.created_at', [$request->from, $request->to])
+                                ->select('products.name as product_name',
+                                        'orders.total_price',
+                                        'users.firstname', 
+                                        'orders.order_number',
+                                        'users.lastname',
+                                        'order_status.name as status',
+                                        'orders.order_details->quantity as quantity',
+                                        'colors.name as color',
+                                        'sizes.size_code as size',
+                                        'orders.created_at as ordered_date',
+                                        'orders.updated_at as delivery_date')
+                                ->get();
+                $orders = $orderRequest;
+
+                $from = $request->from;
+                $to = $request->to;
+            }
+            //Return the reports view
+            return view('vendor.reports.index', compact('user', 'orders', 'from', 'to'));
+
+        }catch(Exception $e){
+            return;
+        }
+    }
 }

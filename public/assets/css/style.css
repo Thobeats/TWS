@@ -1242,3 +1242,11 @@ h6 {
   font-size: 13px;
   color: #012970;
 }
+
+table th{
+  font-size: 14px;
+}
+
+table td{
+  font-size: 12px;
+}

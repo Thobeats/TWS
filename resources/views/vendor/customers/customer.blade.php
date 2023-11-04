@@ -33,7 +33,7 @@
                     <th scope="row">{{ $index }}</th>
                     <td>{{ $customer->business_name }}</td>
                     <td>{{ $customer->total_orders }}</td>
-                    <td>${{ $customer->total_price }}</td>
+                    <td>${{ number_format($customer->total_price,2) }}</td>
                     <td align="center">
                         <a class="btn btn-primary btn-sm" href="/vendor/customer/view/{{$customer->id}}">View Customer</a>
                     </td>

@@ -35,7 +35,7 @@
                     <th scope="row">{{ $index }}</th>
                     <td>{{ $order->product_name }}</td>
                     <td>{{ $order->firstname . " " . $order->lastname }}</td>
-                    <td>{{ $order->total_price }}</td>
+                    <td>${{ number_format($order->total_price,2) }}</td>
                     <td><a class='text-primary mx-2' href="/vendor/orders/show/{{$order->id}}" data-bs-toggle="tooltip" data-bs-placement="top" title="View Order">{{ $order->order_number }}</a></td>
                     <td>{{ $order->status }}</td>
                     <td>

@@ -6,18 +6,6 @@
 
 @section('content')
 
-<style>
-  ul li{
-    margin-top: 10px;
-    font-weight: 700;
-    color : #012970; 
-  }
-
-  ul li span{
-    font-weight: 400;
-  }
-</style>
-
 <section class="section dashboard">
   <div class="card">
     <div class="card-body">
@@ -59,7 +47,7 @@
                     </div>
                     <div class="ps-3 text-bold">
                       <h6>
-                        {{ $customer['total_purchase']}}
+                       {{  number_format($customer['total_purchase'],2) }}
                       </h6>
                     </div>
                   </div>
@@ -72,7 +60,7 @@
           <div class="customer_details py-3">
             <h4 class="pt-2">Order Details</h4>
             <hr>
-            <table class="table">
+            <table class="table datatable">
               <thead>
                 <tr>
                   <th scope="col">#</th>
@@ -95,7 +83,7 @@
                       @endphp
                     </td>
                     <td>{{ json_decode($order['order_details'], true)['quantity'] }}</td>
-                    <td>${{ $order['total_price'] }}</td>
+                    <td>${{ number_format($order['total_price'],2) }}</td>
                     <td>{{ date_format(date_create($order['created_at']),  "Y/m/d") }}</td>
                   </tr>
                 @empty

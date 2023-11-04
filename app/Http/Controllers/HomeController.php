@@ -197,7 +197,6 @@ class HomeController extends Controller
                         ->first();
 
         $category = $vendor->products;
-
         $cProducts = Category::whereIn('id', json_decode($category,true))
                                     ->get()
                                     ->map(function($items)use($id){
