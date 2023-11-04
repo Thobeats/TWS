@@ -85,7 +85,7 @@
         </a>
         <ul id="reports" class="nav-content collapse " data-bs-parent="#sidebar-nav">
           <li>
-            <a href="">
+            <a href="/vendor/report">
               <i class="bi bi-circle"></i><span>All Reports</span>
             </a>
           </li>
@@ -129,6 +129,13 @@
         <a class="nav-link collapsed" href="/vendor/profile">
           <i class="bi bi-person"></i>
           <span>Profile</span>
+        </a>
+      </li><!-- End Profile Page Nav -->
+
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="/vendor/customer/switch">
+          <i class="bi bi-arrow-repeat"></i>
+          <span>Switch To Customer</span>
         </a>
       </li><!-- End Profile Page Nav -->
 

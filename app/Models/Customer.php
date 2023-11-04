@@ -12,6 +12,9 @@ class Customer extends Model
     protected $fillable = [
         'user_id',
         'cert',
-        'add_cert'
+        'add_cert',
+        'created_at',
+        'updated_at',
+        'verified'
     ];
 }

@@ -13,7 +13,7 @@
     color : #012970; 
   }
 
-  ul li span{
+  section ul li span{
     font-weight: 400;
   }
 </style>
@@ -27,12 +27,12 @@
                 <img src="{{ url('storage/products/'. json_decode($order->pics,true)[0]) }}" class="img-fluid">
                </div>
     
-               <ul class="p-2" style="list-style-type: none">
+               <ul class="p-2 order_details" style="list-style-type: none">
                 <li>
                   Name : <span> {{$order->product_name}} </span>
                 </li>
                 <li>
-                  Price : <span>  ${{$order->total_price}} </span>
+                  Price : <span>  ${{ number_format($order->total_price,2) }} </span>
                 </li>
                 <li>
                   Quantity : <span> {{$order->quantity}} </span>

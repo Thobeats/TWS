@@ -187,7 +187,6 @@ class AuthController extends Controller
             'address' => json_encode($address),
             'role' => $request->role,
             'account_status' => $request->account_status,
-            'password' => $request->password,
             'user_code' => $user_code
         ];
 

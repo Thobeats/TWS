@@ -60,8 +60,8 @@ class DashboardFilter extends Component
             $this->salesTag = "This " .ucfirst($filterType);
         }
 
-        $this->salesCount = $query->select('order_details->num_of_product')
-                            ->sum('order_details->num_of_product');
+        $this->salesCount = $query->select('order_details->quantity')
+                            ->sum('order_details->quantity');
 
 
     }

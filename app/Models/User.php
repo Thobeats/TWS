@@ -40,6 +40,7 @@ class User extends Authenticatable
         'country_code',
         'stripe_customer',
         'payment_method',
+        'can_switch'
     ];
 
     /**
