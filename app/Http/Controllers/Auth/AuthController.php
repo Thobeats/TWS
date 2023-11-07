@@ -90,14 +90,18 @@ class AuthController extends Controller
                     'card_payments' => ['requested' => true],
                     'transfers' => ['requested' => true],
                 ],
-                // 'individual' => [
-                //     'address' => $request->address,
-                //     'first_name' => $request->firstname,
-                //     'last_name' => $request->lastname
-                // ],
-                // 'company' => [
-                //     'name' => $request->business_name
-                // ]
+                'individual' => [
+                    'address' => [
+                        "country" => "US",
+                        "line1" => $request->address
+                    ],
+                    'first_name' => $request->firstname,
+                    'last_name' => $request->lastname,
+                    "email" => $request->email
+                ],
+                'company' => [
+                    'name' => $request->business_name
+                ]
             ]);
 
             $new_user = User::create($users_data);
