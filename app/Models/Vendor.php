@@ -15,6 +15,7 @@ class Vendor extends Model
         'proof_of_bus',
         'customer_review',
         'products',
+        'products_offered',
         'created_at',
         'updated_at',
         'account_details',

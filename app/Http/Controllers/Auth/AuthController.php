@@ -47,7 +47,7 @@ class AuthController extends Controller
                 'password' => 'required|string|between:8,16',
                 'business_name' => 'required|string',
                 'address' => 'required|string',
-                'products' => 'required|array',
+                'products_offered' => 'required|string',
                 'consent' => 'required|string'
             ]);
 
@@ -107,7 +107,7 @@ class AuthController extends Controller
                 [
                     'user_id' => $new_user->id,
                     // 'ein' => $request->ein,
-                    'products' => json_encode($request->products),
+                    'products_offered' => $request->products_offered,
                     'account_details' => json_encode($response)
                 ]
             );

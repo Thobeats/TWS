@@ -98,11 +98,12 @@
 
         <div class="form-group">
             <label for="products">What kind of products do you offer? <span class='text-danger'>*</span> </label>
-            <select class="js-example-basic-multiple" name="products[]" multiple="multiple" style="width: 100%">
+            {{-- <select class="js-example-basic-multiple" name="products[]" multiple="multiple" style="width: 100%">
                 @foreach ($categories as $category)
                     <option value="{{$category->id}}">{{ $category->name }}</option>
                 @endforeach
-            </select>
+            </select> --}}
+            <textarea name="products_offered" id="" cols="30" rows="5" class="form-control"></textarea>
         </div>
         <div class="form-group">
             Any electronic signature of a party to this Agreement and of a party to take any action related to this Agreement or any agreement entered into by the Partnership shall be valid as an original signature and shall be effective and binding. Any such electronic signature (including the signature(s) to this Agreement) shall be deemed (i) to be “written” or “in writing,” (ii) to have been signed and (iii) to constitute a record established and maintained in the ordinary course of business and an original written record when printed from electronic files.
