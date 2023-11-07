@@ -200,7 +200,7 @@ class AuthController extends Controller
         ]);
 
          // Send Confirmation Email
-         $this->sendConfirmEmail($request->email, $user_code);
+       //  $this->sendConfirmEmail($request->email, $user_code);
 
         return redirect('/success');
     }
