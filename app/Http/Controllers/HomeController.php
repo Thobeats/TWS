@@ -196,7 +196,7 @@ class HomeController extends Controller
                         ->join('users', 'users.id', '=', 'vendors.user_id')
                         ->first();
 
-        $category = $vendor->products ?? [];
+        $category = $vendor->products ?? "{}";
 
         $cProducts = Category::whereIn('id', json_decode($category,true))
                                     ->get()
