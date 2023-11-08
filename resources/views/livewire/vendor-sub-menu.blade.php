@@ -7,9 +7,9 @@
                     Top Selling Vendors
                 </h4>
 
-                <div class="mt-3 product-wrapper d-flex justify-content-left">
+                <div class="mt-3 product-wrapper d-flex justify-content-around">
                     @forelse ($vendors as $vendor)
-                        <div class="block2" style="width: 300px;">
+                        <div class="block2" style="width: 260px;">
                             <div class="block2-pic hov-img0">
                                 <img src="{{ $vendor->profile != null ? url('storage/'. $vendor->profile)  : asset('images/blank.jpg') }}" alt="TWSL-VENDOR">
                             </div>
