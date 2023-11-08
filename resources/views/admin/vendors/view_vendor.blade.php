@@ -59,13 +59,13 @@
         </div>
     </div>
     <div class="row mt-4">
-      @if (file_exists(url("/storage/" . $vendor->proof_of_bus)))
+      @if (file_exists(url("/storage/public/" . $vendor->proof_of_bus)))
         <div class="col-xl-6">
           @if ($vendor->verify_business == 3)
             <div class="card">
               <div class="card-body profile-card pt-4 d-flex flex-column align-items-center">
                 <h5 class="card-title">Proof Of Business</h5>
-                <iframe src="{{ url("/storage/" . $vendor->proof_of_bus) }}" frameborder="0" height="500px"></iframe>
+                <iframe src="{{ url('/storage/public/' . $vendor->proof_of_bus) }}" frameborder="0" height="500px"></iframe>
               </div>
               <div class="p-2 text-end">
                 <span class="badge bg-success">Verified <i class="bi bi-check2-circle"></i></span>
@@ -75,7 +75,7 @@
             <div class="card">
               <div class="card-body profile-card pt-4 d-flex flex-column align-items-center">
                 <h5 class="card-title">Proof Of Business</h5>
-                <iframe src="{{ url("/storage/" . $vendor->proof_of_bus) }}" frameborder="0" height="500px"></iframe>
+                <iframe src="{{ url("/storage/public/" . $vendor->proof_of_bus) }}" frameborder="0" height="500px"></iframe>
               </div>
               <div class="p-2 text-end">
                 <a class="btn btn-primary btn-sm me-2" href="/admin/vendors/verifyBusiness/1/{{$vendor->user_id}}">Verify</a>
@@ -86,13 +86,13 @@
         </div>        
       @endif
 
-      @if (file_exists(url("/storage/" . $vendor->customer_review)))
+      @if (file_exists(url("/storage/public/" . $vendor->customer_review)))
         <div class="col-xl-6">
           @if ($vendor->verify_customer_review == 3)
             <div class="card">
               <div class="card-body profile-card pt-4 d-flex flex-column align-items-center">
                 <h5 class="card-title">Customer Review</h5>
-                <iframe src="{{url('/storage/' . $vendor->customer_review)}}" frameborder="0" height="500px"></iframe>
+                <iframe src="{{url('/storage/public/' . $vendor->customer_review)}}" frameborder="0" height="500px"></iframe>
               </div>
               <div class="p-2 text-end">
                 <span class="badge bg-success">Verified <i class="bi bi-check2-circle"></i></span>
@@ -102,7 +102,7 @@
             <div class="card">
               <div class="card-body profile-card pt-4 d-flex flex-column align-items-center">
                 <h5 class="card-title">Customer Review</h5>
-                <iframe src="{{url('/storage/' . $vendor->customer_review)}}" frameborder="0" height="500px"></iframe>
+                <iframe src="{{url('/storage/public/' . $vendor->customer_review)}}" frameborder="0" height="500px"></iframe>
               </div>
               <div class="p-2 text-end">
                 <a class="btn btn-primary btn-sm me-2" href="/admin/vendors/verifyCustomerReview/1/{{$vendor->user_id}}">Verify</a>
