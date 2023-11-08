@@ -78,6 +78,15 @@ trait AppTrait{
 
         return false;
     }
+
+    protected function changePassword($newPassword, $user){
+        $user->password = Hash::make($newPassword);
+        $user->save();
+    }
+
+    protected function deleteProfileImage(){
+
+    }
 }
 
 

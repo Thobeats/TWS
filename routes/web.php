@@ -233,6 +233,8 @@ Route::middleware(['auth'])->group(function () {
             //Dashboard
             Route::get('/', [AH::class, 'dashboard']);
 
+            Route::get('/profile', [AH::class, 'profile']);
+
             //Categories Route
             Route::group(['prefix' => 'categories'],function(){
                 Route::get('/', [CategoryController::class, 'index']);

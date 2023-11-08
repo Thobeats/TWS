@@ -39,6 +39,10 @@ class VendorController extends Controller
             $vendor->proof_of_bus = null;
             $vendor->save();
 
+            $document = storage_path("app/public/" . $vendor->proof_of_bus);
+            // Delete the image
+            unlink($document);
+
             toastr()->success('rejected');
             return redirect('');
         }
@@ -60,6 +64,10 @@ class VendorController extends Controller
             $vendor->verify_customer_review = 1;
             $vendor->customer_review = null;
             $vendor->save();
+
+            $document = storage_path("app/public/" . $vendor->customer_review);
+            // Delete the image
+            unlink($document);
 
             toastr()->success('rejected');
             return redirect()->back();

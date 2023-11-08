@@ -20,7 +20,6 @@
                     <th scope="col">Fullname</th>
                     <th scope="col">Email</th>
                     <th scope="col">Phone</th>
-                    <th scope="col">Gender</th>
                     <th scope="col">Business Name</th>
                     <th scope="col">Account Status</th>
                     <th scope="col">Joined at</th>
@@ -41,7 +40,6 @@
                     <td>{{ $customer->fullname() }}</td>
                     <td>{{ $customer->email }}</td>
                     <td>{{ $customer->phone }}</td>
-                    <td>{{ $customer->gender }}</td>
                     <td>{{ $customer->business_name }}</td>
                     <td>{{ $customer->account_status }}</td>
                     <td>{{ $joined_at }}</td>

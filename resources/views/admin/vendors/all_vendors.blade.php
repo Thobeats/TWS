@@ -2,7 +2,7 @@
 
 @section('pagetitle','All Vendors')
 
-@section('title', 'Admin - All Venddors')
+@section('title', 'Admin - All Vendors')
 
 @section('content')
 
