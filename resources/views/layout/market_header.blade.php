@@ -62,6 +62,13 @@
                                     </div>
                                 @endif
 
+                                 {{-- DropDown For Admin --}}
+                                 @if (Auth::user()->role == 3)
+                                 <div class="dropdown-menu p-2">
+                                     <a class="dropdown-item p-2" href="/admin"><i class="zmdi zmdi-account"></i> Dashboard </a>
+                                 </div>
+                             @endif
+
 
                                 </div>
                             <!-- <div class="icon-header-item cl2 hov-cl1 trans-04 p-lr-11 js-show-cart">
