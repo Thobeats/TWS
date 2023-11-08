@@ -110,9 +110,9 @@
                                     @livewire('vendor-sub-menu')
                                 </div>
                             </li>
-                            <li>
+                            {{-- <li>
                                 <a href="#">Spotlight</a>
-                            </li>
+                            </li> --}}
 
                             <li>
                                 <a href="#">Just in </a>
@@ -121,12 +121,12 @@
                                 </div>
                             </li>
 
-                            <li>
+                            {{-- <li>
                                 <a href="#">Pre Orders</a>
                             </li>
                             <li>
                                 <a href="#">On Sale</a>
-                            </li>
+                            </li> --}}
 
 
                         </ul>
