@@ -283,6 +283,10 @@ class AuthController extends Controller
                     return redirect('/vendor/dashboard');
                 }
 
+                if($user->role == 3){
+                    return redirect('/admin');
+                }
+
             }else{
                 toastr()->error('Wrong Password');
             }
