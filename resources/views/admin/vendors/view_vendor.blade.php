@@ -59,7 +59,7 @@
         </div>
     </div>
     <div class="row mt-4">
-      @if (file_exists(url("/public/storage/" . $vendor->proof_of_bus)))
+      @if (file_exists(storage_path('app/public/') . $vendor->proof_of_bus))
         <div class="col-xl-6">
           @if ($vendor->verify_business == 3)
             <div class="card">
@@ -86,7 +86,7 @@
         </div>        
       @endif
 
-      @if (file_exists(url("/public/storage/" . $vendor->customer_review)))
+      @if (file_exists(storage_path('app/public/'). $vendor->customer_review))
         <div class="col-xl-6">
           @if ($vendor->verify_customer_review == 3)
             <div class="card">
