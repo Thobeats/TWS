@@ -87,6 +87,10 @@ trait AppTrait{
     protected function deleteProfileImage(){
 
     }
+
+    protected function notifyAdmin(){
+        $admin  = User::where('role_id', 3)->get();
+    }
 }
 
 

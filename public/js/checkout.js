@@ -45,7 +45,7 @@ async function handleSubmit(e) {
     elements,
     confirmParams: {
       // Make sure to change this to your payment completion page
-      return_url: "http://127.0.0.1:8000/confirm_payment",
+      return_url: "https:shop.thewholesalelounge.com/confirm_payment",
       receipt_email: emailAddress,
     },
   });
