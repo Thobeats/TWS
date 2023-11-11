@@ -1,18 +1,13 @@
-//var stripe = Stripe('pk_test_51JDQeGK8ulhDI3CCfH8CtMRV3XUQq5YXGrLDVk5hnipMPMGdENm7AAEeHkuvZPiTrFBizZErg93qGxWVfeOOYTJf00Wm2TrPWt');
 var stripe = Stripe('pk_live_51NDrKkGQDXoy7rGv0BGikXyVPqDXDtw1O81wFh5LcADDVfNnAQX6KjVuhZePLytwsOpgivGdItkH8Tyy1uEHOLLc00Xu8qxR8M');
 // The items the customer wants to buy
-
 let elements;
-
 initialize();
 checkStatus();
 
 document
   .querySelector("#payment-form")
   .addEventListener("submit", handleSubmit);
-
-
-
+  
 // Fetches a payment intent and captures the client secret
 async function initialize() {
   items = document.getElementById('request').value;
@@ -45,7 +40,7 @@ async function handleSubmit(e) {
     elements,
     confirmParams: {
       // Make sure to change this to your payment completion page
-      return_url: "https://shop.thewholesalelounge.com/confirm_payment",
+      return_url: "https:shop.thewholesalelounge.com/confirm_payment",
       receipt_email: emailAddress,
     },
   });

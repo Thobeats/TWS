@@ -16,7 +16,7 @@
     <section class="section">
         <div class="row">
             <div class="col-3 p-2">
-               <a href={{ $user->email_verified_at == null ? "/vendor/verify_email" : "#" }}>
+               <a href="/vendor/verify_email">
                     <div class="card">
                         <div class="card-body pb-4">
                             <div class="text-end {{ $user->email_verified_at != null ? 'text-success text-bold' : 'text-secondary' }} py-2"><i class="bi bi-check-circle-fill"></i></div>
@@ -27,7 +27,7 @@
                </a>
             </div>
             <div class="col-3 p-2">
-                <a href="{{ $user->vendor()->verify_business == 3 ? '#' : '/vendor/verify_business' }}">
+                <a href='/vendor/verify_business'>
                      <div class="card">
                          <div class="card-body pb-4">
                             <div class="text-end {{$user->vendor()->verify_business == 3 ? 'text-success' : 'text-secondary' }} py-2"><i class="bi bi-check-circle-fill"></i></div>
@@ -38,7 +38,7 @@
                 </a>
             </div>
             <div class="col-3 p-2">
-                <a href=" {{ $user->vendor()->payment_setup ? '#' : '/vendor/account/setup' }}">
+                <a href="/vendor/account/setup">
                      <div class="card">
                          <div class="card-body pb-4">
                              <div class="text-end {{ $user->vendor()->payment_setup ? 'text-success' : 'text-secondary' }} py-2"><i class="bi bi-check-circle-fill"></i></div>
@@ -49,7 +49,7 @@
                 </a>
             </div>
             <div class="col-3 p-2">
-                <a href=" {{ $user->vendor()->subscribed ? '#' : '/vendor/subscribe' }}">
+                <a href='/vendor/subscribe'>
                      <div class="card">
                          <div class="card-body pb-4">
                             <div class="text-end {{ $user->vendor()->subscribed ? 'text-success' : 'text-secondary' }} py-2"><i class="bi bi-check-circle-fill"></i></div>

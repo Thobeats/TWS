@@ -251,8 +251,57 @@ class VendorController extends Controller
     }
 
     public function accountSetup(){
-        $user = Auth::user();
-        return view('vendor.account.setup',compact('user'));
+        try{
+            $user = Auth::user();
+            $accountDetails = json_decode($user->vendor()->account_details, true);
+            $accountID = $accountDetails['id'];
+            $stripe_verification = $user->vendor()->stripe_account_verification;
+            $vendorCard = VendorCard::where('user_id', $user->id)->first();
+            $hasCard = $vendorCard ? $vendorCard : false;
+            return view('vendor.account.setup', compact('accountID', 'stripe_verification','hasCard'));
+        }catch(Exception $e){
+            return $e->getMessage();
+        }
+    }
+
+    public function initiateAccountSetup($accountID){
+        try{
+            $stripe = $this->initialiseStripe();
+            $session = $stripe->accountLinks->create([
+                'account' => "acct_1OBKAxGh1hpNeyaZ",
+                'refresh_url' => url("/vendor/account/setup/initiate/$accountID"),
+                'return_url' => url("/vendor/account/setup/confirm/$accountID"),
+                'type' => 'account_onboarding',
+            ]);
+
+            $link = $session->url;
+            return redirect($link);
+        }catch(Exception $e){
+
+        }
+    }
+
+
+    public function confirmAccountSetup($accountID){
+        try{
+            $stripe = $this->initialiseStripe();
+            $confirm = $stripe->accounts->retrieve($accountID,[]);
+
+            // Get User Via Account ID
+            $user = Vendor::whereRaw("vendors.account_details->'$.id' = '$accountID'")->first();
+            $status = count($confirm->requirements->pending_verification);
+
+            if ($status == 0){
+                //Update Stripe Account Verified
+                $user->stripe_account_verification = 1;
+            }
+            $user->account_details = json_encode($confirm);
+            $user->save();
+
+            return redirect('vendor/account/setup');
+        }catch(Exception $e){
+
+        }
     }
 
     /// Cards
@@ -329,12 +378,17 @@ class VendorController extends Controller
         $user = Auth::user();
 
         if($request->method() == "GET"){
-
             // Check if user has set payment and has verified business
-            if(!$user->vendor()->payment_setup || $user->vendor()->verify_business != 3 || $user->vendor()->verify_customer_review != 3){
-                toastr()->error('Business details and payment details not verified yet.');
+            if($user->vendor()->verify_business != 3 || $user->vendor()->verify_customer_review != 3){
+                toastr()->error('Business details not verified yet');
                 return redirect()->back();
             }
+
+            if(!$user->vendor()->payment_setup){
+                toastr()->error('payment details not verified yet');
+                return redirect()->back();
+            }
+
 
             $packages = Package::where('status', 1)->get()->toArray();
             return view('vendor.verify.subscribe', compact('packages','user'));
@@ -346,22 +400,9 @@ class VendorController extends Controller
             // Create a Stripe Subscription
             // Save the sub id in the database and other details
 
-
-
             // Subscription
             $stripe = $this->initialiseStripe();
             $twlStripe = new TWLStripe;
-
-            // Create Customer
-            // $vendorCard = VendorCard::where('user_id',$user->id)->first();
-            // $createpaymentMethod = $stripe->paymentMethods->create([
-            //     'type' => 'card',
-            //     'card' => [
-            //       'token' => $vendorCard['token']
-            //     ],
-            //   ]);
-
-            // dd($createpaymentMethod);
 
             $newCustomer = $twlStripe->createCustomer($stripe, $user->email, $user->payment_method);
             $user->stripe_customer = $newCustomer->id;
@@ -779,7 +820,7 @@ class VendorController extends Controller
                     $vendorProducts[] = "$cat";
                 }
             }
-            
+
             return redirect('/vendor/products');
 
     }
@@ -1035,7 +1076,7 @@ class VendorController extends Controller
                                 $total_purchase = $query->sum('total_price');
                                 $orders = $query->get()->toArray();
 
-                               // $review = 
+                               // $review =
                                 return [
                                     "orders" => $orders,
                                     "business_name" => $item->business_name,
@@ -1046,7 +1087,7 @@ class VendorController extends Controller
                                 ];
                             });
 
-                            $customer = $customer[0]; 
+                            $customer = $customer[0];
 
         return view('vendor.customers.view_customer', compact('customer'));
     }
@@ -1243,7 +1284,7 @@ class VendorController extends Controller
             $from = ""; $to = "";
 
             if ($request->method() == "POST"){
-        
+
                 //Query the Database
                 $orderRequest = Order::where('orders.vendor_id', $user->id)
                                 ->join('users', 'users.id', '=', 'orders.customer_id')
@@ -1254,7 +1295,7 @@ class VendorController extends Controller
                                 ->whereBetween('orders.created_at', [$request->from, $request->to])
                                 ->select('products.name as product_name',
                                         'orders.total_price',
-                                        'users.firstname', 
+                                        'users.firstname',
                                         'orders.order_number',
                                         'users.lastname',
                                         'order_status.name as status',
@@ -1275,5 +1316,11 @@ class VendorController extends Controller
         }catch(Exception $e){
             return;
         }
+    }
+
+    public function notAdmin(){
+        $admin = $this->notifyAdmin();
+
+        return $admin;
     }
 }

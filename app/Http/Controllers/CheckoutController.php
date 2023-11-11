@@ -99,7 +99,7 @@ class CheckoutController extends Controller
             $stripe = $this->initialiseStripe();
             $uniqID = uniqid('ORDER_');
             $intent = $stripe->paymentIntents->create([
-                'amount' => $total,
+                'amount' => $total * 100,
                 'currency' => 'usd',
                 'transfer_group' => $uniqID,
                 'automatic_payment_methods' => ['enabled' => true],

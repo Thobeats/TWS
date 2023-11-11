@@ -31,7 +31,8 @@ class Vendor extends Model
         'twitter',
         'instagram',
         'about',
-        'bpone'
+        'bpone',
+        'stripe_account_verification'
     ];
 
     public function business_logo(){
