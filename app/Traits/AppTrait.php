@@ -49,7 +49,7 @@ trait AppTrait{
 
     public function initialiseStripe(){
         $key = new SecretKey;
-        $stripe = new Stripe($key->getSecret());
+        $stripe = new \Stripe\StripeClient($key->getSecret());
         return $stripe;
     }
 
@@ -65,6 +65,9 @@ trait AppTrait{
         ];
 
         Notification::send(User::find($recipientID), new AppNotification($data));
+
+        //Send Email to the User
+
     }
 
     protected function deleteFile($fileName){
@@ -88,8 +91,20 @@ trait AppTrait{
 
     }
 
-    protected function notifyAdmin(){
-        $admin  = User::where('role_id', 3)->get();
+    protected function notifyAdmin($title, $message,$ref, $type){
+        $admin  = User::where('role', 3)->get();
+
+        // Create the notification
+        $data = [
+            "title" => "New Message",
+            "message" => "I am testing this",
+            "ref" => "",
+            "from" => 1,
+            "time" => now()->format('l F Y h:i:s '),
+            "type" => "success"
+        ];
+
+        Notification::send($admin, new AppNotification($data));
     }
 }
 

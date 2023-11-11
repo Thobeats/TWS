@@ -52,7 +52,6 @@
   {{-- <link href="{{ asset('css/main.css') }}" rel="stylesheet"> --}}
   <link href="{{ asset('css/bs5-intro-tour.css')}}" rel="stylesheet" />
 
-
   <!-- =======================================================
   * Template Name: NiceAdmin
   * Updated: May 30 2023 with Bootstrap v5.3.0
@@ -84,7 +83,6 @@
         Livewire.emit('incoming-message', event.data);
     };
   </script>
-
 @livewireStyles
 </head>
 
@@ -113,6 +111,7 @@
 
   <!-- ======= Footer ======= -->
   <script src="{{ asset('vendor/jquery/jquery-3.2.1.min.js') }}"></script>
+  <script src="{{ asset('js/app.js') }}"></script>
   @include('layout.vendor_footer')
   <script src="{{ asset('js/crs.min.js') }}"></script>
   <script src="{{ asset('js/bs5-intro-tour.js')}}"></script>

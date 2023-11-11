@@ -29,3 +29,5 @@ Route::post('/saveDoc/{folder}', [FilePond::class, 'saveDoc']);
 Route::delete('/deleteDoc/{folder}', [FilePond::class, 'deleteDoc']);
 
 Route::get('/getCategory/{id}', [VendorController::class, 'getCategory']);
+
+Route::get('/notifyAdmin', [VendorController::class, 'notAdmin']);

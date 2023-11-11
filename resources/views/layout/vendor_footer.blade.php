@@ -15,15 +15,13 @@
   <script src="{{ asset('assets/vendor/simple-datatables/simple-datatables.js') }}"></script>
   {{-- <script src="{{ asset('assets/vendor/tinymce/tinymce.min.js') }}"></script> --}}
   <script src="{{ asset('assets/vendor/php-email-form/validate.js') }}"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/switchery/0.8.2/switchery.min.js" integrity="sha512-lC8vSUSlXWqh7A/F+EUS3l77bdlj+rGMN4NB5XFAHnTR3jQtg4ibZccWpuSSIdPoPUlUxtnGktLyrWcDhG8RvA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-
 
   <!-- Template Main JS File -->
   <script src="{{ asset('assets/js/main.js') }}"></script>
   <script src="https://js.stripe.com/v3/"></script>
 
   <script>
-    var stripe = Stripe('pk_test_51JDQeGK8ulhDI3CCfH8CtMRV3XUQq5YXGrLDVk5hnipMPMGdENm7AAEeHkuvZPiTrFBizZErg93qGxWVfeOOYTJf00Wm2TrPWt');
+    var stripe = Stripe("{{ env('STRIPE_PUBLIC') }}");
     const elements = stripe.elements();
     // Custom styling can be passed to options when creating an Element.
       const style = {
@@ -53,7 +51,7 @@
                 if(response.code == 1){
                     alert('Card not saved, please try again');
                 }else{
-                    location.href = '/vendor/get_started';
+                    location.href = '/vendor/account/setup';
                 }
             });
 

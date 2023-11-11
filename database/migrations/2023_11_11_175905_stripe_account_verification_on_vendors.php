@@ -13,10 +13,8 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::table('users', function(Blueprint $table){
-            $table->string('phone')->nullable()->change();
-            $table->json('address')->nullable()->change();
-            $table->string('user_code');
+        Schema::table('vendors', function(Blueprint $table){
+            $table->boolean('stripe_account_verification')->default(false);
         });
     }
 
@@ -27,8 +25,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::table('users', function(Blueprint $table){
-            $table->dropColumn('user_code');
-        });
+        Schema::dropColumns('vendors', ['stripe_account_verification']);
     }
 };

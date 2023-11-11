@@ -11,7 +11,7 @@
 
           <a class="nav-link nav-icon" href="#" data-bs-toggle="dropdown">
             <i class="bi bi-bell"></i>
-            <span class="badge bg-primary badge-number"></span>
+            <span class="badge bg-primary badge-number">{{$notificationCount}}</span>
           </a>
           <!-- End Notification Icon -->
 
@@ -27,7 +27,7 @@
             @forelse ($notifications as $notification)
             <li class="notification-item {{ $notification->read_at != NULL ? 'bg-light' : '' }}" onclick="readNotification('{{$notification->id}}')">
               <i class="
-                    {{ 
+                    {{
                     ($notification->data['noty']['type'] == 'success' ? 'bi bi-check-circle text-success' : ($notification->data['noty']['type'] == 'warning' ? 'bi bi-exclamation-circle text-warning' : ($notification->data['noty']['type'] == 'info' ? 'bi bi-info-circle text-primary' : 'bi bi-x-circle text-danger')))
                     }}
                     "></i>
@@ -41,7 +41,7 @@
               <hr class="dropdown-divider">
             </li>
             @empty
-              
+
             @endforelse
 
             <li>

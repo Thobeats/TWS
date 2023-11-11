@@ -76,7 +76,7 @@ Route::middleware(['auth'])->group(function () {
     Route::put('/setProfile', [AuthController::class, 'setProfileImage']);
     Route::put('/updateProfile', [AuthController::class, 'updateProfile']);
     Route::put('/updateCustomerProfile', [AuthController::class, 'updateCustomerProfile']);
-    
+
     //Auth Market
     Route::get('/addWishList/{id}', [WishListController::class, 'add']);
     //Market
@@ -154,6 +154,8 @@ Route::middleware(['auth'])->group(function () {
             Route::get('/setup', [VendorController::class, 'accountSetup']);
             Route::post('/saveCard', [VendorController::class, 'saveCard']);
             Route::post('/createPaymentMethod', [VendorController::class, 'createPaymentMethod']);
+            Route::get('/setup/initiate/{id}', [VendorController::class, 'initiateAccountSetup']);
+            Route::get('/setup/confirm/{id}', [VendorController::class, 'confirmAccountSetup']);
         });
 
         Route::middleware(['verified'])->group(function () {
@@ -363,7 +365,7 @@ Route::get('/updateVendors', function(){
 //             'X-RapidAPI-Key' => '7f063eed88msh4724b3cc06730c1p1204b2jsn3fcdec979f05',
 //         ],
 //     ]);
-    
+
 //     echo $response->getBody();
 // });
 Route::get('/add',function(){ return "hh"; });
