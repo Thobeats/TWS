@@ -271,3 +271,11 @@ Stack trace:
 Stack trace:
 #0 {main}
   thrown in /home/pcf3igoccn7l/public_html/TheWholeSaleLounge/public/index.php on line 34
+[06-Nov-2023 16:10:10 UTC] PHP Fatal error:  Constant expression contains invalid operations in /home/pcf3igoccn7l/public_html/TheWholeSaleLounge/app/Models/SecretKey.php on line 14
+[06-Nov-2023 16:14:25 UTC] PHP Fatal error:  Constant expression contains invalid operations in /home/pcf3igoccn7l/public_html/TheWholeSaleLounge/app/Models/SecretKey.php on line 14
+[06-Nov-2023 16:18:42 UTC] PHP Fatal error:  Constant expression contains invalid operations in /home/pcf3igoccn7l/public_html/TheWholeSaleLounge/app/Models/SecretKey.php on line 14
+[06-Nov-2023 16:23:00 UTC] PHP Fatal error:  Constant expression contains invalid operations in /home/pcf3igoccn7l/public_html/TheWholeSaleLounge/app/Models/SecretKey.php on line 14
+[07-Nov-2023 14:07:04 UTC] PHP Fatal error:  Constant expression contains invalid operations in /home/pcf3igoccn7l/public_html/TheWholeSaleLounge/app/Models/SecretKey.php on line 14
+[07-Nov-2023 14:24:40 UTC] PHP Fatal error:  Constant expression contains invalid operations in /home/pcf3igoccn7l/public_html/TheWholeSaleLounge/app/Models/SecretKey.php on line 14
+[07-Nov-2023 15:19:26 UTC] PHP Fatal error:  Constant expression contains invalid operations in /home/pcf3igoccn7l/public_html/TheWholeSaleLounge/app/Models/SecretKey.php on line 14
+[07-Nov-2023 15:43:46 UTC] PHP Fatal error:  Constant expression contains invalid operations in /home/pcf3igoccn7l/public_html/TheWholeSaleLounge/app/Models/SecretKey.php on line 14

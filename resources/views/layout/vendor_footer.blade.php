@@ -23,7 +23,7 @@
   <script src="https://js.stripe.com/v3/"></script>
 
   <script>
-    var stripe = Stripe('pk_test_51JDQeGK8ulhDI3CCfH8CtMRV3XUQq5YXGrLDVk5hnipMPMGdENm7AAEeHkuvZPiTrFBizZErg93qGxWVfeOOYTJf00Wm2TrPWt');
+    var stripe = Stripe("{{ env('STRIPE_PUBLIC') }}");
     const elements = stripe.elements();
     // Custom styling can be passed to options when creating an Element.
       const style = {
