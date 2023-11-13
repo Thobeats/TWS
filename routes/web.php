@@ -7,10 +7,10 @@ use App\Models\Product;
 use App\Models\Section;
 use App\Models\OTPModel;
 use App\Models\ChargeBee;
-use App\Notifications\AppNotification;
 use Illuminate\Routing\RouteGroup;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Route;
+use App\Notifications\AppNotification;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\VendorController;
@@ -29,6 +29,7 @@ use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\HomeController as AH;
 use App\Http\Controllers\Admin\VendorController as AV;
 use App\Http\Controllers\Admin\CustomerController as AC;
+use App\Http\Controllers\Admin\SubscriptionController as ADSub;
 
 /*
 |--------------------------------------------------------------------------
@@ -308,8 +309,8 @@ Route::middleware(['auth'])->group(function () {
 
              //Subscription Route
              Route::group(['prefix' => 'subscription'],function(){
-                Route::get('/', [SubscriptionController::class, 'index']);
-                Route::get('/create', [SubscriptionController::class, 'create']);
+                Route::get('/', [ADSub::class, 'index']);
+                Route::get('/create', [ADSub::class, 'create']);
             });
 
              //Package Route

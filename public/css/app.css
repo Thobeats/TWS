@@ -1,1 +1,183 @@
+/*
+Website Theme
+Primary Color : #fffff
+Secondary Color: #e39ff6
+*/
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@600&family=Titillium+Web:ital,wght@0,200;0,400;0,700;1,600&family=Work+Sans:wght@100;200;300;400&display=swap');
+
+.home-btn-outline{
+    border-color: #710193;
+    color: #710193 !important;
+    font-weight: 400;
+}
+
+.home-btn-outline a{
+    color: #710193;
+}
+
+.home-bg-color{
+    background-color: #710193;
+    color: #fff;
+}
+
+.btn-home{
+    background-color: #710193;
+    color: #fff !important;
+}
+
+.big-btn{
+    width: 200px;
+    padding: 12px;
+    font-size: 17px;
+    text-transform: uppercase;
+    text-align: center;
+}
+
+.big-btn:hover{
+    color: #fff;
+}
+
+.home-text{
+    color: #710193;
+}
+
+.home-title{
+    text-transform: uppercase;
+    font-weight: 600;
+    font-family: Poppins-Bold;
+}
+
+.home-active{
+    background-color: #710193;
+    color: #fff;
+}
+
+.home-active:hover{
+    color: #fff;
+}
+
+.shipping-tab, .shipping-tab:hover{
+    color: #710193;
+}
+
+.change_val{
+    font-size: 20px;
+}
+
+.profile-nav{
+    padding: 5px;
+    font-size: 18px;
+    color: #000;
+}
+
+.page-title{
+    font-weight: 600;
+    font-size: 20px;
+    color: #000;
+}
+
+.card-title{
+    color: #000;
+    font-size: 15px;
+    font-family: Poppins-Medium;
+}
+
+.customer-sidebar{
+    height: 150vh;
+    box-shadow: #ccc 1px 1px 12px;
+    max-height: 200vh;
+}
+
+.customer-sidebar .zmdi{
+    font-size: 18px;
+    margin-right: 5px;
+}
+
+.vendor-name{
+    font-size: 25px;
+}
+
+.form-label{
+    font-weight: 400;
+    font-family: Montserrat-Regular;
+}
+.chat-user-name
+{
+    font-size: 15px;
+    font-weight: 400;
+    font-family: Montserrat-Regular;
+    text-transform: capitalize;
+}
+
+.vendor_search table td:hover{
+    background-color: #710193;
+    color: #fff;
+    cursor: pointer;
+}
+
+.vendor_search h4{
+    font-weight: 500;
+    text-transform: uppercase;
+    font-size: 18px;
+    color: #710193;
+    font-family: Montserrat-Regular;
+    border-bottom: 0.1rem solid #710193;
+}
+
+.category-link:hover{
+    color: #710193;
+}
+
+.cat_active{
+    color: #710193 !important;
+}
+
+.vendor-page-title{
+    font-family: 'Inter', sans-serif;
+    color: #710193;
+    font-weight: 600;
+    font-size: 20px;
+    border-bottom: 1px solid #710193;
+}
+
+.trending_categories{
+    list-style-type: none;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.trending_categories li{
+    background: #F7F7F7;
+    border-radius: 24px;
+    height: 36px;
+    line-height: 36px;
+    padding: 0 24px;
+    font-weight: 600;
+    font-size: 16px;
+    text-align: center;
+    color: #333333;
+    margin: 0 16px 24px 0;
+    cursor: pointer;
+}
+
+.trending_badge{
+    color: #000;
+}
+
+.just-in {
+    font-size: 18px;
+    font-weight: 300;
+    font-family: 'Titillium Web', sans-serif;
+    text-transform: uppercase;
+}
+
+.just-in-amount{
+    font-weight: 600;
+    font-family: 'Titillium Web', sans-serif;
+    text-transform: uppercase;
+    margin-top: 5px;
+}
+
+
+
 

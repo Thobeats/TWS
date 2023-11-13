@@ -151,9 +151,19 @@
     });
 
     $(document).ready(function() {
-            $('.js-example-basic-multiple').select2();
+        $('.js-example-basic-multiple').select2();
+    });
 
-        });
+    function selectPackage(e){
+
+        let packageId = e.target.value;
+
+        if (packageId != ""){
+            $.get(`/api/package/${packageId}`, function(res){
+                console.log(res);
+            }, 'json');
+        }
+    }
 
   </script>
 

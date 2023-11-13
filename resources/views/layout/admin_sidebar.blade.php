@@ -115,10 +115,10 @@
         </ul>
       </li><!-- End Tags -->
        <li class="nav-item">
-        <a class="nav-link collapsed" data-bs-target="#subscription" data-bs-toggle="collapse" href="#">
+        <a class="nav-link collapsed" data-bs-target="#package" data-bs-toggle="collapse" href="#">
           <i class="bi bi-building-add"></i><span>Packages</span><i class="bi bi-chevron-down ms-auto"></i>
         </a>
-        <ul id="subscription" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+        <ul id="package" class="nav-content collapse " data-bs-parent="#sidebar-nav">
           <li>
             <a href="/admin/package/create">
               <i class="bi bi-circle"></i><span>New Package</span>
@@ -127,6 +127,23 @@
           <li>
             <a href="/admin/package/">
               <i class="bi bi-circle"></i><span>All Packages</span>
+            </a>
+          </li>
+        </ul>
+      </li><!-- End SUbs -->
+      <li class="nav-item">
+        <a class="nav-link collapsed" data-bs-target="#subscription" data-bs-toggle="collapse" href="#">
+            <i class="bi bi-bookmark-plus"></i><span>Subscriptions</span><i class="bi bi-chevron-down ms-auto"></i>
+        </a>
+        <ul id="subscription" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+          <li>
+            <a href="/admin/subscription/create">
+              <i class="bi bi-circle"></i><span>Add Subscription</span>
+            </a>
+          </li>
+          <li>
+            <a href="/admin/subscription/">
+              <i class="bi bi-circle"></i><span>All Subscriptions</span>
             </a>
           </li>
         </ul>
