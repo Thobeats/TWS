@@ -48,11 +48,11 @@
                     <div class="row">
                         <div class="col">
                             <label for="">Package</label>
-                            <h5 id="package">Premium</h5>
+                            <h5 id="pack_name"></h5>
                         </div>
                         <div class="col">
                             <label for="">Price</label>
-                            <h5 id="package">$100</h5>
+                            <h5 id="package_price"></h5>
                         </div>
                     </div>
 
@@ -70,7 +70,7 @@
                         </div>
                         <div class="col">
                             <h6 class="p-2 bg-dark text-light">
-                                Total: $<span id="total_price">100</span>
+                                Total: $<span id="total_price"></span>
                             </h6>
                         </div>
                     </div>

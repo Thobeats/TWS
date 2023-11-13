@@ -160,8 +160,28 @@
 
         if (packageId != ""){
             $.get(`/api/package/${packageId}`, function(res){
-                console.log(res);
+                if (res.code == 0){
+                  console.log(res.response.package_name);
+                  document.getElementById("pack_name").innerHTML = res.response.package_name;
+                  $('#package_price').text('$' + res.response.package_price);
+                  $('#multiplier').val(res.response.package_price);
+                  $('#total_price').text(res.response.package_price);
+                  
+
+                  document.querySelector('.package_details').classList.remove('d-none');
+               
+                }else{
+                  if(!document.querySelector('.package_details').classList.contain('d-none')){
+                    document.querySelector('.package_details').classList.add('d-none');
+                  }
+                  
+                }
             }, 'json');
+        }else{
+          if(!document.querySelector('.package_details').classList.contains('d-none')){
+            document.querySelector('.package_details').classList.add('d-none');
+          }
+          
         }
     }
 
