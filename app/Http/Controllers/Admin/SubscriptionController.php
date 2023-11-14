@@ -53,7 +53,7 @@ class SubscriptionController extends Controller
             $start_date = strtotime($validated['start_date']);
             $package = Package::where('id', $validated['package_id'])->first();
             $stripeRef = json_decode($package->stripe_reference);
-            
+
             $stripe = $this->initialiseStripe();
             $twlStripe = new TWLStripe;
             if (!$user->stripe_customer)
@@ -97,6 +97,9 @@ class SubscriptionController extends Controller
             $vendor->subscribed = 1;
             $vendor->verified = 1;
             $vendor->save();
+
+            toastr()->success('Vendor is subscribed');
+            return redirect('/admin/subscription/create');
         }catch(Exception $e){
 
         }
