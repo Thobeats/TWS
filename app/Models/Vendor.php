@@ -32,7 +32,10 @@ class Vendor extends Model
         'instagram',
         'about',
         'bpone',
-        'stripe_account_verification'
+        'stripe_account_verification',
+        'payment_setup',
+        'subscribed',
+        'products_offered'
     ];
 
     public function business_logo(){

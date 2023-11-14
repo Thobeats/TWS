@@ -311,6 +311,7 @@ Route::middleware(['auth'])->group(function () {
              Route::group(['prefix' => 'subscription'],function(){
                 Route::get('/', [ADSub::class, 'index']);
                 Route::get('/create', [ADSub::class, 'create']);
+                Route::post('/store', [ADSub::class, 'save']);
             });
 
              //Package Route
