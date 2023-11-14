@@ -7,6 +7,7 @@ use App\Models\SecretKey;
 use Illuminate\Http\Request;
 use \Stripe\StripeClient as Stripe;
 use App\Http\Controllers\Controller;
+use Exception;
 
 class PackageController extends Controller
 {
@@ -187,5 +188,20 @@ class PackageController extends Controller
 
         //Redirect to index
         return redirect('/admin/package');
+    }
+
+    public function getPackage($id){
+        try{
+            $package = Package::find($id);
+
+            if (!$package){
+                return ['code' => 1, 'response' => 'not Found'];
+            }
+
+            return ['code' => 0, 'response' => $package];
+
+        }catch(Exception $e){
+            return ['code' => 1, 'response' => $e->getMessage()];
+        }
     }
 }

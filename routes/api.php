@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\PackageController;
 use App\Models\FilePond;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -31,3 +32,5 @@ Route::delete('/deleteDoc/{folder}', [FilePond::class, 'deleteDoc']);
 Route::get('/getCategory/{id}', [VendorController::class, 'getCategory']);
 
 Route::get('/notifyAdmin', [VendorController::class, 'notAdmin']);
+
+Route::get('/package/{id}', [PackageController::class, 'getPackage']);
