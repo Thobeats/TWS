@@ -19,6 +19,7 @@ class SubscriptionController extends Controller
     public function index(){
         try{
 
+
         }catch(Exception $e){
 
         }
@@ -26,12 +27,13 @@ class SubscriptionController extends Controller
 
     public function create(){
         try{
-            $vendors = Vendor::where('users.account_status', 0)
+            $vendors = Vendor::where(['users.account_status' => 0])
+                            ->whereRaw('users.payment_method is not null')
                             ->join('users','users.id','=','vendors.user_id')
                             ->select('users.id', 'users.business_name', 'vendors.account_details->id as account_id')
                             ->get();
 
-            $packages = Package::select('id', 'stripe_reference', 'package_name')->get();
+            $packages = Package::where('status', 1)->select('id', 'stripe_reference', 'package_name')->get();
 
             return view('admin.subs.new_sub', compact('vendors', 'packages'));
         }catch(Exception $e){
@@ -101,7 +103,7 @@ class SubscriptionController extends Controller
             toastr()->success('Vendor is subscribed');
             return redirect('/admin/subscription/create');
         }catch(Exception $e){
-
+            return $e->getMessage();
         }
     }
 }
