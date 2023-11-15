@@ -275,17 +275,11 @@ class AuthController extends Controller
                 Auth::login($user);
                 toastr()->success('Login Succesful');
 
-                if($user->role == 1){
-                    return redirect('/customer/profile');
-                }
-
-                if($user->role == 2){
-                    return redirect('/vendor/dashboard');
-                }
-
                 if($user->role == 3){
                     return redirect('/admin');
                 }
+
+                return back();
 
             }else{
                 toastr()->error('Wrong Password');
@@ -385,7 +379,7 @@ class AuthController extends Controller
         $user->firstname = $request->firstname;
         $user->lastname = $request->lastname;
         $user->phone = $request->phone;
-        
+
         $user->save();
 
         toastr()->success('Profile Updated', 'Update Successful');
