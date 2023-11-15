@@ -67,7 +67,7 @@ class SubscriptionController extends Controller
 
             $response = $stripe->subscriptions->create([
                 'customer' => $user->stripe_customer,
-                'backdate_start_date' => $start_date,
+                'billing_cycle_anchor' => $start_date,
                 'items' => [
                     ['price' => $stripeRef->price_id],
                     ['price_data' => [
@@ -80,8 +80,7 @@ class SubscriptionController extends Controller
                             'unit_amount' => $validated['unit_price']
                         ],
                     ],
-                ],
-                'proration_behavior' => 'none'
+                ]
             ]);
 
             $data = [
