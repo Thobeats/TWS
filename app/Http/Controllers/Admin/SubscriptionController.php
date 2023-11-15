@@ -89,9 +89,9 @@ class SubscriptionController extends Controller
                 'status' => 1,
                 'created_at' => now(),
                 'updated_at' => now(),
-                'stripe_reference' => json_encode($response),
-                'from' => date("Y-m-d",$response->current_period_start),
-                'end_date' => date("Y-m-d",$response->current_period_end),
+                // 'stripe_reference' => json_encode($response),
+                // 'from' => date("Y-m-d",$response->current_period_start),
+                // 'end_date' => date("Y-m-d",$response->current_period_end),
                 'validity' => $validated['cycle']
             ];
             Subscription::create($data);
