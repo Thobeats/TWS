@@ -56,32 +56,32 @@ class SubscriptionController extends Controller
             $package = Package::where('id', $validated['package_id'])->first();
             $stripeRef = json_decode($package->stripe_reference);
 
-            $stripe = $this->initialiseStripe();
-            $twlStripe = new TWLStripe;
-            if (!$user->stripe_customer)
-            {
-                $newCustomer = $twlStripe->createCustomer($stripe, $user->email, $user->payment_method);
-                $user->stripe_customer = $newCustomer->id;
-                $user->save();
-            }
+            // $stripe = $this->initialiseStripe();
+            // $twlStripe = new TWLStripe;
+            // if (!$user->stripe_customer)
+            // {
+            //     $newCustomer = $twlStripe->createCustomer($stripe, $user->email, $user->payment_method);
+            //     $user->stripe_customer = $newCustomer->id;
+            //     $user->save();
+            // }
 
-            $response = $stripe->subscriptions->create([
-                'customer' => $user->stripe_customer,
-                'billing_cycle_anchor' => $start_date,
-                'items' => [
-                    ['price' => $stripeRef->price_id],
-                    ['price_data' => [
-                            'currency' => 'usd',
-                            'product' => $stripeRef->product_id,
-                            'recurring' => [
-                                'interval' => 'month',
-                                'interval_count' => $validated['cycle']
-                            ],
-                            'unit_amount' => $validated['unit_price']
-                        ],
-                    ],
-                ]
-            ]);
+            // $response = $stripe->subscriptions->create([
+            //     'customer' => $user->stripe_customer,
+            //     'billing_cycle_anchor' => $start_date,
+            //     'items' => [
+            //         ['price' => $stripeRef->price_id],
+            //         ['price_data' => [
+            //                 'currency' => 'usd',
+            //                 'product' => $stripeRef->product_id,
+            //                 'recurring' => [
+            //                     'interval' => 'month',
+            //                     'interval_count' => $validated['cycle']
+            //                 ],
+            //                 'unit_amount' => $validated['unit_price']
+            //             ],
+            //         ],
+            //     ]
+            // ]);
 
             $data = [
                 'vendor_id' => $user->id,
