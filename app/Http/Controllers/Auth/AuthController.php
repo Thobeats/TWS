@@ -275,6 +275,14 @@ class AuthController extends Controller
                 Auth::login($user);
                 toastr()->success('Login Succesful');
 
+                if($user->role == 1){
+                    return redirect('/');
+                }
+
+                if($user->role == 2){
+                    return redirect('/vendor/dashboard');
+                }
+
                 if($user->role == 3){
                     return redirect('/admin');
                 }

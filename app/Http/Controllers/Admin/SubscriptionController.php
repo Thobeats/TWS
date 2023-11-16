@@ -56,14 +56,14 @@ class SubscriptionController extends Controller
             $package = Package::where('id', $validated['package_id'])->first();
             $stripeRef = json_decode($package->stripe_reference);
 
-            // $stripe = $this->initialiseStripe();
-            // $twlStripe = new TWLStripe;
-            // if (!$user->stripe_customer)
-            // {
-            //     $newCustomer = $twlStripe->createCustomer($stripe, $user->email, $user->payment_method);
-            //     $user->stripe_customer = $newCustomer->id;
-            //     $user->save();
-            // }
+            $stripe = $this->initialiseStripe();
+            $twlStripe = new TWLStripe;
+            if (!$user->stripe_customer)
+            {
+                $newCustomer = $twlStripe->createCustomer($stripe, $user->email, $user->payment_method);
+                $user->stripe_customer = $newCustomer->id;
+                $user->save();
+            }
 
             // $response = $stripe->subscriptions->create([
             //     'customer' => $user->stripe_customer,
@@ -98,6 +98,9 @@ class SubscriptionController extends Controller
             $vendor->subscribed = 1;
             $vendor->verified = 1;
             $vendor->save();
+
+            // Notify the vendor
+            $this->notifyUser("You have been subscribed to the $package->package_name","",$vendor->user_id,"success","Subscription");
 
             toastr()->success('Vendor is subscribed');
             return redirect('/admin/subscription/create');

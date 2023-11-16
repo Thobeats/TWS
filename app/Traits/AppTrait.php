@@ -64,10 +64,11 @@ trait AppTrait{
             "type" => $type
         ];
 
-        Notification::send(User::find($recipientID), new AppNotification($data));
+        $user = User::find($recipientID);
+        Notification::send($user, new AppNotification($data));
 
         //Send Email to the User
-
+        
     }
 
     protected function deleteFile($fileName){
