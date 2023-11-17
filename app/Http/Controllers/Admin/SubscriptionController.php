@@ -27,7 +27,7 @@ class SubscriptionController extends Controller
 
     public function create(){
         try{
-            $vendors = Vendor::where(['users.account_status' => 0])
+            $vendors = Vendor::where(['users.account_status' => 1])
                             ->whereRaw('users.payment_method is not null')
                             ->join('users','users.id','=','vendors.user_id')
                             ->select('users.id', 'users.business_name', 'vendors.account_details->id as account_id')

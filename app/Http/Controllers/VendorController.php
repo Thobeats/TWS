@@ -78,6 +78,7 @@ class VendorController extends Controller
         // }
 
         $user->email_verified_at = now();
+        $user->account_status = 1;
         $user->save();
 
         toastr()->success('Email verified');

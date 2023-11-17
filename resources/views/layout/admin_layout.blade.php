@@ -40,6 +40,7 @@
         href="https://unpkg.com/filepond-plugin-file-poster/dist/filepond-plugin-file-poster.css"
         rel="stylesheet"
     />
+    @livewireStyles
 
 
   <!-- =======================================================
@@ -82,6 +83,7 @@
 
   <script src="{{ asset('assets/vendor/tinymce/tinymce.min.js') }}"></script>
   @include('layout.filepond')
+  @livewireScripts
 
   <script>
     tinymce.init({
@@ -166,22 +168,22 @@
                   $('#package_price').text('$' + res.response.package_price);
                   $('#multiplier').val(res.response.package_price);
                   $('#total_price').text(res.response.package_price);
-                  
+
 
                   document.querySelector('.package_details').classList.remove('d-none');
-               
+
                 }else{
                   if(!document.querySelector('.package_details').classList.contain('d-none')){
                     document.querySelector('.package_details').classList.add('d-none');
                   }
-                  
+
                 }
             }, 'json');
         }else{
           if(!document.querySelector('.package_details').classList.contains('d-none')){
             document.querySelector('.package_details').classList.add('d-none');
           }
-          
+
         }
     }
 
