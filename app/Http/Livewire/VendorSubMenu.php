@@ -23,7 +23,7 @@ class VendorSubMenu extends Component
     }
 
     public function topVendors(){
-        $this->vendors = Vendor::where('users.account_status', 0)
+        $this->vendors = Vendor::where('users.account_status', 1)
                                 ->join('users','users.id','=','vendors.user_id')
                                 ->leftJoin('orders','orders.vendor_id','=','vendors.user_id')
                                 ->selectRaw("count(orders.vendor_id) as cnt, users.business_name, users.profile, users.id")
@@ -35,7 +35,7 @@ class VendorSubMenu extends Component
     }
 
     public function newVendors(){
-        $this->new_vendors = User::where(['users.role' => 2, 'users.account_status' => 0, 'vendors.verified' => 1])
+        $this->new_vendors = User::where(['users.role' => 2, 'users.account_status' => 1, 'vendors.verified' => 1])
                                     ->join('vendors','vendors.user_id','=','users.id')
                                     ->select('users.business_name','users.id')
                                     ->orderBy('vendors.created_at', 'DESC')
@@ -51,7 +51,7 @@ class VendorSubMenu extends Component
         //                             ->orderby('vendor_id','DESC')
         //                             ->first();
 
-        $this->votw = Vendor::where('users.account_status', 0)
+        $this->votw = Vendor::where('users.account_status', 1)
                                 ->join('users','users.id','=','vendors.user_id')
                                 ->leftJoin('orders','orders.vendor_id','=','vendors.user_id')
                                 ->first();

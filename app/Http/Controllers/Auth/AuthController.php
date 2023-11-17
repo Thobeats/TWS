@@ -10,14 +10,11 @@ use App\Models\Vendor;
 use App\Models\Customer;
 use App\Traits\AppTrait;
 use App\Models\SecretKey;
-use App\Mail\ConfirmEmail;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Http;
-use Illuminate\Support\Facades\Mail;
-use App\Http\Requests\RegisterRequest;
 use Illuminate\Support\Facades\Validator;
 
 class AuthController extends Controller

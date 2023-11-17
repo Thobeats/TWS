@@ -8,6 +8,7 @@ use App\Models\Section;
 use App\Models\OTPModel;
 use App\Models\ChargeBee;
 use Illuminate\Routing\RouteGroup;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Route;
 use App\Notifications\AppNotification;
@@ -349,14 +350,14 @@ Route::get('/verifyOTP/{email}/{code}', [OTPModel::class, 'verifyOTP']);
 //     Notification::send(User::find(14), new AppNotification($data));
 // });
 
-Route::get('/updateVendors', function(){
-    Vendor::query()->update([
-        "verified" => 1,
-        "verify_ein" => 1,
-        "verify_business" => 1,
-        "verify_customer_review" => 1
-    ]);
-});
+// Route::get('/updateVendors', function(){
+//     Vendor::query()->update([
+//         "verified" => 1,
+//         "verify_ein" => 1,
+//         "verify_business" => 1,
+//         "verify_customer_review" => 1
+//     ]);
+// });
 
 // Route::get('/address', function(){
 //     $client = new \GuzzleHttp\Client();
@@ -370,5 +371,9 @@ Route::get('/updateVendors', function(){
 
 //     echo $response->getBody();
 // });
-Route::get('/add',function(){ return "hh"; });
+
 Route::get('address', [AuthController::class, 'getAddress']);
+
+Route::get('/make_all_users_active',function(){
+    DB::table('users')->whereNotNull('email_verified_at')->update(['account_status' => 1]);
+});

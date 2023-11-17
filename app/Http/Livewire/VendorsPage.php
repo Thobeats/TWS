@@ -48,12 +48,12 @@ class VendorsPage extends Component
     public function filterVendor(Request $request,$alphabet){
 
         if($alphabet == "#"){
-            $filterVendors = Vendor::where('users.account_status', 0)
+            $filterVendors = Vendor::where('users.account_status', 1)
                                 ->where('users.business_name','LIKE',"[0-9]%")
                                 ->join('users','users.id','=','vendors.user_id')
                                 ->get();
         }else{
-            $filterVendors = Vendor::where('users.account_status', 0)
+            $filterVendors = Vendor::where('users.account_status', 1)
                             ->where('users.business_name','LIKE',"$alphabet%")
                             ->join('users','users.id','=','vendors.user_id')
                             ->get();
@@ -98,7 +98,7 @@ class VendorsPage extends Component
 
         $this->title = "All Vendors";
 
-        $query = Vendor::where('users.account_status', 0);
+        $query = Vendor::where('users.account_status', 1);
 
         // Category
         if(count($this->categoryQuery) > 0){

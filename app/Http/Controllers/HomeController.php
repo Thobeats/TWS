@@ -111,7 +111,7 @@ class HomeController extends Controller
 
         $freeShipping = Product::where(['publish_status' => 1, 'shipping_fee' => 0])->inRandomOrder()->get();
 
-        $newVendors = User::where(['users.role' => 2, 'users.account_status' => 0, 'vendors.verified' => 1])
+        $newVendors = User::where(['users.role' => 2, 'users.account_status' => 1, 'vendors.verified' => 1])
                                 ->join('vendors','vendors.user_id','=','users.id')
                                 ->select('users.business_name','users.id', 'users.profile')
                                 ->orderBy('vendors.created_at', 'DESC')
