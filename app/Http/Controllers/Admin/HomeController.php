@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Auth;
 class HomeController extends Controller
 {
     public function dashboard(){
-        
+
         return view('admin.dashboard');
     }
 
@@ -17,5 +17,13 @@ class HomeController extends Controller
         $user = Auth::user();
         $tab = $request->tab ? $request->tab : "profile";
         return view('admin.profile', compact('user', 'tab'));
+    }
+
+    public function getReport($filter){
+        if (Auth::check() == false){
+            return;
+        }
+
+        
     }
 }

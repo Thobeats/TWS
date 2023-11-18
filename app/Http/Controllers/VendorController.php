@@ -1319,9 +1319,17 @@ class VendorController extends Controller
         }
     }
 
-    public function notAdmin(){
-        $admin = $this->notifyAdmin();
-
-        return $admin;
+    public function upload_file(){
+        try{
+            return view('vendor.products.upload_file');
+        }catch(Exception $e){
+            
+        }
     }
+
+    // public function notAdmin(){
+    //     $admin = $this->notifyAdmin();
+
+    //     return $admin;
+    // }
 }

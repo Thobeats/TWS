@@ -266,6 +266,7 @@ class AuthController extends Controller
 
         if(!$user){
             toastr()->error('Email does not exist');
+            return redirect('/login');
         }else{
 
             if(Hash::check($request->password, $user->password)){
@@ -288,10 +289,9 @@ class AuthController extends Controller
 
             }else{
                 toastr()->error('Wrong Password');
+                return redirect('/login');
             }
         }
-
-       return redirect('/');
     }
 
     protected function setCookie(Request $request){

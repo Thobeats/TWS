@@ -377,9 +377,9 @@
                         <h6>Filter</h6>
                       </li>
 
-                      <li><a class="dropdown-item" wire:click="topSelling(0, 'Today')">Today</a></li>
-                      <li><a class="dropdown-item" wire:click="topSelling(1, 'This Month')">This Month</a></li>
-                      <li><a class="dropdown-item" wire:click="topSelling(2, 'This Year')">This Year</a></li>
+                      <li><a class="dropdown-item" href="#" wire:click="topSelling(0, 'Today')">Today</a></li>
+                      <li><a class="dropdown-item" href="#" wire:click="topSelling(1, 'This Month')">This Month</a></li>
+                      <li><a class="dropdown-item" href="#" wire:click="topSelling(2, 'This Year')">This Year</a></li>
                     </ul>
                   </div>
 
