@@ -21,6 +21,8 @@ class AdminDashboard extends Component
     public $packageCount;
     public $productCount;
     public $topVendors;
+    public $topSelling;
+    public $topSellingTag;
 
     public function mount(){
         $this->vendorCount(0);
@@ -30,6 +32,7 @@ class AdminDashboard extends Component
         $this->recentVendors();
         $this->recentCustomers();
         $this->topVendors();
+        $this->topSelling();
     }
 
     public function vendorCount($filter = 0, $tag = 'All'){
@@ -155,7 +158,36 @@ class AdminDashboard extends Component
                                     ->leftJoin('orders','orders.vendor_id','=','vendors.user_id')
                                     ->selectRaw("count(orders.vendor_id) as cnt, users.business_name, users.profile, users.id, sum(orders.total_price) as revenue")
                                     ->groupBy('users.id')
+                                    ->having('cnt', '>', 0)
                                     ->orderBy('cnt', 'DESC')
+                                    ->limit(5)
+                                    ->get();
+    }
+
+    public function topSelling(){
+        $query = Product::where('products.publish_status', 1)->leftJoin('orders','orders.product_id','=','products.id');
+        // $time = Carbon::now();
+        // $this->topSellingTag = $tag;
+
+        // if ($filter == 0)
+        // {
+        //     $query = $query->whereDate('orders.created_at', $time->toDateString());
+        // }
+
+        // if ($filter == 1)
+        // {
+        //     $query = $query->whereMonth('orders.created_at', $time->month);
+        // }
+
+        // if ($filter == 2)
+        // {
+        //     $query = $query->whereYear('orders.created_at', $time->year);
+        // }
+
+        $this->topSelling = $query->selectRaw("count(orders.product_id) as sold, products.name,products.price, products.pics, sum(orders.total_price) as revenue")
+                                    ->groupBy('products.id')
+                                    ->having('sold', '>', 0)
+                                    ->orderBy('sold', 'DESC')
                                     ->limit(5)
                                     ->get();
     }

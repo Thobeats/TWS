@@ -174,7 +174,7 @@ Route::middleware(['auth'])->group(function () {
                 Route::put('/update', [VendorController::class, 'updateProduct']);
                 Route::get('/delete/{id}', [VendorController::class, 'deleteProduct']);
                 Route::get('/toggle_active/{id}', [VendorController::class, 'toggleActive']);
-                Route::get('/uploadFile', [VendorController::class, 'uploadFile']);
+                Route::get('/uploadFile', [VendorController::class, 'upload_file']);
                 Route::post('/upload', [VendorController::class, 'importProducts']);
             });
 

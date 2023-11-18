@@ -5,7 +5,7 @@ use App\Models\FilePond;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\VendorController;
-
+use App\Http\Controllers\Admin\HomeController;
 
 /*
 |--------------------------------------------------------------------------
@@ -34,3 +34,5 @@ Route::get('/getCategory/{id}', [VendorController::class, 'getCategory']);
 Route::get('/notifyAdmin', [VendorController::class, 'notAdmin']);
 
 Route::get('/package/{id}', [PackageController::class, 'getPackage']);
+
+Route::get('/get/reports', [HomeController::class, 'getReport']);
