@@ -9,11 +9,15 @@
 <section class="section dashboard">
   <div class="card">
     <div class="card-body">
-        <div class="text-center">
+        <div class="p-3 mt-2 bg-primary">
+            <div class="text-start">
+                <a class="btn btn-outline-light" href="/downloadSample" download>Download Sample</a>
+            </div>
+        </div>
+        <div class="mt-3 text-center">
           <form action="/vendor/products/upload" method="POST" enctype="multipart/form-data" class="mt-3">
             @csrf
-            <div class="form-group">
-              <label for="">Upload CSV file</label>
+            <div class="form-group my-2">
               <input type="file" name="csv_file" class="form-control">
             </div>
             <div class="form-group text-end mt-3">

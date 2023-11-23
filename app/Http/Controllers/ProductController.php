@@ -73,7 +73,7 @@ class ProductController extends Controller
                 $chats = json_decode($chat->chat_message,true);
             }
 
-            $colors =[]; $sizes = []; $no_in_stock = 0;
+            $colors =[];
 
             if (!is_null($product->item_listing())){
                foreach($product->item_listing() as $key => $value){
@@ -84,7 +84,7 @@ class ProductController extends Controller
                         'name' => $color->name,
                         'id' => $color->id,
                         'listing' => $listing
-                    ]; 
+                    ];
                }
             }
 
@@ -98,7 +98,7 @@ class ProductController extends Controller
           //  dd($data);
             return view('market.product',$data);
         }
-        
+
     }
 
 
@@ -110,7 +110,7 @@ class ProductController extends Controller
         $items = []; $i = 0;
         foreach($item[0] as $size){
             $sizes = Size::find($size);
-            
+
             $items[] = [
                 'size' => $sizes->size_code,
                 'size_id' => $sizes->id,
@@ -118,7 +118,7 @@ class ProductController extends Controller
             ];
             $i++;
         }
-        
+
 
         return $items;
     }

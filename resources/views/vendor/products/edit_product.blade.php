@@ -6,6 +6,18 @@
 
 @section('content')
 
+<style>
+    td select{
+        padding: 5px;
+        font-size: 12px;
+    }
+
+    td input {
+        padding: 5px;
+        font-size: 12px;
+    }
+</style>
+
 <section class="section dashboard">
 
      <div class="card">
@@ -25,7 +37,7 @@
 
                 <input type="hidden" name="product_id" value="{{$product->id}}">
                 <div class="row mt-3">
-                  <div class="col-lg-6">
+                  <div class="col-lg-12">
                     <div class="has-validation">
                           <label for="cat_name" class="form-label">Product Name</label>
                           <input type="text" class="form-control  @error('name') is-invalid @enderror" id="name" name='name' value="{{ $product->name }}">
@@ -34,15 +46,8 @@
                           </div>
                       </div>
                   </div>
-                  <div class="col-lg-6">
-                        <label for="price" class="form-label">Price</label>
-                        <input type="number" name="price" class="form-control @error('price') is-invalid @enderror" value="{{ $product->price }}">
-                        <div class="invalid-feedback">
-                          @error('price') {{ $message }} @enderror
-                      </div>
-                  </div>
               </div>
-        
+
               <div class="row mt-3">
                  <div class="row col-12 categories">
                   <div class="col-md-4">
@@ -69,7 +74,7 @@
                     <select {{ count($cats) > 2 ? '' : 'disable' }} id="subsubcategory" name='category_id[]' class="form-select @error('category_id') is-invalid @enderror">
                       {!! $subcatTemp2 !!}
                     </select>
-                  </div> 
+                  </div>
                  </div>
               </div>
 
@@ -131,6 +136,7 @@
               <div class="row mt-3">
                 <div class="col-12">
                   <h4>Item Inventory</h4>
+                  <hr>
                 </div>
 
                 <div class="col-12">
@@ -153,7 +159,7 @@
                           <button class='btn btn-danger btn-sm' type='button' onclick=removeInventory({{$index}})><i class='bi bi-trash'></i></button>
                         </td>
                         <td>
-                          <select id="colors" name='colors[]' required class="form-select @error('colors') is-invalid @enderror"style="width: 100%">
+                          <select id="colors" name='colors[]' required class="@error('colors') is-invalid @enderror"style="width: 100%">
                             <option value="">Select Color</option>
                             @if(!empty($colors))
                                 @foreach($colors as $color)
@@ -164,11 +170,18 @@
                         </td>
                        <td>
                           <table class="table table-bordered">
+                            <colgroup>
+                                <col span="1" style="width: 30%;">
+                                <col span="1" style="width: 30%;">
+                                <col span="1" style="width: 30%;">
+                                <col span="1" style="width: 10%;">
+                            </colgroup>
                             <thead>
                               <tr>
                                 <th>no in stock</th>
                                 <th>Size</th>
-                                <th></th>
+                                <th>Price</th>
+                                <th>Action</th>
                               </tr>
                             </thead>
                             <tbody id="record{{$index}}">
@@ -178,10 +191,10 @@
                               @foreach ($item[1] as $key => $itemRecord)
                               <tr id="record{{$index.$index2}}">
                                 <td>
-                                  <input type="number" value="{{$itemRecord}}" name="no_in_stock[{{$index}}][]" required class="form-control @error('no_in_stock') is-invalid @enderror">
+                                  <input type="number" value="{{$itemRecord}}" name="no_in_stock[{{$index}}][]" required class="@error('no_in_stock') is-invalid @enderror">
                                 </td>
                                 <td>
-                                  <select id="sizes" name='sizes[{{$index}}][]' class="form-select @error('sizes') is-invalid @enderror" style="width: 100%">
+                                  <select id="sizes" name='sizes[{{$index}}][]' class="@error('sizes') is-invalid @enderror" style="width: 100%">
                                     <option value="">Select Size</option>
                                     @if(!empty($sizes))
                                         @foreach($sizes as $size)
@@ -189,6 +202,9 @@
                                         @endforeach
                                     @endif
                                   </select>
+                                </td>
+                                <td>
+                                    <input type="text" value="{{ $item[2][$key]}}" name="p_price[{{$index}}][]" required id="">
                                 </td>
                                 <td>
                                   <button class='btn btn-danger btn-sm' onclick=removeRecord(record{{$index.$index2}},record{{$index}})><i class='bi bi-trash'></i></button>
@@ -201,7 +217,7 @@
                             </tbody>
                             <tfoot>
                               <tr>
-                                <th colspan="3" class="text-end">
+                                <th colspan="4" class="text-end">
                                   <button type="button" onclick="addNewRecord({{$index}})" class="btn btn-primary btn-sm">
                                     <i class="bi bi-plus-circle-fill"></i> Add
                                   </button>
@@ -233,7 +249,8 @@
                               <tr>
                                 <th>no in stock</th>
                                 <th>Size</th>
-                                <th></th>
+                                <th>Price</th>
+                                <th>Action</th>
                               </tr>
                             </thead>
                             <tbody id="record0">
@@ -251,12 +268,15 @@
                                     @endif
                                   </select>
                                 </td>
+                                <td>
+                                    <input type="text" name="p_price[0][]" required id="">
+                                </td>
                                 <td></td>
                               </tr>
                             </tbody>
                             <tfoot>
                               <tr>
-                                <th colspan="3" class="text-end">
+                                <th colspan="4" class="text-end">
                                   <button type="button" onclick="addNewRecord(0)" class="btn btn-primary btn-sm">
                                     <i class="bi bi-plus-circle-fill"></i> Add
                                   </button>
@@ -268,7 +288,7 @@
                       </tr>
                       @endforelse
                       @endif
-                      
+
                     </tbody>
                   </table>
                 </div>
@@ -277,10 +297,10 @@
                   <button type="button" onclick="addInventory()" class="btn btn-primary btn-sm">Add Inventory</button>
                 </div>
 
-                  
+
               </div>
 
-       
+
 
               <div class="row mt-3">
                 <div class="col-12">
@@ -321,12 +341,12 @@
               let subsubcategories = document.querySelector(".subsubcatwrapper");
                 if(json.length > 0){
                   // create new form element
-          
+
                   if(step == 1){
                     if(subcategories.classList.contains('d-none')){
                       subcategories.classList.remove('d-none');
                     }
-                    
+
                     if(!subsubcategories.classList.contains('d-none')){
                       subsubcategories.classList.add('d-none');
                     }
@@ -342,7 +362,7 @@
                     if(subsubcategories.classList.contains('d-none')){
                       subsubcategories.classList.remove('d-none');
                     }
-                  
+
                     let subcat = document.querySelector("#subsubcategory");
                     let options = "<option>Select</option>";
 
@@ -368,7 +388,7 @@
                       subsubcategories.classList.add('d-none');
                   }
                   }
-                 
+
                 }
             });
   }
@@ -385,7 +405,7 @@
           <button class='btn btn-danger btn-sm' type='button' onclick="removeInventory(${id})"><i class='bi bi-trash'></i></button>
         </td>
         <td>
-          <select id="colors" name='colors[]' required class="form-select @error('colors') is-invalid @enderror"style="width: 100%">
+          <select id="colors" name='colors[]' required class="@error('colors') is-invalid @enderror"style="width: 100%">
             <option value="">Select Color</option>
             @if(!empty($colors))
 
@@ -397,20 +417,27 @@
         </td>
         <td>
           <table class="table table-bordered">
+            <colgroup>
+                <col span="1" style="width: 30%;">
+                <col span="1" style="width: 30%;">
+                <col span="1" style="width: 30%;">
+                <col span="1" style="width: 10%;">
+            </colgroup>
             <thead>
               <tr>
                 <th>no in stock</th>
                 <th>Size</th>
-                <th></th>
+                <th>Price</th>
+                <th>Action</th>
               </tr>
             </thead>
             <tbody id="record${id}">
               <tr>
                 <td>
-                  <input type="number" name="no_in_stock[${id}][]" required class="form-control @error('no_in_stock') is-invalid @enderror">
+                  <input type="number" name="no_in_stock[${id}][]" required class="@error('no_in_stock') is-invalid @enderror">
                 </td>
                 <td>
-                  <select id="sizes" name='sizes[${id}][]' class="form-select @error('sizes') is-invalid @enderror" style="width: 100%">
+                  <select id="sizes" name='sizes[${id}][]' class="@error('sizes') is-invalid @enderror" style="width: 100%">
                     <option value="">Select Size</option>
                     @if(!empty($sizes))
                         @foreach($sizes as $size)
@@ -419,12 +446,15 @@
                     @endif
                   </select>
                 </td>
+                <td>
+                    <input type="text" name="p_price[${id}][]" id="">
+                </td>
                 <td></td>
               </tr>
             </tbody>
             <tfoot>
               <tr>
-                <th colspan="3" class="text-end">
+                <th colspan="4" class="text-end">
                   <button type="button" onclick="addNewRecord(${id})" class="btn btn-primary btn-sm">
                     <i class="bi bi-plus-circle-fill"></i> Add
                   </button>
@@ -451,10 +481,10 @@
 
     tr.innerHTML = `
     <td>
-      <input type="number" name="no_in_stock[${recordID}][]" required class="form-control @error('no_in_stock') is-invalid @enderror">
+      <input type="number" name="no_in_stock[${recordID}][]" required class="@error('no_in_stock') is-invalid @enderror">
     </td>
     <td>
-      <select id="sizes" name='sizes[${recordID}][]' class="form-select @error('sizes') is-invalid @enderror" style="width: 100%">
+      <select id="sizes" name='sizes[${recordID}][]' class="@error('sizes') is-invalid @enderror" style="width: 100%">
         <option value="">Select Size</option>
         @if(!empty($sizes))
             @foreach($sizes as $size)
@@ -462,6 +492,9 @@
             @endforeach
         @endif
       </select>
+    </td>
+    <td>
+        <input type="text" name="p_price[${recordID}][]" id="">
     </td>
     <td scope="row">
       <button class='btn btn-danger btn-sm' onclick="removeRecord(${`record${recordID}${id}`},record${recordID})"><i class='bi bi-trash'></i></button>

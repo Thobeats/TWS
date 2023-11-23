@@ -377,3 +377,11 @@ Route::get('address', [AuthController::class, 'getAddress']);
 Route::get('/make_all_users_active',function(){
     DB::table('users')->whereNotNull('email_verified_at')->update(['account_status' => 1]);
 });
+Route::get('/downloadSample', function(){
+    $path = url("storage/sample.csv");
+    return redirect($path);
+});
+
+Route::get('/404', function(){
+    return view('error.404');
+});
