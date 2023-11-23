@@ -706,7 +706,7 @@ class VendorController extends Controller
     }
 
     public function store(Request $request){
-
+       try{
             if($request->has('save')){
                 $ps = 1;
 
@@ -717,13 +717,15 @@ class VendorController extends Controller
                     'tags' => 'required|array',
                     'sizes.*' => 'required|array',
                     'colors' => 'required|array',
-                    'price' => 'required|numeric',
                     'no_in_stock.*' => 'required|array',
                     'pics' => 'required|array',
                     'shipping_fee' => 'integer',
                     'sections' => 'required|array',
                     'sku' => 'nullable|string',
                     'moq' => 'required|integer'
+                ],[
+                    'name.required' => 'The Product name is needed',
+                    'tags.required' => 'Tags are needed to manage your products'
                 ]);
 
             }else{
@@ -736,7 +738,6 @@ class VendorController extends Controller
                     'tags' => 'nullable|array',
                     'sizes.*' => 'nullable|array',
                     'colors' => 'nullable|array',
-                    'price' => 'nullable|numeric',
                     'no_in_stock.*' => 'nullable|array',
                     'pics' => 'nullable|array',
                     'shipping_fee' => 'integer',
@@ -747,9 +748,6 @@ class VendorController extends Controller
             }
 
             $request->merge(['publish_status' => $ps]);
-
-
-          //  $user = Auth::user();
 
             if($validator->fails() && count($request->pics) > 0){
                 foreach($request->pics as $pic){
@@ -775,16 +773,23 @@ class VendorController extends Controller
 
             $pics = $request->pics;
             $item_listing = [];
+            $priceSum = 0;
+            $priceCount = 0;
 
             for ($i=0; $i < count($request->colors); $i++) {
                 $listing = [
                     $request->sizes[$i],
                     $request->no_in_stock[$i],
+                    $request->p_price[$i]
                 ];
+
+                $priceSum += array_sum($request->p_price[$i]);
+                $priceCount += count($request->p_price[$i]);
 
                 $item_listing[$request->colors[$i]] = $listing;
             }
 
+            $request->merge(['price' => ceil($priceSum / $priceCount)]);
             $user = Auth::user();
 
             // Attach the Vendor Id to the request
@@ -812,18 +817,21 @@ class VendorController extends Controller
                 return redirect('/vendor/products/drafts');
             }
 
-
             // Add the Category to the list of Products
             $vendorProfile = Vendor::where('user_id', $user->id)->first();
             $vendorProducts = json_decode($vendorProfile->products,true);
-            foreach( $request->category_id as $cat){
+            foreach(json_decode($request->category_id,true) as $cat){
                 if(!array_search($cat, $vendorProducts)){
                     $vendorProducts[] = "$cat";
                 }
             }
+            $vendorProfile->products = json_encode($vendorProducts);
+            $vendorProfile->save();
 
             return redirect('/vendor/products');
-
+        }catch(Exception $e){
+            return $e->getMessage();
+        }
     }
 
     public function all_products(){
@@ -900,7 +908,6 @@ class VendorController extends Controller
                 'tags' => 'required|array',
                 'sizes.*' => 'required|array',
                 'colors' => 'required|array',
-                'price' => 'required|numeric',
                 'no_in_stock.*' => 'required|array',
                 'pics' => 'required|array',
                 'shipping_fee' => 'integer',
@@ -908,6 +915,9 @@ class VendorController extends Controller
                 'sku' => 'nullable|string',
                 'product_id' => 'required|integer',
                 'moq' => 'required|integer'
+            ],[
+                'name.required' => 'The Product name is needed',
+                'tags.required' => 'Tags are needed to manage your products'
             ]);
 
         }else{
@@ -920,7 +930,6 @@ class VendorController extends Controller
                 'tags' => 'nullable|array',
                 'sizes.*' => 'nullable|array',
                 'colors' => 'nullable|array',
-                'price' => 'nullable|numeric',
                 'no_in_stock.*' => 'nullable|array',
                 'pics' => 'nullable|array',
                 'shipping_fee' => 'integer',
@@ -941,15 +950,23 @@ class VendorController extends Controller
 
         $pics = $request->pics;
             $item_listing = [];
+            $priceSum = 0;
+            $priceCount = 0;
 
             for ($i=0; $i < count($request->colors); $i++) {
                 $listing = [
                     $request->sizes[$i],
                     $request->no_in_stock[$i],
+                    $request->p_price[$i]
                 ];
+
+                $priceSum += array_sum($request->p_price[$i]);
+                $priceCount += count($request->p_price[$i]);
 
                 $item_listing[$request->colors[$i]] = $listing;
             }
+
+            $request->merge(['price' => ceil($priceSum / $priceCount)]);
 
             $user = Auth::user();
 
@@ -976,6 +993,18 @@ class VendorController extends Controller
         if(!$ps){
             return redirect('/vendor/products/drafts');
         }
+
+        // Add the Category to the list of Products
+        $vendorProfile = Vendor::where('user_id', $user->id)->first();
+        $vendorProducts = json_decode($vendorProfile->products,true);
+        foreach(json_decode($request->category_id,true) as $cat){
+            if(!array_search($cat, $vendorProducts)){
+                $vendorProducts[] = "$cat";
+            }
+        }
+        $vendorProfile->products = json_encode($vendorProducts);
+        $vendorProfile->save();
+
         return redirect('/vendor/products');
     }
 
@@ -1323,7 +1352,7 @@ class VendorController extends Controller
         try{
             return view('vendor.products.upload_file');
         }catch(Exception $e){
-            
+
         }
     }
 

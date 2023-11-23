@@ -166,6 +166,7 @@
             allowImageValidateSize: true,
             imagePreviewHeight: 170,
             maxFiles : 3,
+            required : true,
             files : [
             <?php
             if(isset($images)):
