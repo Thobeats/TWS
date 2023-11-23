@@ -190,7 +190,7 @@
                                 </div>
                             @endif
                         @empty
-                          
+
                         @endforelse
                     </div>
                     <textarea class="form-control p-1 my-2" name="" id="textArea" cols="30" rows="2"></textarea>
@@ -599,7 +599,7 @@
                     document.getElementById("product_modal_stock").dataset.max = json[0].no_in_stock;
                     document.getElementById('product_modal_size').innerHTML = temp;
                 });
-            
+
         }
 
         function getNoInStock(e){

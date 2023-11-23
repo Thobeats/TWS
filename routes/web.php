@@ -202,6 +202,15 @@ Route::middleware(['auth'])->group(function () {
                 Route::any('/switch', [VendorController::class, 'switch']);
             });
 
+            // Customers
+            Route::group(['prefix' => 'discount'], function(){
+                Route::get('/', [VendorController::class, 'discount']);
+                Route::get('/new', [VendorController::class, 'newDiscount']);
+                Route::get('/save', [VendorController::class, 'saveDiscount']);
+                Route::get('/edit/{id}', [VendorController::class, 'editDiscount']);
+                Route::put('/update/{id}', [VendorController::class, 'updateDiscount']);
+            });
+
             // Reports
             Route::group(['prefix' => 'report'], function(){
                 Route::any('/', [VendorController::class, 'reports']);
@@ -381,7 +390,6 @@ Route::get('/downloadSample', function(){
     $path = url("storage/sample.csv");
     return redirect($path);
 });
-
 Route::get('/404', function(){
     return view('error.404');
 });

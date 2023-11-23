@@ -187,6 +187,20 @@
         }
     }
 
+    var url = 'http://my-json-server.typicode.com/apexcharts/apexcharts.js/yearly';
+
+    $.getJSON(url, function(response) {
+        chart.updateSeries([
+            {
+                name: 'Vendors',
+                data: response.vendors,
+            },
+            {
+                name: 'Customers',
+                data: response.customers
+            }
+        ]);
+    });
   </script>
 
 
