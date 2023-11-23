@@ -6,6 +6,7 @@ use Exception;
 use App\Models\User;
 use App\Models\Vendor;
 use App\Models\Product;
+use App\Models\Customer;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
@@ -64,12 +65,20 @@ class HomeController extends Controller
     }
 
     public function getReport(){
-        if (Auth::check() == false){
-            return;
-        }
+        $vendors = Vendor::selectRaw('month(created_at) as mnth, count(user_id) as cnt')
+                            ->groupBy("mnth")
+                            ->get();
 
-      //  $vendors = Vendor::selectRaw('count(user_id) as cnt group by created_at')
+        $customers = Customer::selectRaw('month(created_at) as mnth, count(user_id) as cnt')
+                            ->groupBy("mnth")
+                            ->get();
 
+        $result = [
+            "vendors" => $vendors->pluck('cnt'),
+            "customers" => $customers->pluck('cnt'),
+            "months" => $vendors->pluck('mnth')
+        ];
 
+        return json_encode($result);
     }
 }

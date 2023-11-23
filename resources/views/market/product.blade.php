@@ -51,7 +51,6 @@
                         </div>
 
                         <div class="col-md-6 col-lg-5 p-b-30">
-
                             <div class="p-r-50 p-t-5 p-lr-0-lg">
                                 <div class="d-flex justify-content-between">
                                     <h4 class="mtext-106 cl2 js-name-detail p-b-14" id="product_modal_name">
@@ -96,7 +95,7 @@
                                                 <div class="rs1-select2 bor8 bg0">
                                                     <select class="js-select2" name="size" id="product_modal_size" onchange="getNoInStock(event)">
                                                        @foreach ($item[0]['listing'] as $listing)
-                                                            <option data-max="{{$listing['no_in_stock']}}" value="{{$listing['size_id']}}">{{ $listing['size'] }}</option>
+                                                            <option data-max="{{$listing['no_in_stock']}}" data-price="{{$listing['price']}}" value="{{$listing['size_id']}}">{{ $listing['size'] }}</option>
                                                        @endforeach
                                                     </select>
                                                     <div class="dropDownSelect2"></div>
@@ -594,7 +593,7 @@
                 .then(json => {
                     let temp = '';
                     for (i in json){
-                        temp += `<option data-max='${json[i].no_in_stock}' value='${json[i].size_id}'>${json[i].size}</option>`;
+                        temp += `<option data-max='${json[i].no_in_stock}' data-price='${json[i].price}' value='${json[i].size_id}'>${json[i].size}</option>`;
                     }
                     document.getElementById("product_modal_stock").dataset.max = json[0].no_in_stock;
                     document.getElementById('product_modal_size').innerHTML = temp;
@@ -604,9 +603,11 @@
 
         function getNoInStock(e){
             let max = e.target.options[e.target.selectedIndex].dataset.max;
+            let price = e.target.options[e.target.selectedIndex].dataset.price;
 
             //console.log(max);
             document.getElementById("product_modal_stock").dataset.max = max;
+            document.getElementById("product_modal_price").innerHTML = '$'+ price;
         }
     </script>
 
