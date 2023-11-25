@@ -38,17 +38,25 @@
                 <div class="product-wrapper h-75">
                     <div class="mt-3 d-flex justify-content-left">
                         @forelse ($newProducts as $new)
-                            <div class="card mx-2" style="height: 400px; width: 220px;">
-                                <div class="img-wrapper" style="height: 90%;">
-                                    <img src="{{ url('storage/products/'. json_decode($new->pics,true)[0]) }}" class="card-img-top h-100" alt="...">
+                            <div class="block2 mr-2" style="width: 250px;">
+                                <div class="block2-pic hov-img0">
+                                    <img src="{{ url('storage/products/'. json_decode($new->pics,true)[0]) }}" alt="IMG-PRODUCT" class="card-image">
                                 </div>
-                                <div class="p-2 new_arrival">
-                                    <a href="/market/vendor/{{$new->vendor_id}}" class="mtext-101 text-dark cl4 hov-cl1 trans-04 js-name-b2">
-                                        {{ $new->vendorName() }}
-                                    </a>
-                                    <a class="stext-104 cl4 hov-cl1 trans-04 js-name-b2" href="/market/product/{{$new->id}}">
-                                        {{ $new->name }}
-                                    </a>
+                                <div class="p-2">
+                                    <div class="d-flex justify-content-between">
+                                       <div>
+                                            <a href="/market/vendor/{{$new->vendor_id}}" class="mtext-101 text-dark cl4 hov-cl1 trans-04 js-name-b2">
+                                                {{ $new->vendorName() }}
+                                            </a>
+                                            <a href="/market/product/{{$new->id}}" class="stext-104 cl4 hov-cl1 trans-04 js-name-b2">
+                                                {{ $new->name }}
+                                            </a>
+                                       </div>
+
+                                       <div>
+                                         <a href="/market/product/{{$new->id}}" class="btn btn-outline-dark btn-sm mt-3">View in Shop</a>
+                                       </div>
+                                    </div>
                                 </div>
                             </div>
                         @empty

@@ -20,15 +20,11 @@
                                             <h6 class="my-2">{{ $vendor->business_name }}</h6>
                                         </a>
                                    </div>
-
-                                   <div>
-                                     <a href="/market/vendor/{{$vendor->id}}" class="btn btn-outline-dark btn-sm">View</a>
-                                   </div>
                                 </div>
                             </div>
                         </div>
                     @empty
-                      
+
                     @endforelse
                 </div>
             </div>
@@ -69,10 +65,6 @@
                                         <a href="/market/vendor/{{$votw->id}}">
                                             <h6 class="my-2">{{ $votw->business_name }}</h6>
                                         </a>
-                                   </div>
-
-                                   <div>
-                                     <a href="/market/vendor/{{$votw->id}}" class="btn btn-outline-dark btn-sm">View</a>
                                    </div>
                                 </div>
                             </div>
