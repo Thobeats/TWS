@@ -78,7 +78,7 @@ class ProductController extends Controller
             if (!is_null($product->item_listing())){
                foreach($product->item_listing() as $key => $value){
                     $color = Color::find($key);
-                    $listing = $this->getItemsByColor($product->id,$color->id, $product->price);
+                    $listing = $this->getItemsByColor($product->id,$color->id);
 
                     $colors[] = [
                         'name' => $color->name,
@@ -93,16 +93,17 @@ class ProductController extends Controller
                 'images' => $product->images(),
                 'item' => $colors,
                 'user' => $user,
-                'chats' => $chats
+                'chats' => $chats,
+                'productId' => $product->id
             ];
-          //  dd($data);
+            // dd($data);
             return view('market.product',$data);
         }
 
     }
 
 
-    public function getItemsByColor($productId, $colorId, $price){
+    public function getItemsByColor($productId, $colorId){
         $product = Product::find($productId);
         $listing = json_decode($product->item_listing,true);
         $item = $listing[$colorId];
@@ -115,7 +116,7 @@ class ProductController extends Controller
                 'size' => $sizes->size_code,
                 'size_id' => $sizes->id,
                 'no_in_stock' => $item[1][$i],
-                'price' => isset($item[2]) ? $item[2][$i] : $price
+                'price' => isset($item[2]) ? $item[2][$i] : $product->price
             ];
             $i++;
         }

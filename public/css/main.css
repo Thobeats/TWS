@@ -442,8 +442,6 @@ body{
 
 .sub-menu li {
   position: relative;
-  text-transform: uppercase;
-  background-color: transparent;
   transition: all 0.4s;
   font-size: 16px;
   font-family: Poppins-Regular;
@@ -466,9 +464,9 @@ body{
 .sub-menu a {
   /* font-size: 14px; */
   line-height: 2;
-  color: #555;
+  color: #000;
   display: block;
-  font-family: 'Inter', sans-serif;
+  font-family: 'Titillium web', sans-serif;
   /* padding: 8px 20px;
   width: 100%; */
 

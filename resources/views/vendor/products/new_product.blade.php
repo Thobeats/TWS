@@ -48,38 +48,22 @@
                 </div>
 
                 <div class="row mt-3">
-                   <div class="row col-12 categories">
-                    <div class="col-md-4">
+                   <div class="row col-12">
+                    <div class="col-12">
                       <label for="category" class="form-label">Category</label>
-                      <select id="category" name='category_id[]' class="form-select @error('category_id') is-invalid @enderror" onchange="getCategory(event)">
-                        <option value="">Select Category</option>
-                       @forelse ($categories as $category)
-                         <option value="{{$category['id']}}">{{ $category['name'] }}</option>
-                       @empty
-                       @endforelse
+                      <select id="category" name='category_id[]' class="@error('category_id') is-invalid @enderror" multiple style="width: 100%">
+                        {!! $categoryTemp !!}
                       </select>
                         <div class="invalid-feedback">
                             @error('category_id') {{ $message }} @enderror
                         </div>
                     </div>
-                    <div class="col-md-4 d-none subcatwrapper">
-                      <label for="category" id="sub_cat" class="form-label">Sub Category</label>
-                      <select id="subcategory" name='category_id[]' class="form-select @error('category_id') is-invalid @enderror" onchange="getCategory(event, 2)">
-
-                      </select>
-                    </div>
-                    <div class="col-md-4 d-none subsubcatwrapper">
-                      <label for="category" id="sub_cat" class="form-label">Sub Category</label>
-                      <select id="subsubcategory" name='category_id[]' class="form-select @error('category_id') is-invalid @enderror">
-                      </select>
-                    </div>
-                   </div>
                 </div>
 
                 <div class="row mt-3">
                   <div class="col-lg-6">
                     <label for="tags" class="form-label">Tags</label>
-                    <select id="tags" name='tags[]' class="form-select @error('tags') is-invalid @enderror js-example-basic-multiple" multiple style="width: 100%">
+                    <select id="tags" name='tags[]' class="@error('tags') is-invalid @enderror js-example-basic-multiple" multiple style="width: 100%">
                       @if(!empty($tags))
                           @foreach($tags as $tag)
                           <option value="{{ $tag['id'] }}">{{ $tag['name'] }}</option>

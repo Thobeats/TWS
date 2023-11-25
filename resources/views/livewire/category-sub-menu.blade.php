@@ -18,49 +18,48 @@
                     @endif
                 </ul>
             </div>
-            <div class="col-lg-2">
-                <ul>
-                    @forelse ($sub_categories as $scat)
-                    <li class="p-1">
-                        <a class="category-link {{ $active2 == $scat['id'] ? 'cat_active' : ''}}" href="#" onmouseover="getSubcategories({{$scat['id']}}, '2')">
-                            <span>{{ $scat['name'] }}</span>
-                            @if(in_array($scat['id'],array_column($hasChildren,'parent_id')))
-                                <span style="position: absolute; right:4px;"><i class="zmdi zmdi-chevron-right"></i></span>
-                            @endif
-                        </a>
-                    </li>
-                    @empty
-                    @endforelse
-                </ul>
-            </div>
-            <div class="col-lg-2">
-                <ul>
-                    @forelse ($sub_categories2 as $scat2)
-                    <li class="p-1">
-                        <a class="category-link" href="#">
-                            <span>{{ $scat2['name'] }}</span>
-                        </a>
-                    </li>
-                    @empty
-                    @endforelse
-                </ul>
-            </div>
-            <div class="col-lg-6">
-                <h4 class="sub-menu-title border border-top-0 border-left-0 border-right-0 border-left border-3 border-dark">
-                    New Arrivals
-                </h4>
+            @if (!empty($sub_categories))
+                <div class="col-lg-2">
+                    <ul>
+                        @forelse ($sub_categories as $scat)
+                        <li class="p-1">
+                            <a class="category-link {{ $active2 == $scat['id'] ? 'cat_active' : ''}}" href="#" onmouseover="getSubcategories({{$scat['id']}}, '2')">
+                                <span>{{ $scat['name'] }}</span>
+                                @if(in_array($scat['id'],array_column($hasChildren,'parent_id')))
+                                    <span style="position: absolute; right:4px;"><i class="zmdi zmdi-chevron-right"></i></span>
+                                @endif
+                            </a>
+                        </li>
+                        @empty
+                        @endforelse
+                    </ul>
+                </div>
+            @endif
+
+            @if (!empty($sub_categories2))
+                <div class="col-lg-2">
+                    <ul>
+                        @forelse ($sub_categories2 as $scat2)
+                        <li class="p-1">
+                            <a class="category-link" href="#">
+                                <span>{{ $scat2['name'] }}</span>
+                            </a>
+                        </li>
+                        @empty
+                        @endforelse
+                    </ul>
+                </div>
+            @endif
+
+            <div class="{{ $col_lg }}">
                 <div class="mt-3 product-wrapper d-flex">
                     @forelse ($new_arrivals as $new)
                         @php
                             $pic = isset(json_decode($new->pics,true)[0]) ? json_decode($new->pics,true)[0] : ""
                         @endphp
-                        <div class="block2" style="width: 300px;">
-                            <div class="block2-image hov-img0">
-                                <img src="{{ url('storage/products/'. $pic) }}" alt="IMG-PRODUCT" class="img-fluid">
-    
-                                <a href="/market/product/{{$new->id}}" class="block2-btn flex-c-m stext-103 cl2 size-102 bg0 bor2 hov-btn1 p-lr-15 trans-04 js-show-modal1" data-product="{{$new->id}}">
-                                    Quick View
-                                </a>
+                        <div class="block2 mr-2" style="width: 300px;">
+                            <div class="block2-pic hov-img0">
+                                <img src="{{ url('storage/products/'. $pic) }}" alt="IMG-PRODUCT" class="card-image">
                             </div>
                             <div class="p-2">
                                 <div class="d-flex justify-content-between">
@@ -79,6 +78,7 @@
                                 </div>
                             </div>
                         </div>
+
                     @empty
 
                     @endforelse

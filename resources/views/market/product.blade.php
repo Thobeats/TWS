@@ -586,9 +586,12 @@
 
         function getListing(e){
             let id = e.target.value;
-            let product = "{{ $product->id }}"
+            let product = "{{ $productId }}";
+            let url = `/market/listing/${product}/${id}`;
 
-            fetch(`/market/listing/${product}/${id}`,{method: 'GET'})
+            console.log(url);
+
+            fetch(`${url}`,{method: 'GET'})
                 .then(res => res.json())
                 .then(json => {
                     let temp = '';

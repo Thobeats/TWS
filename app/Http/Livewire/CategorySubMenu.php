@@ -17,6 +17,7 @@ class CategorySubMenu extends Component
     public $hasChildren;
     public $sub_categories2;
     public $active2;
+    public $col_lg = 'col-lg-10';
 
 
     protected $listeners = ['get_subcategories' => 'getSubCategories'];
@@ -40,20 +41,24 @@ class CategorySubMenu extends Component
             $this->sub_categories = Category::where('parent_to_children.parent_id', $category_id)
                                 ->join('parent_to_children', 'parent_to_children.category_id', 'categories.id')
                                 ->select('categories.*')
-                                ->get();
+                                ->get()
+                                ->toArray();
+            if (!empty($this->sub_categories)){
+                $this->col_lg = 'col-lg-8';
+            }
             $this->active = $category_id;
 
             $this->new_arrivals = Product::whereJsonContains('products.category_id', "$category_id")
                                 ->select('products.pics','products.name','products.id', 'products.price', 'products.vendor_id')
                                 ->orderBy('id', 'DESC')
-                                ->limit(2)
+                                ->limit(3)
                                 ->get();
             $this->sub_categories2 = [];
         }elseif($step == 2){
             $this->sub_categories2 = Category::where('parent_to_children.parent_id', $category_id)
                                 ->join('parent_to_children', 'parent_to_children.category_id', 'categories.id')
                                 ->select('categories.*')
-                                ->get();
+                                ->get()->toArray();
             $this->active2 = $category_id;
 
             $this->new_arrivals = Product::whereJsonContains('products.category_id', "$category_id")
@@ -61,6 +66,10 @@ class CategorySubMenu extends Component
                                 ->orderBy('id', 'DESC')
                                 ->limit(3)
                                 ->get();
+
+            if (!empty($this->sub_categories2)){
+                $this->col_lg = 'col-lg-6';
+            }
         }
 
     }

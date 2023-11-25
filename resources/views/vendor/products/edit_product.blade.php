@@ -48,7 +48,7 @@
                   </div>
               </div>
 
-              <div class="row mt-3">
+              {{-- <div class="row mt-3">
                  <div class="row col-12 categories">
                   <div class="col-md-4">
                     <label for="category" class="form-label">Category</label>
@@ -76,7 +76,20 @@
                     </select>
                   </div>
                  </div>
-              </div>
+              </div> --}}
+
+                <div class="row mt-3">
+                    <div class="row col-12">
+                    <div class="col-12">
+                    <label for="category" class="form-label">Category</label>
+                    <select id="category" name='category_id[]' class="@error('category_id') is-invalid @enderror" multiple style="width: 100%">
+                        {!! $categoryTemp !!}
+                    </select>
+                        <div class="invalid-feedback">
+                            @error('category_id') {{ $message }} @enderror
+                        </div>
+                    </div>
+                </div>
 
               <div class="row mt-3">
                 <div class="col-lg-6">
