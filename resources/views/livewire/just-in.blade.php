@@ -35,7 +35,7 @@
                         <h1 class="just-in-amount">{{ $last7days }}</h1>
                     </div>
                 </div>
-                <div class="product-wrapper h-75">
+                <div class="product-wrapper">
                     <div class="mt-3 d-flex justify-content-left">
                         @forelse ($newProducts as $new)
                             <div class="block2 mr-2" style="width: 250px;">
@@ -65,9 +65,6 @@
                             </div>
                         @endforelse
                     </div>
-                </div>
-                <div class="view_all p-3 text-right">
-                    <a class="btn btn-home" href="/shop">View all</a>
                 </div>
             </div>
         </div>
