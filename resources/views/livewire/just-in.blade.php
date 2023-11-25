@@ -49,7 +49,7 @@
                                                 {{ $new->vendorName() }}
                                             </a>
                                             <a href="/market/product/{{$new->id}}" class="stext-104 cl4 hov-cl1 trans-04 js-name-b2">
-                                                {{ $new->name }}
+                                                {{ substr($new->name,0,10) }}
                                             </a>
                                        </div>
 
