@@ -43,13 +43,15 @@ class CategorySubMenu extends Component
                                 ->select('categories.*')
                                 ->get()
                                 ->toArray();
-            $this->col_lg = 'col-lg-8';
+            if (!empty($this->sub_categories)){
+                $this->col_lg = 'col-lg-8';
+            }
             $this->active = $category_id;
 
             $this->new_arrivals = Product::whereJsonContains('products.category_id', "$category_id")
                                 ->select('products.pics','products.name','products.id', 'products.price', 'products.vendor_id')
                                 ->orderBy('id', 'DESC')
-                                ->limit(2)
+                                ->limit(3)
                                 ->get();
             $this->sub_categories2 = [];
         }elseif($step == 2){
@@ -64,7 +66,10 @@ class CategorySubMenu extends Component
                                 ->orderBy('id', 'DESC')
                                 ->limit(3)
                                 ->get();
-            $this->col_lg = 'col-lg-6';
+
+            if (!empty($this->sub_categories2)){
+                $this->col_lg = 'col-lg-6';
+            }
         }
 
     }

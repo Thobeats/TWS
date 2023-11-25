@@ -52,9 +52,6 @@
             @endif
 
             <div class="{{ $col_lg }}">
-                <h4 class="sub-menu-title border border-top-0 border-left-0 border-right-0 border-left border-3 border-dark">
-                    New Arrivals
-                </h4>
                 <div class="mt-3 product-wrapper d-flex">
                     @forelse ($new_arrivals as $new)
                         @php
@@ -63,10 +60,6 @@
                         <div class="block2 mr-2" style="width: 300px;">
                             <div class="block2-pic hov-img0">
                                 <img src="{{ url('storage/products/'. $pic) }}" alt="IMG-PRODUCT" class="card-image">
-
-                                <a href="/market/product/{{$new->id}}" class="block2-btn flex-c-m stext-103 cl2 size-102 bg0 bor2 hov-btn1 p-lr-15 trans-04 js-show-modal1">
-                                    Quick View
-                                </a>
                             </div>
                             <div class="p-2">
                                 <div class="d-flex justify-content-between">
@@ -85,7 +78,7 @@
                                 </div>
                             </div>
                         </div>
-                        
+
                     @empty
 
                     @endforelse

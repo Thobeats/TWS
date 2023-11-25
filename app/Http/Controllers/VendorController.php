@@ -655,21 +655,20 @@ class VendorController extends Controller
     }
 
     public function create_product(){
-        $categories = Category::where(['categories.status' => '1', 'parent_to_children.parent_id' => 0])
+        $categories = Category::where(['categories.status' => '1'])
                                 ->join('parent_to_children', 'parent_to_children.category_id', '=', 'categories.id')
                                 ->select('categories.id', 'categories.name','parent_to_children.parent_id')->get()->toArray();
         $tags = Tag::where('status', 1)->get()->toArray();
         $sections = Section::where('for',2)->get();
         $shipping = ShippingType::select('id','name')->get();
-        // $cats = $this->buildTree($categories);
-        // $this->buildTemplate($cats);
-        // $category_template = $this->category_template;
-
+        $cats = $this->buildTree($categories);
+        $this->buildTemplate($cats);
+        $categoryTemp = $this->category_template;
 
         //Sizes
         $sizes = Size::select('id', 'size_code')->get()->toArray();
         $colors = Color::select('id', 'name')->get()->toArray();
-        return view('vendor.products.new_product', compact('tags', 'categories','sizes', 'colors','sections','shipping'));
+        return view('vendor.products.new_product', compact('tags', 'categoryTemp','sizes', 'colors','sections','shipping'));
     }
 
     protected function buildTree($elements, $parent_id = 0){
@@ -686,17 +685,20 @@ class VendorController extends Controller
         return $branch;
     }
 
-    protected function buildTemplate($elements, $id=[],&$option=""){
+    protected function buildTemplate($elements, $id=[],&$option="", $parentname=""){
         foreach($elements as $key => $element){
 
             $selected = in_array($element['id'], $id) ? 'selected' : '';
+            $parent = $element['parent_id'];
+            $dataParent = $parent != 0 ? "data-parent='$parent'" : "";
+            $dataParentname = $parent != 0 ? "data-parentname='$parentname'" : "";
 
-            $option .= "<option $selected value='" . $element['id'] ."'>". $element['name'] ."</option>";
+            $option .= "<option $dataParent $dataParentname $selected value='" . $element['id'] ."'>". $element['name'] ."</option>";
 
             if(isset($element['children'])){
 
                 $option .= "<optgroup label='". $element['name'] . "'>";
-                $this->buildTemplate($element['children'],$id,$option);
+                $this->buildTemplate($element['children'],$id,$option,$element['name']);
 
                 $option .= "</optgroup>";
             }
@@ -706,6 +708,7 @@ class VendorController extends Controller
     }
 
     public function store(Request $request){
+        return $request->all();
        try{
             if($request->has('save')){
                 $ps = 1;
@@ -848,9 +851,12 @@ class VendorController extends Controller
 
     public function editProduct($id){
         $product = Product::find($id);
-        $categories = Category::where(['categories.status' => '1', 'parent_to_children.parent_id' => 0])
+        $categories = Category::where(['categories.status' => '1'])
                                 ->join('parent_to_children', 'parent_to_children.category_id', '=', 'categories.id')
                                 ->select('categories.id', 'categories.name','parent_to_children.parent_id')->get()->toArray();
+        $cats = $this->buildTree($categories);
+        $this->buildTemplate($cats,json_decode($product->category_id));
+        $categoryTemp = $this->category_template;
 
         $tags = Tag::where('status', 1)->get()->toArray();
         $sections = Section::where('for',2)->get();
@@ -862,39 +868,39 @@ class VendorController extends Controller
         //Images
         $images = json_decode($product->pics,true);
 
-        $cats =[];
-        ///category settings
-        if($product->category_id && count(json_decode($product->category_id)) > 1){
-            $cats = json_decode($product->category_id);
-            $subcats = Category::where(['categories.status' => '1', 'parent_to_children.parent_id' => $cats[0]])
-                                ->join('parent_to_children', 'parent_to_children.category_id', '=', 'categories.id')
-                                ->select('categories.id', 'categories.name','parent_to_children.parent_id')->get()->toArray();
-            $subcatTemp = "<option>Select</option>";
-            foreach($subcats as $sb){
-                $selected = in_array($sb['id'], $cats) ? 'selected' : '';
-                $subcatTemp .= "<option $selected value='" .$sb['id'] . "'>" . $sb['name'] . "</option>";
-            }
-        }else{
-            $subcatTemp  = "";
-        }
+        // $cats =[];
+        // ///category settings
+        // if($product->category_id && count(json_decode($product->category_id)) > 1){
+        //     $cats = json_decode($product->category_id);
+        //     $subcats = Category::where(['categories.status' => '1', 'parent_to_children.parent_id' => $cats[0]])
+        //                         ->join('parent_to_children', 'parent_to_children.category_id', '=', 'categories.id')
+        //                         ->select('categories.id', 'categories.name','parent_to_children.parent_id')->get()->toArray();
+        //     $subcatTemp = "<option>Select</option>";
+        //     foreach($subcats as $sb){
+        //         $selected = in_array($sb['id'], $cats) ? 'selected' : '';
+        //         $subcatTemp .= "<option $selected value='" .$sb['id'] . "'>" . $sb['name'] . "</option>";
+        //     }
+        // }else{
+        //     $subcatTemp  = "";
+        // }
 
-        if($product->category_id && count(json_decode($product->category_id)) > 2){
-            $cats = json_decode($product->category_id);
-            $subcats2 = Category::where(['categories.status' => '1', 'parent_to_children.parent_id' => $cats[1]])
-                                ->join('parent_to_children', 'parent_to_children.category_id', '=', 'categories.id')
-                                ->select('categories.id', 'categories.name','parent_to_children.parent_id')->get()->toArray();
-            $subcatTemp2 = "<option>Select</option>";
-            foreach($subcats2 as $sb){
-                $selected = in_array($sb['id'], $cats) ? 'selected' : '';
-                $subcatTemp2 .= "<option $selected value='" .$sb['id'] . "'>" . $sb['name'] . "</option>";
-            }
-        }else{
-            $subcatTemp2  = "";
-        }
+        // if($product->category_id && count(json_decode($product->category_id)) > 2){
+        //     $cats = json_decode($product->category_id);
+        //     $subcats2 = Category::where(['categories.status' => '1', 'parent_to_children.parent_id' => $cats[1]])
+        //                         ->join('parent_to_children', 'parent_to_children.category_id', '=', 'categories.id')
+        //                         ->select('categories.id', 'categories.name','parent_to_children.parent_id')->get()->toArray();
+        //     $subcatTemp2 = "<option>Select</option>";
+        //     foreach($subcats2 as $sb){
+        //         $selected = in_array($sb['id'], $cats) ? 'selected' : '';
+        //         $subcatTemp2 .= "<option $selected value='" .$sb['id'] . "'>" . $sb['name'] . "</option>";
+        //     }
+        // }else{
+        //     $subcatTemp2  = "";
+        // }
 
 
 
-        return view('vendor.products.edit_product', compact('product','tags', 'categories','sizes', 'colors', 'images', 'sections', 'subcatTemp', 'subcatTemp2', 'cats'));
+        return view('vendor.products.edit_product', compact('product','tags', 'categories','sizes', 'colors', 'images', 'sections', 'categoryTemp'));
     }
 
     public function updateProduct(Request $request){

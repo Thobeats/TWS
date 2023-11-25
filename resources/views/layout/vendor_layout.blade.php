@@ -61,6 +61,11 @@
   ======================================================== -->
   <script src="{{ asset('assets/vendor/tinymce/tinymce.min.js') }}"></script>
 
+    <style>
+        .select2-container--default .select2-selection--multiple{
+            border-color: #dee2e6;
+        }
+    </style>
 
  <script>
 
@@ -125,9 +130,8 @@
         const pics = document.querySelector('#pics');
         const business = document.querySelector('#business');
          $(document).ready(function() {
-            $('.js-example-basic-multiple').select2(
-
-            );
+            $('.js-example-basic-multiple').select2();
+            $('#category').select2();
 
             const steps = [
             {
@@ -199,6 +203,23 @@
 
         elems.forEach(function(html) {
             var switchery = new Switchery(html,{size: 'small'});
+        });
+
+        $('#category').on('select2:select', function(e){
+            let selected = $("#category").select2('data');
+            let mapped = selected.map(function(item){
+                            return item.id;
+                        });
+            if (e.params.data.element.dataset.parent)
+            {
+                let parentId = e.params.data.element.dataset.parent;
+                let parentName = e.params.data.element.dataset.parentname;
+                if (!mapped.includes(parentId)){
+                    console.log("n");
+                    var newOption = new Option(parentName, parentId, true, true);
+                    $('#category').append(newOption).trigger('change');
+                }
+            }
         });
 
 </script>
