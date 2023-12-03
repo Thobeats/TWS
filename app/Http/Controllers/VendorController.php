@@ -708,8 +708,11 @@ class VendorController extends Controller
     }
 
     public function store(Request $request){
-        return $request->all();
-       try{
+            try{
+            parse_str($request->getContent(), $formData);
+           $request = new Request($formData);
+
+           //return $request->all();
             if($request->has('save')){
                 $ps = 1;
 
@@ -718,9 +721,10 @@ class VendorController extends Controller
                     'description' => 'required|string',
                     'category_id' => 'required|array',
                     'tags' => 'required|array',
-                    'sizes.*' => 'required|array',
-                    'colors' => 'required|array',
-                    'no_in_stock.*' => 'required|array',
+                    'sizes.*.*' => 'required|array',
+                    'p_price.*.*' => 'required|array',
+                    'colors.*' => 'required|array',
+                    'no_in_stock.*.*' => 'required|array',
                     'pics' => 'required|array',
                     'shipping_fee' => 'integer',
                     'sections' => 'required|array',
@@ -728,51 +732,47 @@ class VendorController extends Controller
                     'moq' => 'required|integer'
                 ],[
                     'name.required' => 'The Product name is needed',
-                    'tags.required' => 'Tags are needed to manage your products'
+                    'tags.required' => 'Tags are needed to manage your products',
+                    'pics.required' => 'Please Upload pictures before publishing a product',
+                    'sizes.*.*' => 'Please enter a size value for the #:position item in the #:second-position entry',
+                    'no_in_stock.*.*' => 'Please enter a value for the #:position item in the #:second-position entry',
+                    'p_price.*.*' => 'Please enter a price for the #:position item in the #:second-position entry',
+                    'description' => 'Please enter a product Description before publishing',
+                    'category_id' => 'Please choose a product category before publishing',
+                    'colors.*' => 'Please choose a color for the #:position item'
                 ]);
-
             }else{
                 $ps = 0;
 
                 $validator = Validator::make($request->all(),[
-                    'name' => 'nullable|string',
+                    'name' => 'required|string',
                     'description' => 'nullable|string',
                     'category_id' => 'nullable|array',
                     'tags' => 'nullable|array',
                     'sizes.*' => 'nullable|array',
+                    'p_price.*' => 'nullable|array',
                     'colors' => 'nullable|array',
                     'no_in_stock.*' => 'nullable|array',
                     'pics' => 'nullable|array',
                     'shipping_fee' => 'integer',
                     'sections' => 'nullable|array',
                     'sku' => 'nullable|string',
-                    'moq' => 'nullable|integer'
+                    'moq' => 'required|integer'
+                ],[
+                    'name.required' => 'The name field needs a value, even as a placeholder',
+                    'moq.required' => 'The minimum order quantity needs a value, even as a placeholder'
                 ]);
             }
 
             $request->merge(['publish_status' => $ps]);
 
-            if($validator->fails() && count($request->pics) > 0){
-                foreach($request->pics as $pic){
-                    Storage::delete('public/products/'.$pic);
-                }
-
-                return redirect()->back()->withErrors($validator->errors());
-            }
-
             if($validator->fails()){
-
-                return redirect()->back()->withErrors($validator->errors());
+                return [
+                    "code" => 2,
+                    "type" => "error",
+                    "body" => $validator->errors()
+                ];
             }
-
-            // if($tmp->count() > 0){
-            //     foreach($tmp as $tp){
-            //         Storage::copy('products/tmp/'.$tp->image_uniqID . '/'.$tp->image_name,"public/products/".$tp->image_uniqID . '/'.$tp->image_name);
-            //         $pics[] = $tp->image_uniqID . '/'. $tp->image_name;
-            //         Storage::deleteDirectory('products/tmp/'.$tp->image_uniqID);
-            //         $tp->delete();
-            //     }
-            // }
 
             $pics = $request->pics;
             $item_listing = [];
@@ -780,6 +780,16 @@ class VendorController extends Controller
             $priceCount = 0;
 
             for ($i=0; $i < count($request->colors); $i++) {
+                $color = $request->colors[$i];
+                if ($color == 'no_color'){
+                    $color = 234990;
+                }else {
+                    if(!$this->findColor($color))
+                    {
+                        $color = $this->saveColor($color);
+                    }
+                }
+
                 $listing = [
                     $request->sizes[$i],
                     $request->no_in_stock[$i],
@@ -789,7 +799,7 @@ class VendorController extends Controller
                 $priceSum += array_sum($request->p_price[$i]);
                 $priceCount += count($request->p_price[$i]);
 
-                $item_listing[$request->colors[$i]] = $listing;
+                $item_listing[$color] = $listing;
             }
 
             $request->merge(['price' => ceil($priceSum / $priceCount)]);
@@ -817,7 +827,11 @@ class VendorController extends Controller
             toastr()->success('New Product Saved');
 
             if(!$ps){
-                return redirect('/vendor/products/drafts');
+                return [
+                    "code" => 0,
+                    "type" => "draft",
+                    "body" => "Success"
+                ];
             }
 
             // Add the Category to the list of Products
@@ -831,9 +845,18 @@ class VendorController extends Controller
             $vendorProfile->products = json_encode($vendorProducts);
             $vendorProfile->save();
 
-            return redirect('/vendor/products');
+            return [
+                "code" => 0,
+                "type" => "published",
+                "body" => "Success"
+            ];
         }catch(Exception $e){
-            return $e->getMessage();
+            info($e);
+            return [
+                "code" => 1,
+                "type" => "error",
+                "body" => $e->getMessage()
+            ];
         }
     }
 
@@ -1017,8 +1040,10 @@ class VendorController extends Controller
     public function deleteProduct($id){
         $product = Product::find($id);
 
-        foreach(json_decode($product->pics, true) as $pic){
-            Storage::deleteDirectory('public/products/'.$pic);
+        if ($product->pics != "null"){
+            foreach(json_decode($product->pics, true) as $pic){
+                Storage::deleteDirectory('public/products/'.$pic);
+            }
         }
 
         $product->delete();
@@ -1367,4 +1392,19 @@ class VendorController extends Controller
 
     //     return $admin;
     // }
+
+    protected function saveColor($color){
+        $newColor = Color::create([
+            "name" => $color,
+            "status" => 1,
+            "created_at" => now(),
+            "updated_at" => now()
+        ]);
+
+        return $newColor->id;
+    }
+
+    protected function findColor($color){
+        return Color::find($color);
+    }
 }

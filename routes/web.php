@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Route;
 use App\Notifications\AppNotification;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\VendorSubscribe;
 use App\Http\Controllers\VendorController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\CheckoutController;
@@ -88,6 +89,7 @@ Route::middleware(['auth'])->group(function () {
         Route::get('vendor/{id}', [HomeController::class, 'vendor']);
         Route::post('vendor/review', [HomeController::class, 'saveVendorRating'])->name('vendor.review');
         Route::get('/listing/{product_id}/{color_id}', [ProductController::class,'getItemsByColor']);
+        Route::get('/subscribe/vendor/{id}', [VendorSubscribe::class, 'subscribe']);
     });
 
     //Cart

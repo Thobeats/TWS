@@ -517,7 +517,6 @@
         const time = "{{ date_format(date_create(now()), 'H:i a | M d') }}";
         socket.onopen = function(e) {
             console.log("[open] Connection established");
-          //  socket.send("My name is John");
         };
         socket.onmessage = (event) => {
             let data = JSON.parse(event.data)

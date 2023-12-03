@@ -3,28 +3,29 @@
 namespace App\Mail;
 
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
+use Illuminate\Mail\Mailables\Address;
 use Illuminate\Mail\Mailables\Content;
-use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Mail\Mailables\Envelope;
+use Illuminate\Contracts\Queue\ShouldQueue;
 
 class NotificationMail extends Mailable
 {
     use Queueable, SerializesModels;
 
-    public $email;
     public $title;
-    public $message;
+    public $msg;
 
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct($title, $msg)
     {
-        
+        $this->title = $title;
+        $this->msg = $msg;
     }
 
     /**
@@ -35,6 +36,7 @@ class NotificationMail extends Mailable
     public function envelope()
     {
         return new Envelope(
+            from: new Address('support@thewholesalelounge.com', 'Help Desk'),
             subject: 'Notification Mail',
         );
     }
@@ -47,7 +49,7 @@ class NotificationMail extends Mailable
     public function content()
     {
         return new Content(
-            view: 'view.name',
+            view: 'emails.notification',
         );
     }
 

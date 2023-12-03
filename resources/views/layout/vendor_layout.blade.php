@@ -9,8 +9,9 @@
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
   <title>@yield('title')</title>
-  <meta content="" name="description">
-  <meta content="" name="keywords">
+  <meta content="Vendors selling products" name="description">
+  <meta content="products wholesale new shoe" name="keywords">
+  <meta name="csrf-token" content="{{ csrf_token() }}">
 
   <!-- Favicons -->
   <link href="{{ asset('assets/img/favicon.png') }}" rel="icon">
@@ -131,6 +132,9 @@
         const business = document.querySelector('#business');
          $(document).ready(function() {
             $('.js-example-basic-multiple').select2();
+            $('.color-select').select2({
+                tags : true
+            });
             $('#category').select2();
 
             const steps = [
@@ -170,7 +174,7 @@
             allowImageValidateSize: true,
             imagePreviewHeight: 170,
             maxFiles : 3,
-            required : true,
+          //  required : true,
             files : [
             <?php
             if(isset($images)):
@@ -215,13 +219,157 @@
                 let parentId = e.params.data.element.dataset.parent;
                 let parentName = e.params.data.element.dataset.parentname;
                 if (!mapped.includes(parentId)){
-                    console.log("n");
                     var newOption = new Option(parentName, parentId, true, true);
                     $('#category').append(newOption).trigger('change');
                 }
             }
         });
 
+        // Handle New Product Form
+        var action;
+        function validationHandler(target, value){
+            let input = document.getElementById(`${target}_error`);
+            for (c in value){
+                input.innerHTML +=  `<span class='text-danger'>${value[c]}</span> <br><br>`;
+            }
+
+            input.style.display = 'block';
+        }
+        $("#submitBtn").on('click', function(){
+            action = "&save=1";
+            $("#newProductForm").submit();
+        });
+        $("#draftBtn").on('click', function(){
+            action = "";
+            $("#newProductForm").submit();
+        });
+        $("#newProductForm").on('submit',(e)=>{
+            e.preventDefault();
+            let formData = $("#newProductForm").serialize();
+            formData += action;
+            fetch("{{ url('/vendor/products/store') }}", {
+                method : "POST",
+                headers : {
+                    "X-CSRF-TOKEN" : $('meta[name="csrf-token"]').attr('content'),
+                },
+                body : formData
+            })
+            .then(response => response.json())
+            .then(json => {
+               //console.log(json);
+               $(".invalid-feedback").html('');
+
+                if (json.code == 2){
+                    // Validation Error
+                    for(x in json.body){
+                        let inputError = x.split(".");
+                        console.log(json.body);
+                        validationHandler(inputError[0], json.body[x]);
+                    }
+                }
+
+                if (json.code == 1){
+                    alert(json.body);
+                }
+
+                if (json.code == 0 && json.type == 'draft'){
+                    location.href = '/vendor/products/drafts';
+                }
+
+                if (json.code == 0 && json.type == 'published'){
+                    location.href = '/vendor/products';
+                }
+            });
+        });
+
+</script>
+
+<script>
+
+    function addInventory(){
+        let inventory = document.getElementById('inventory');
+        let id = inventory.children.length;
+        let row = document.createElement('tr');
+        row.setAttribute('id',id);
+        row.innerHTML = `
+            <td scope="row">
+            <button class='btn btn-danger btn-sm' type='button' onclick="removeInventory(${id})"><i class='bi bi-trash'></i></button>
+            </td>
+            <td>
+            <select id="colors${id}" name='colors[]' class="color-select" style="width: 100%">
+                <option value="no_color">No Color</option>
+                @if(!empty($colors))
+                    @foreach($colors as $color)
+                    <option value="{{ $color['id'] }}">{{ $color['name'] }}</option>
+                    @endforeach
+                @endif
+            </select>
+            </td>
+            <td>
+            <table class="table table-borderless">
+                <colgroup>
+                    <col span="1" style="width: 30%;">
+                    <col span="1" style="width: 30%;">
+                    <col span="1" style="width: 30%;">
+                    <col span="1" style="width: 10%;">
+                </colgroup>
+                <thead class="border">
+                <tr>
+                    <th>
+                        no in stock
+                    </th>
+                    <th>Size</th>
+                    <th>Price</th>
+                    <th>Action</th>
+                </tr>
+                </thead>
+                <tbody id="record${id}">
+                <tr>
+                    <td>
+                    <input type="number" name="no_in_stock[${id}][]">
+                    </td>
+                    <td>
+                    <select id="sizes" name='sizes[${id}][]' style="width: 100%">
+                        <option value="">Select Size</option>
+                        @if(!empty($sizes))
+                            @foreach($sizes as $size)
+                            <option value="{{ $size['id'] }}">{{ $size['size_code'] }}</option>
+                            @endforeach
+                        @endif
+                    </select>
+                    </td>
+                    <td>
+                        <input type="text" name="p_price[${id}][]" id="">
+                    </td>
+                    <td></td>
+                </tr>
+                </tbody>
+                <tfoot>
+                <tr>
+                    <th colspan="4" class="text-end">
+                    <button type="button" onclick="addNewRecord(${id})" class="btn btn-primary btn-sm">
+                        <i class="bi bi-plus-circle-fill"></i> Add
+                    </button>
+                    </th>
+                </tr>
+                </tfoot>
+            </table>
+            </td>
+        `;
+
+        inventory.appendChild(row);
+        $(`#colors${id}`).select2({
+            tags : true
+        });
+    }
+
+    function removeInventory(id){
+        let inventory = document.getElementById('inventory');
+        inventory.removeChild(inventory.children.namedItem(`${id}`));
+        $(`#colors${id}`).select2({
+            tags : true
+        });
+    }
 </script>
 
 

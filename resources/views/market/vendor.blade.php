@@ -31,10 +31,17 @@
                             <i class="item-rating zmdi zmdi-star"></i>
                             View Reviews
                         </a>
-                        <a href="" class="btn btn-outline-dark btn-sm mr-2">
+                        @if($check == false)
+                        <span onclick="subscribe(event)" data-vendorid = "{{ $vendor->user_id }}" style="cursor: pointer" class="btn btn-outline-danger btn-sm mr-2">
                             <i class="item-rating zmdi  zmdi-notifications"></i>
                             Subscribe
-                        </a>
+                        </span>
+                        @else
+                            <span onclick="subscribe(event)" data-vendorid = "{{ $vendor->user_id }}" style="cursor: pointer" class="btn btn-outline-danger btn-sm mr-2">
+                                <i class="item-rating zmdi  zmdi-check"></i>
+                                Unsubscribe
+                            </span>
+                        @endif
                         <a class="btn btn-outline-success btn-sm" href="#">
                             <i class="zmdi zmdi-comments"></i>
                             Chat with the Vendor
@@ -340,5 +347,33 @@
         @endif --}}
     </div>
 
+    <script>
+        function subscribe(e){
+            let vendorId = e.target.dataset.vendorid;
+
+            fetch(`/market/subscribe/vendor/${vendorId}`, {
+                method : "GET",
+                headers : {
+                    "X-CSRF-TOKEN" : $('meta[name="csrf-token"]').attr('content'),
+                },
+            })
+            .then(response => response.json())
+            .then(json => {
+                if (json.code == 0){
+                    e.target.innerHTML = `
+                    <i class="item-rating zmdi  zmdi-check"></i>
+                        Unsubscribe
+                    `;
+                }
+
+               if (json.code == 1){
+                    e.target.innerHTML = `
+                        <i class="item-rating zmdi  zmdi-notifications"></i>
+                        Subscribe
+                    `;
+                }
+            });
+        }
+    </script>
 
 @endsection

@@ -382,7 +382,7 @@
     <div class="container-fluid">
         <div class="p-b-32">
             <h6 class="ltext-107 cl5 txt-left respon1">
-                Free Shipping Deals
+                Top Selling Products
             </h6>
         </div>
 

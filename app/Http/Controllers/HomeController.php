@@ -17,6 +17,7 @@ use App\Models\VendorReview;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\RegisterRequest;
+use App\Models\VendorSubscription;
 use Illuminate\Support\Facades\Validator;
 
 class HomeController extends Controller
@@ -192,11 +193,15 @@ class HomeController extends Controller
     }
 
     public function vendor(Request $request, $id){
+        $user = Auth::user();
         $vendor = Vendor::where('vendors.user_id', $id)
                         ->join('users', 'users.id', '=', 'vendors.user_id')
                         ->first();
 
         $category = $vendor->products ?? "{}";
+
+        //Check if subscribed
+        $check = VendorSubscription::where(['customer_id' => $user->id, 'vendor_id' => $vendor->user_id])->first();
 
         $cProducts = Category::whereIn('id', json_decode($category,true))
                                     ->get()
@@ -229,7 +234,7 @@ class HomeController extends Controller
         //                             });
         $step = $request->step ? $request->step : 'about';
 
-        return view('market.vendor',compact('id', 'vendor', 'cProducts', 'step'));
+        return view('market.vendor',compact('id', 'vendor', 'cProducts', 'step', 'check'));
     }
 
     public function saveVendorRating(Request $request){

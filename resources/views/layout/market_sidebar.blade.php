@@ -20,7 +20,7 @@
                         My Account
                     </a>
                 </li>
-{{-- 
+{{--
                 <li class="p-b-13">
                     <a href="#" class="stext-102 cl2 hov-cl1 trans-04">
                         Track Oder
@@ -138,8 +138,7 @@
                 </span>
 
                 <p class="stext-108 cl6 p-t-27">
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur maximus vulputate hendrerit. Praesent faucibus erat vitae rutrum gravida. Vestibulum tempus mi enim, in molestie sem fermentum quis.
-                </p>
+                    Welcome to The Wholesale Lounge where we understand the value of small businesses– the dreams, the hard work, and the unique stories behind every venture. Our journey began with a pledge to empower small businesses, a commitment that threads through every aspect of our marketplace. We're more than a platform – we're a catalyst for collaboration and growth. Become a part of our community and connect with our network of reputable and verified business owners, forming valuable relationships across a diverse spectrum of suppliers and buyers. Here at The Wholesale Lounge, we believe in more than just transactions; we believe in relationships.                </p>
             </div>
         </div>
     </div>

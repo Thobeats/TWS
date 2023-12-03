@@ -8,6 +8,7 @@ use App\Mail\ConfirmEmail;
 use Illuminate\Http\Request;
 use Ichtrojan\Otp\Otp as OTP;
 use App\Mail\ConfirmEmailMarkdown;
+use App\Mail\NotificationMail;
 use \Stripe\StripeClient as Stripe;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Hash;
@@ -68,7 +69,7 @@ trait AppTrait{
         Notification::send($user, new AppNotification($data));
 
         //Send Email to the User
-        
+       // Mail::to($user->email)->send(new NotificationMail($title,$message));
     }
 
     protected function deleteFile($fileName){
