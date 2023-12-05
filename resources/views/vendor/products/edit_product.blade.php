@@ -97,7 +97,7 @@
                   <select id="tags" name='tags[]' class="form-select @error('tags') is-invalid @enderror js-example-basic-multiple" multiple style="width: 100%">
                     @if(!empty($tags))
                         @foreach($tags as $tag)
-                        <option {{ in_array($tag['id'], json_decode($product->tags)) ? 'selected' : '' }} value="{{ $tag['id'] }}">{{ $tag['name'] }}</option>
+                        <option {{ in_array($tag['id'], $product_tags) ? 'selected' : '' }} value="{{ $tag['id'] }}">{{ $tag['name'] }}</option>
                         @endforeach
                     @endif
                   </select>
@@ -121,7 +121,7 @@
                       <select id="sections" name='sections[]' class="form-select @error('sections') is-invalid @enderror js-example-basic-multiple" multiple style="width: 100%">
                       @if(!empty($sections))
                           @foreach($sections as $section)
-                          <option {{ $product->section_id && in_array($section['id'],json_decode($product->section_id)) ? 'selected' : '' }} value="{{ $section['id'] }}">{{ $section['name'] }}</option>
+                          <option {{ $product->section_id && in_array($section['id'], $product_sections) ? 'selected' : '' }} value="{{ $section['id'] }}">{{ $section['name'] }}</option>
                           @endforeach
                       @endif
                     </select>
@@ -166,20 +166,20 @@
                         $index = 0;
                       @endphp
                       @if($product->item_listing)
-                      @forelse (json_decode($product->item_listing) as $key => $item)
+                      @forelse (json_decode($product->item_listing, true) as $key => $item)
                       <tr id="{{$index}}">
                         <td>
-                          <button class='btn btn-danger btn-sm' type='button' onclick=removeInventory({{$index}})><i class='bi bi-trash'></i></button>
+                           <button class='btn btn-danger btn-sm' type='button' onclick=removeInventory({{$index}})><i class='bi bi-trash'></i></button>
                         </td>
                         <td>
-                          <select id="colors" name='colors[]' required class="@error('colors') is-invalid @enderror"style="width: 100%">
-                            <option value="">Select Color</option>
-                            @if(!empty($colors))
-                                @foreach($colors as $color)
-                                <option {{ $color['id'] == $key ? 'selected' : '' }} value="{{ $color['id'] }}">{{ $color['name'] }}</option>
-                                @endforeach
-                            @endif
-                          </select>
+                            <select id="colors" name='colors[]' class="color-select" style="width: 100%">
+                                <option value="no_color">No Color</option>
+                                @if(!empty($colors))
+                                    @foreach($colors as $color)
+                                    <option {{ $color['id'] == $key ? 'selected' : '' }} value="{{ $color['id'] }}">{{ $color['name'] }}</option>
+                                    @endforeach
+                                @endif
+                            </select>
                         </td>
                        <td>
                           <table class="table table-bordered">
@@ -247,14 +247,14 @@
                       <tr>
                         <td></td>
                         <td>
-                          <select id="colors" name='colors[]' required class="form-select @error('colors') is-invalid @enderror"style="width: 100%">
-                            <option value="">Select Color</option>
-                            @if(!empty($colors))
-                                @foreach($colors as $color)
-                                <option value="{{ $color['id'] }}">{{ $color['name'] }}</option>
-                                @endforeach
-                            @endif
-                          </select>
+                            <select id="colors" name='colors[]' class="color-select" style="width: 100%">
+                                <option value="no_color">No Color</option>
+                                @if(!empty($colors))
+                                    @foreach($colors as $color)
+                                    <option value="{{ $color['id'] }}">{{ $color['name'] }}</option>
+                                    @endforeach
+                                @endif
+                            </select>
                         </td>
                        <td>
                           <table class="table table-bordered">

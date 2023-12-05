@@ -878,15 +878,26 @@ class VendorController extends Controller
                                 ->join('parent_to_children', 'parent_to_children.category_id', '=', 'categories.id')
                                 ->select('categories.id', 'categories.name','parent_to_children.parent_id')->get()->toArray();
         $cats = $this->buildTree($categories);
-        $this->buildTemplate($cats,json_decode($product->category_id));
+
+        if ($product->category_id == "null"){
+            $product_category = [];
+        } else{
+            $product_category = json_decode($product->category_id,true);
+        }
+
+        $this->buildTemplate($cats,$product_category);
         $categoryTemp = $this->category_template;
 
         $tags = Tag::where('status', 1)->get()->toArray();
         $sections = Section::where('for',2)->get();
+        $product_tags = $product->tags == "null" ? [] : json_decode($product->tags,true);
 
         //Sizes
         $sizes = Size::select('id', 'size_code')->get()->toArray();
         $colors = Color::select('id', 'name')->get()->toArray();
+
+        //Sections
+        $product_sections = $product->section_id == "null" ? [] : json_decode($product->section_id,true);
 
         //Images
         $images = json_decode($product->pics,true);
@@ -923,7 +934,7 @@ class VendorController extends Controller
 
 
 
-        return view('vendor.products.edit_product', compact('product','tags', 'categories','sizes', 'colors', 'images', 'sections', 'categoryTemp'));
+        return view('vendor.products.edit_product', compact('product','tags', 'categories','sizes', 'colors', 'images', 'sections', 'categoryTemp', 'product_tags', 'product_sections'));
     }
 
     public function updateProduct(Request $request){
