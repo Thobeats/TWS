@@ -305,16 +305,10 @@
                     </tbody>
                   </table>
                 </div>
-
                 <div class="col-12 my-2 text-end">
                   <button type="button" onclick="addInventory()" class="btn btn-primary btn-sm">Add Inventory</button>
                 </div>
-
-
               </div>
-
-
-
               <div class="row mt-3">
                 <div class="col-12">
                   <label for="product_description" class="form-label">Description</label>
@@ -406,85 +400,84 @@
             });
   }
 
-  function addInventory(){
-    let inventory = document.getElementById('inventory');
+//   function addInventory(){
+//     let inventory = document.getElementById('inventory');
 
-    let id = inventory.children.length;
+//     let id = inventory.children.length;
 
-    let row = document.createElement('tr');
-    row.setAttribute('id',id);
-    row.innerHTML = `
-        <td scope="row">
-          <button class='btn btn-danger btn-sm' type='button' onclick="removeInventory(${id})"><i class='bi bi-trash'></i></button>
-        </td>
-        <td>
-          <select id="colors" name='colors[]' required class="@error('colors') is-invalid @enderror"style="width: 100%">
-            <option value="">Select Color</option>
-            @if(!empty($colors))
+//     let row = document.createElement('tr');
+//     row.setAttribute('id',id);
+//     row.innerHTML = `
+//         <td scope="row">
+//           <button class='btn btn-danger btn-sm' type='button' onclick="removeInventory(${id})"><i class='bi bi-trash'></i></button>
+//         </td>
+//         <td>
+//           <select id="colors" name='colors[]' required class="@error('colors') is-invalid @enderror"style="width: 100%">
+//             <option value="">Select Color</option>
+//             @if(!empty($colors))
+//                 @foreach($colors as $color)
+//                 <option value="{{ $color['id'] }}">{{ $color['name'] }}</option>
+//                 @endforeach
+//             @endif
+//           </select>
+//         </td>
+//         <td>
+//           <table class="table table-bordered">
+//             <colgroup>
+//                 <col span="1" style="width: 30%;">
+//                 <col span="1" style="width: 30%;">
+//                 <col span="1" style="width: 30%;">
+//                 <col span="1" style="width: 10%;">
+//             </colgroup>
+//             <thead>
+//               <tr>
+//                 <th>no in stock</th>
+//                 <th>Size</th>
+//                 <th>Price</th>
+//                 <th>Action</th>
+//               </tr>
+//             </thead>
+//             <tbody id="record${id}">
+//               <tr>
+//                 <td>
+//                   <input type="number" name="no_in_stock[${id}][]" required class="@error('no_in_stock') is-invalid @enderror">
+//                 </td>
+//                 <td>
+//                   <select id="sizes" name='sizes[${id}][]' class="@error('sizes') is-invalid @enderror" style="width: 100%">
+//                     <option value="">Select Size</option>
+//                     @if(!empty($sizes))
+//                         @foreach($sizes as $size)
+//                         <option value="{{ $size['id'] }}">{{ $size['size_code'] }}</option>
+//                         @endforeach
+//                     @endif
+//                   </select>
+//                 </td>
+//                 <td>
+//                     <input type="text" name="p_price[${id}][]" id="">
+//                 </td>
+//                 <td></td>
+//               </tr>
+//             </tbody>
+//             <tfoot>
+//               <tr>
+//                 <th colspan="4" class="text-end">
+//                   <button type="button" onclick="addNewRecord(${id})" class="btn btn-primary btn-sm">
+//                     <i class="bi bi-plus-circle-fill"></i> Add
+//                   </button>
+//                 </th>
+//               </tr>
+//             </tfoot>
+//           </table>
+//         </td>
+//     `;
 
-                @foreach($colors as $color)
-                <option value="{{ $color['id'] }}">{{ $color['name'] }}</option>
-                @endforeach
-            @endif
-          </select>
-        </td>
-        <td>
-          <table class="table table-bordered">
-            <colgroup>
-                <col span="1" style="width: 30%;">
-                <col span="1" style="width: 30%;">
-                <col span="1" style="width: 30%;">
-                <col span="1" style="width: 10%;">
-            </colgroup>
-            <thead>
-              <tr>
-                <th>no in stock</th>
-                <th>Size</th>
-                <th>Price</th>
-                <th>Action</th>
-              </tr>
-            </thead>
-            <tbody id="record${id}">
-              <tr>
-                <td>
-                  <input type="number" name="no_in_stock[${id}][]" required class="@error('no_in_stock') is-invalid @enderror">
-                </td>
-                <td>
-                  <select id="sizes" name='sizes[${id}][]' class="@error('sizes') is-invalid @enderror" style="width: 100%">
-                    <option value="">Select Size</option>
-                    @if(!empty($sizes))
-                        @foreach($sizes as $size)
-                        <option value="{{ $size['id'] }}">{{ $size['size_code'] }}</option>
-                        @endforeach
-                    @endif
-                  </select>
-                </td>
-                <td>
-                    <input type="text" name="p_price[${id}][]" id="">
-                </td>
-                <td></td>
-              </tr>
-            </tbody>
-            <tfoot>
-              <tr>
-                <th colspan="4" class="text-end">
-                  <button type="button" onclick="addNewRecord(${id})" class="btn btn-primary btn-sm">
-                    <i class="bi bi-plus-circle-fill"></i> Add
-                  </button>
-                </th>
-              </tr>
-            </tfoot>
-          </table>
-        </td>
-    `;
+//     inventory.appendChild(row);
+//   }
 
-    inventory.appendChild(row);
-  }
-
-  function removeInventory(id){
-    let inventory = document.getElementById('inventory');
-    inventory.removeChild(inventory.children.namedItem(`${id}`));
-  }
+//   function removeInventory(id){
+//     let inventory = document.getElementById('inventory');
+//     inventory.removeChild(inventory.children.namedItem(`${id}`));
+//   }
 
   function addNewRecord(recordID){
     let record = document.getElementById(`record${recordID}`);

@@ -31,7 +31,7 @@
   <link href="{{ asset('assets/vendor/quill/quill.bubble.css') }}" rel="stylesheet">
   <link href="{{ asset('assets/vendor/remixicon/remixicon.css') }}" rel="stylesheet">
   <link href="{{ asset('assets/vendor/simple-datatables/style.css') }}" rel="stylesheet">
-  <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.0/css/select2.min.css" integrity="sha512-arEjGlJIdHpZzNfZD2IidQjDZ+QY9r4VFJIm2M/DhXLjvvPyXFj+cIotmo0DLgvL3/DOlIaEDwzEiClEPQaAFQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/switchery/0.8.2/switchery.min.css" integrity="sha512-uyGg6dZr3cE1PxtKOCGqKGTiZybe5iSq3LsqOolABqAWlIRLo/HKyrMMD8drX+gls3twJdpYX0gDKEdtf2dpmw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
   <!-- Template Main CSS File -->
   <link href="{{ asset('assets/css/style.css') }}" rel="stylesheet">
@@ -121,7 +121,7 @@
   @include('layout.vendor_footer')
   <script src="{{ asset('js/crs.min.js') }}"></script>
   <script src="{{ asset('js/bs5-intro-tour.js')}}"></script>
-  <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.0/js/select2.min.js"></script>
   @include('layout.filepond')
 @livewireScripts
 
@@ -135,22 +135,23 @@
             $('.color-select').select2({
                 tags : true
             });
+
             $('#category').select2();
 
             const steps = [
-            {
-                title: "Hello",
-                content: "<p> Welcome to The Wholesale Lounge, Let's show you around</p>"
-            }, {
-                id: "first",
-                title: "Products",
-                content: "<p>Add new products and view all added products</p>"
-            },{
-                id: "second",
-                title: "Orders",
-                content: "<p>View all orders from customers</p>"
-            }
-        ];
+                {
+                    title: "Hello",
+                    content: "<p> Welcome to The Wholesale Lounge, Let's show you around</p>"
+                }, {
+                    id: "first",
+                    title: "Products",
+                    content: "<p>Add new products and view all added products</p>"
+                },{
+                    id: "second",
+                    title: "Orders",
+                    content: "<p>View all orders from customers</p>"
+                }
+            ];
 
             const tour = new Tour(steps);
 
