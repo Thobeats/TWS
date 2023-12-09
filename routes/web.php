@@ -126,6 +126,14 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/address/delete/{id}',[CustomerController::class, 'deleteAddress'])->name('delete_address');
         Route::get('/chat', [CustomerController::class, 'chat']);
         Route::post('/saveChat', [CustomerController::class, 'saveChat']);
+
+        Route::group(['prefix' => '/wishlists'], function(){
+            Route::get('/', [WishListController::class, 'allWishList']);
+            Route::get('/all_category', [WishListController::class, 'allCategory']);
+            Route::post('/save_category', [WishListController::class, 'saveNewCategory']);
+            Route::get('/remove/{id}', [WishListController::class, 'remove']);
+            Route::put('/add_to_category/{product_id}', [WishListController::class, 'addWishListToCategory']);
+        });
     });
 
     Route::group(['prefix' => '/vendor'], function(){

@@ -135,22 +135,32 @@
 
 		$('.js-addwish-b2').each(function(){
 			var nameProduct = $(this).parent().parent().find('.js-name-b2').html();
-
             var productId = $(this).attr('data-product');
-
 			$(this).on('click', function(){
+                var children = $(this).children();
                 $.get(`/addWishList/${productId}`,function(res){
-
-                    if(res.action == 1){
-                        swal(nameProduct, "is added to wishlist !", "success");
+                    if(res.code == 1){
+                        swal(nameProduct, "product no longer in stock!", "error");
+                    }else if(res.code == 0){
+                        if (children.hasClass('zmdi-favorite-outline')){
+                            children.removeClass('zmdi-favorite-outline').addClass('zmdi-favorite');
+                        }else if (children.hasClass('zmdi-favorite')){
+                            children.removeClass('zmdi-favorite').addClass('zmdi-favorite-outline');
+                        }
+                        swal(nameProduct, res.body, "success");
                     }else{
-                        swal(nameProduct, "is removed from wishlist !", "success");
+                        swal(nameProduct, res.body, "error");
                     }
-                    //Add Count to the Wishlist Badge
-                    $("#wishList").addClass("icon-header-noti");
-                    $("#wishList").attr('data-notify',res.count);
 
-                    location.reload();
+                    if (res.count == 0){
+                        $("#wishList").removeClass("icon-header-noti");
+                        $("#wishList").removeAttr('data-notify');
+                    }else{
+                        //Add Count to the Wishlist Badge
+                        $("#wishList").addClass("icon-header-noti");
+                        $("#wishList").attr('data-notify',res.count);
+                    }
+
                 });
 
 			});
@@ -201,20 +211,22 @@
 
     @auth
         <script>
-             const socket = new WebSocket("ws://localhost:8080?userID={{ Auth::id()}}");
+            const socket = new WebSocket("ws://localhost:8080?userID={{ Auth::id()}}");
+
+            socket.onopen = function(e) {
+                console.log("[open] Connection established");
+            };
 
             socket.onmessage = (event) => {
-                //alert('You have a new message');
                 document.getElementById('inbox').innerHTML += '<span class="badge badge-danger">new</span>';
+
+                if (typeof incomingMessage != "undefined" && typeof incomingMessage == "function"){
+                    let data = JSON.parse(event.data)
+                    incomingMessage(data);
+                }
             };
+
         </script>
-
-		<script>
-			function addToWishList(){
-
-			}
-		</script>
-
     @endauth
 
 

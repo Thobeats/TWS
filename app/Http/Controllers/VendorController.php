@@ -709,10 +709,10 @@ class VendorController extends Controller
 
     public function store(Request $request){
             try{
-            parse_str($request->getContent(), $formData);
-           $request = new Request($formData);
+                parse_str($request->getContent(), $formData);
+                $request = new Request($formData);
 
-           //return $request->all();
+            //return $request->all();
             if($request->has('save')){
                 $ps = 1;
 

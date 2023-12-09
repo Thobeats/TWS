@@ -1,15 +1,15 @@
 <?php
 
 namespace App\View\Composers;
- 
+
 use App\Models\Cart;
 use App\Models\Wishlist;
 use Illuminate\View\View;
 use Illuminate\Support\Facades\Auth;
- 
+
 class MarketComposer
 {
- 
+
     /**
      * Bind data to the view.
      *
@@ -24,18 +24,13 @@ class MarketComposer
             $cart = Cart::where('user_id', auth()->user()->id)->get();
 
             $sum = Cart::where('user_id', auth()->user()->id)->sum('price');
-        
-            $wishList = Wishlist::where('user_id', auth()->user()->id)->first();
-            if($wishList){
-                $wcount = count(json_decode($wishList->items,true));
-            }else{
-                $wcount = 0;
-            }
 
-            $view->with(compact('count', 'wcount', 'cart', 'sum'));
-            
+            $wquery = Wishlist::where('user_id', auth()->user()->id);
+            $wcount = $wquery->count();
+            $wishlists = $wquery->get();
+            $view->with(compact('count', 'wcount', 'cart', 'sum', 'wishlists'));
         }
-       
+
     }
 }
 

@@ -19,9 +19,8 @@ class CustomerDashboard extends Component
         $user = Auth::user();
 
         // Saved Items
-        $savedItemsCount = Wishlist::where('user_id', $user->id)->first();
-        if($savedItemsCount){$result = json_decode($savedItemsCount->items, true);}else{ $result = []; }
-        $this->savedItems = count($result);
+        $squery = Wishlist::where('user_id', $user->id);
+        $this->savedItems = $squery->count();
 
 
         //Orders

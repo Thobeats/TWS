@@ -47,6 +47,8 @@
     };
 
     socket.onmessage = (event) => {
+
+        alert('incoming');
         /**@argument
          *
          * The idea is this, if a new chat comes in while a session is going,

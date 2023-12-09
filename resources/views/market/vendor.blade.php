@@ -4,6 +4,24 @@
 
 
 @section('content')
+<style>
+    #chatForm{
+        background: #fff;
+        height: 100vh;
+        display: none;
+        position: fixed;
+        bottom: 0;
+        right: 0px;
+        width: 350px;
+        border: 3px solid #f1f1f1;
+        z-index: 4000;
+    }
+    #messageWrapper{
+        height: 70%;
+        overflow-y: scroll;
+        scroll-behavior: smooth;
+    }
+</style>
     <div class="container">
 
         <div class="row">
@@ -42,13 +60,16 @@
                                 Unsubscribe
                             </span>
                         @endif
-                        <a class="btn btn-outline-success btn-sm" href="#">
+                        <a class="btn btn-outline-success btn-sm" href="#" onclick="openChat()">
                             <i class="zmdi zmdi-comments"></i>
                             Chat with the Vendor
                         </a>
                     </div>
                 </div>
             </div>
+
+             <!-- Chat -->
+             @include('layout.market_chat')
         </div>
 
         @forelse ($cProducts as $cp)
@@ -374,6 +395,83 @@
                 }
             });
         }
+
+        function closeChat(){
+            document.getElementById("chatForm").style.display = 'none';
+        }
+
+        function openChat(){
+            document.getElementById("chatForm").style.display = 'block';
+        }
+
+
+        const messageWrapper = document.getElementById('messageWrapper');
+        const message = document.getElementById('textArea');
+        const recipient = "{{$vendor->user_id}}";
+        const time = "{{ date_format(date_create(now()), 'H:i a | M d') }}";
+        socket.onopen = function(e) {
+            console.log("[open] Connection established");
+        };
+
+        function sendMessage(){
+            if(message.value == ""){
+                return;
+            }
+
+            let data = {
+                recipient : recipient,
+                from : "{{$user->id}}",
+                message : message.value,
+                source : "customer",
+                time : time,
+                customerName : "{{ $user->fullname()}}",
+                _token : "{{ csrf_token() }}"
+            };
+
+            console.log(data);
+
+            myMessage(data);
+            saveChat(data);
+            message.value = "";
+
+        }
+
+        function myMessage(data){
+            let myTemplate = `
+                <div class="mt-4 text-right home-bg-color">
+                    <p class="p-2">${data.message}</p>
+                    <span class="badge text-light">${data.time}</span>
+                </div>
+            `;
+            messageWrapper.innerHTML += myTemplate;
+        }
+
+        function incomingMessage(data){
+            let responseTemplate = `
+                <div class="mt-4 text-left bg-light home-text">
+                    <p class="p-2">${data.message}</p>
+                    <span class="badge home-text">${data.time}</span>
+                </div>
+            `;
+            messageWrapper.innerHTML += responseTemplate;
+        }
+
+
+        function saveChat(data){
+            fetch('/market/saveChat', {
+                method : "POST",
+                headers : {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            })
+            .then(response=>response.json())
+            .then(json=>{
+                data.chat_id = json.message.id;
+                socket.send(JSON.stringify(data));
+            })
+        }
+
     </script>
 
 @endsection

@@ -95,14 +95,10 @@ class Product extends Model
     public function inWishList(){
         $user = Auth::user();
         //User WishList
-        $wishlist = Wishlist::where('user_id', $user->id)->first();
+        $wishlist = Wishlist::where(['user_id' => $user->id, 'product_id' => $this->id])->first();
 
         if($wishlist){
-            $list = json_decode($wishlist->items, true);
-
-            if(array_key_exists($this->id,$list)){
-                return true;
-            }
+           return true;
         }
 
         return false;

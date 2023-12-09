@@ -232,9 +232,21 @@ class HomeController extends Controller
         //                                     "products" => $products
         //                                 ];
         //                             });
+
+        $chat = Chat::where([
+            'customer_id' => $user->id,
+            'vendor_id' => $vendor->user_id
+        ])->first();
+
+        if(!$chat){
+            $chats = [];
+        }else{
+            $chats = json_decode($chat->chat_message,true);
+        }
+
         $step = $request->step ? $request->step : 'about';
 
-        return view('market.vendor',compact('id', 'vendor', 'cProducts', 'step', 'check'));
+        return view('market.vendor',compact('id', 'vendor', 'cProducts', 'step', 'check', 'chats', 'user'));
     }
 
     public function saveVendorRating(Request $request){

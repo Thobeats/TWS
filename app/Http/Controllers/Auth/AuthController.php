@@ -27,7 +27,7 @@ class AuthController extends Controller
         return $stripe;
     }
 
-    public function register(){
+    public function v (){
         return view('market.register');
     }
 

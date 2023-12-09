@@ -1,15 +1,4 @@
 @auth
-@php
-$list = \App\Models\Wishlist::where('user_id', auth()->user()->id)->first();
-
-if($list){
-    $count = count(json_decode($list->items,true));
-}else{
-    $count = 0;
-}
-
-@endphp
-
 <div class="wrap-header-cart js-panel-wishlist">
     <div class="s-full js-hide-wishlist"></div>
 
@@ -25,10 +14,10 @@ if($list){
         </div>
 
         <div class="header-cart-content flex-w js-pscroll">
-            @if ($count > 0)
+            @if ($wcount > 0)
             <ul class="header-cart-wrapitem w-full">
 
-                @foreach (json_decode($list->items,true) as $key => $item)
+                @foreach ($wishlists as $key => $item)
                     @php
                         $product = \App\Models\Product::find($item['product_id']);
                     @endphp
@@ -41,10 +30,6 @@ if($list){
                             <a href="#" class="header-cart-item-name m-b-18 hov-cl1 trans-04">
                                 {{$product->name}}
                             </a>
-
-                            <span class="header-cart-item-info">
-                                {{ $item['num_of_product'] }} x ${{$product->price}}
-                            </span>
                         </div>
                     </li>
                 @endforeach
