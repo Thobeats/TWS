@@ -17,7 +17,7 @@
             @if ($wcount > 0)
             <ul class="header-cart-wrapitem w-full">
 
-                @foreach ($wishlists as $key => $item)
+                @forelse ($wishlists as $key => $item)
                     @php
                         $product = \App\Models\Product::find($item['product_id']);
                     @endphp
@@ -32,7 +32,8 @@
                             </a>
                         </div>
                     </li>
-                @endforeach
+                @empty
+                @endforelse
             </ul>
             @endif
 
