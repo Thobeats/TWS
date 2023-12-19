@@ -33,22 +33,27 @@
             <div class="row mt-2">
                 <div class="form-group col-md-6">
                     <label for="phone">Phone Number</label>
-                    <input type="tel" value="{{ $address['phone'] }}"  class="form-control @error('phone') is-invalid @enderror" value="@error('phone') {{ $message }}@enderror" id="phone" name="phone">
+                    <input type="tel" value="{{ isset($address['phone']) ? $address['phone'] : ""  }}"  class="form-control @error('phone') is-invalid @enderror" value="@error('phone') {{ $message }}@enderror" id="phone" name="phone">
                 </div>
                 <div class="form-group col-md-6">
                     <label for="add_phone">Additional Phone number (optional)</label>
-                    <input type="tel" value="{{ $address['add_phone'] }}"  class="form-control @error('add_phone') is-invalid @enderror" value="@error('add_phone') {{ $message }}@enderror" id="add_phone" name="add_phone">
+                    <input type="tel" value="{{ isset($address['add_phone']) ? $address['add_phone'] : "" }}"  class="form-control @error('add_phone') is-invalid @enderror" value="@error('add_phone') {{ $message }}@enderror" id="add_phone" name="add_phone">
                 </div>
             </div>
             <div class="form-group mt-2">
                 <label for="inputAddress">Delivery Address</label>
-                <input type="text" value="{{ $address['delivery_address'] }}"  class="form-control @error('delivery_address') is-invalid @enderror" value="@error('delivery_address') {{ $message }}@enderror" name="delivery_address" placeholder="1234 Main St">
+                <input id="address" type="text" value="{{ isset($address['delivery_address']) ? $address['delivery_address'] : "" }}"  class="form-control @error('delivery_address') is-invalid @enderror" value="@error('delivery_address') {{ $message }}@enderror" name="delivery_address" placeholder="1234 Main St">
+                <div class="address_card">
+                    <div class="address_listing list-group">
+
+                    </div>
+                </div>
             </div>
             <div class="form-group mt-2">
                 <label for="inputAddress">Additional Information</label>
-                <input type="text" value="{{ $address['add_info'] }}" class="form-control" name='add_info' placeholder="1234 Main St">
+                <textarea name="add_info" class="form-control" cols="10" rows="10">{{ isset($address['add_info']) ? $address['add_info'] : "" }}</textarea>
             </div>
-            <div class="row mt-2">
+            {{-- <div class="row mt-2">
                 <div class="form-group col-md-6">
                     <label for="inputCity">Country</label>
                     <select id="inputState" class="form-control crs-country" name="country" data-region-id="ABC">
@@ -66,7 +71,7 @@
                     <label for="inputZip">Zip</label>
                     <input type="number" value="{{ $address['zip'] }}" class="form-control" id="inputZip" name="zip">
                 </div>
-            </div>
+            </div> --}}
 
             <div class="text-end mt-3">
                 <button type="submit" class="btn btn-primary">Save</button>

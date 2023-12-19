@@ -56,10 +56,4 @@ class VendorSubscribe extends Controller
             ];
         }
     }
-
-    public function unsubscribe(){
-
-    }
-
-
 }

@@ -27,7 +27,7 @@
         </a>
         <ul id="customers" class="nav-content collapse " data-bs-parent="#sidebar-nav">
           <li>
-            <a href="">
+            <a href="/customer/subscription/">
               <i class="bi bi-circle"></i><span>All Subscriptions</span>
             </a>
           </li>

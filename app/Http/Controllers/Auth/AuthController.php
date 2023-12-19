@@ -60,7 +60,14 @@ class AuthController extends Controller
              * */
             $user_code = $this->generateUserCode();
             $request->merge(['role' => 2,'account_status' => 0,'password' => Hash::make($request->password), 'user_code' => $user_code]);
-            $address[] = $request->only('address');
+            $default_address = [
+                "fname" => $request->firstname,
+                "lname" => $request->lastname,
+                "country" => "USA",
+                "delivery_address" => $request->address
+            ];
+
+            $address[] = $default_address;
             // Save to Users and Customers Table
             $users_data = [
                 'firstname' => $request->firstname,
@@ -143,7 +150,6 @@ class AuthController extends Controller
             'lastname' => 'required|string',
             'email' => 'required|email',
             'password' => 'required|string|between:8,16',
-            'zip_code' => 'required|integer',
             'business_name' => 'required|string',
             'address' => 'required|string',
             'cert' => 'required|mimes:pdf,doc',
@@ -175,7 +181,14 @@ class AuthController extends Controller
             $add_cert_path = "";
         }
 
-        $address[] = $request->only('address');
+        $default_address = [
+            "fname" => $request->firstname,
+            "lname" => $request->lastname,
+            "country" => "USA",
+            "delivery_address" => $request->address
+        ];
+
+        $address[] = $default_address;
 
         // Save to Users and Customers Table
         $users_data = [
@@ -190,7 +203,6 @@ class AuthController extends Controller
             'account_status' => $request->account_status,
             'user_code' => $user_code
         ];
-
         $new_user = User::create($users_data);
 
         //Insert customers

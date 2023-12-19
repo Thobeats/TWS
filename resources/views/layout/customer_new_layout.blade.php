@@ -140,7 +140,7 @@
         });
 
     </script>
-
+<script src="{{asset('assets/js/apicalls.js')}}"></script>
 </body>
 
 </html>

@@ -5,52 +5,66 @@
 @section('pagetitle', 'Addresses')
 
 @section('content')
-<section class="p-2">
+
+<section class="section">
     <div class="row">
-        <div class="col-12 text-end">
+        <div class="col-12 text-end mb-3">
             <a href="{{ route('customer_new_address')}}" class="btn btn-primary btn-sm">Add New Address</a>
         </div>
-        @php
-            $address = json_decode($user->address,true);
-        @endphp
-        @if(!is_null($address))
-        @foreach ($address as $key => $add)
-        <div class="col-lg-4 mt-3">
-            <div class="card border-dark">
-                 <div class="card-body p-2 text-dark">
-                    <div class="name text-uppercase h6 fw-bold">
-                        {{ $add['fname'] . " " . $add['lname']}}
-                    </div>
-                    <p class="address">
-                        {{ $add['delivery_address']}}
-                    </p>
-                    <p class="address">
-                        {{ $add['region'] . ", " . $add['country']}}
-                    </p>
-                    <p class="address">
-                        {{ $add['zip']}}
-                    </p>
-                    <p class="phone text-secondary">
-                        {{ $add['phone'] . " " . $add['add_phone']}}
-                    </p>
-                </div>
-                <div class="card-title pt-2 px-3" style="border-top: 1px solid #000;">
-                    <a href="{{ route('make_default', $key) }}"  class="text-dark {{ $key == 0 ? 'disabled' : '' }}">
-                        <i class="bi {{ $key == 0 ? 'bi-circle-fill' : 'bi-circle' }}" style="font-size: 20px"></i>
-                    </a>
-                    <a href="{{ route('edit_address', $key)}}" class="text-primary" style="position: absolute; right:30px">
-                        <i class="bi bi-pencil-square" style="font-size: 20px"></i>
-                    </a>
-                    <a href="{{ route('delete_address', $key)}}" class="text-danger" style="position: absolute; right:10px">
-                        <i class="bi bi-trash" style="font-size: 20px"></i>
-                    </a>
+        <div class="col-lg-12">
+            <div class="card">
+                <div class="card-body pt-3">
+                    <!-- Table with stripped rows -->
+                    <table class="table datatable">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Set Default</th>
+                                <th>Full Name</th>
+                                <th>Phone</th>
+                                <th>Address</th>
+                                <th>Manage</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @forelse (json_decode($user->address,true) as $key => $addr)
+                                <tr>
+                                    <td>{{ $loop->index + 1 }}</td>
+                                    <td>
+                                        <a href="{{ route('make_default', $key) }}"  class="text-success {{ $key == 0 ? 'disabled' : '' }}">
+                                            <i class="bi {{ $key == 0 ? 'bi-circle-fill' : 'bi-circle' }}" style="font-size: 20px"></i>
+                                        </a>
+                                    </td>
+                                    <td>
+                                        {{ $addr['fname'] . " " . $addr['lname'] }}
+                                    </td>
+                                    <td>
+                                        {{ isset($addr['phone']) ? $addr['phone'] : "" }}
+                                    </td>
+                                    <td>
+                                        {{ $addr['delivery_address'] }}
+                                    </td>
+                                    <td>
+                                        <a href="{{ route('edit_address', $key)}}" class="text-primary">
+                                            <i class="bi bi-pencil-square" style="font-size: 20px"></i>
+                                        </a>
+                                        <a href="{{ route('delete_address', $key)}}" class="text-danger">
+                                            <i class="bi bi-trash" style="font-size: 20px"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                            @empty
+
+                            @endforelse
+                        </tbody>
+                    </table>
+                    <!-- End Table with stripped rows -->
+
                 </div>
             </div>
         </div>
-        @endforeach
-        @endif
     </div>
-</section>
+  </section>
 
 @endsection
 

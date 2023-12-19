@@ -19,48 +19,47 @@
  <section class="section">
       <div class="row">
         <div class="col-lg-12">
-
-         <div class="card">
-            <div class="card-body p-0 p-2 text-end">
-                <div class="button-wrapper">
-                    <a href="/customer/wishlists/all_category" class="btn btn-dark btn-sm me-2">
-                        All Categories
-                    </a>
-                    <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#newCategoryModal">
-                        Add New Category
-                    </button>
+            <div class="card">
+                <div class="card-body p-0 p-2 text-end">
+                    <div class="button-wrapper">
+                        <a href="/customer/wishlists/all_category" class="btn btn-dark btn-sm me-2">
+                            All Categories
+                        </a>
+                        <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#newCategoryModal">
+                            Add New Category
+                        </button>
+                    </div>
                 </div>
             </div>
-         </div>
 
-         <!--Add Category Modal -->
-        <div class="modal fade" id="newCategoryModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <form
-                    onsubmit="submitNewCategory(event)"
-                    id="newCategory"
-                    {{-- action="/customer/wishlists/add_category" method="POST" --}}
-                    >
-                        @csrf
-                        <div class="modal-header">
-                            <h1 class="modal-title fs-5" id="addCatModalLabel">Add Category</h1>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-                        <div class="modal-body">
-                            <div class="form-group">
-                                <input type="text" id="category_name" placeholder="Category Name" class="form-control">
-                                <div id="category_name_error" class="invalid-feedback"></div>
+            <!--Add Category Modal -->
+            <div class="modal fade" id="newCategoryModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <form
+                        onsubmit="submitNewCategory(event)"
+                        id="newCategory"
+                        {{-- action="/customer/wishlists/add_category" method="POST" --}}
+                        >
+                            @csrf
+                            <div class="modal-header">
+                                <h1 class="modal-title fs-5" id="addCatModalLabel">Add Category</h1>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                             </div>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                            <button type="submit" id="saveWishCat" class="btn btn-primary">Save</button>
-                        </div>
-                    </form>
+                            <div class="modal-body">
+                                <div class="form-group">
+                                    <input type="text" id="category_name" placeholder="Category Name" class="form-control">
+                                    <div id="category_name_error" class="invalid-feedback"></div>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                <button type="submit" id="saveWishCat" class="btn btn-primary">Save</button>
+                            </div>
+                        </form>
+                    </div>
                 </div>
             </div>
-        </div>
 
          {{-- <div class="card">
             <div class="card-body">

@@ -44,12 +44,13 @@
             <input type="text" name="business_name" value="{{ old('business_name') }} @error('business_name') {{ $message }} @enderror" required class="form-control @error('business_name') is-invalid text-danger @enderror">
         </div>
         <div class="form-group">
-            <label for="zip_code">Zip Code <span class='text-danger'>*</span> </label>
-            <input type="number" name="zip_code" value="{{ old('zip_code') }} @error('zip_code') {{ $message }} @enderror" required class="form-control @error('zip_code') is-invalid text-danger @enderror">
-        </div>
-        <div class="form-group">
             <label for="address">Address <span class='text-danger'>*</span> </label>
-            <textarea name="address" value="{{ old('address') }} @error('address') {{ $message }} @enderror" required class="form-control @error('address') is-invalid text-danger @enderror" rows="5"></textarea>
+            <input name="address" id="address" value="{{ old('address') }} @error('address') {{ $message }} @enderror" required class="form-control @error('address') is-invalid text-danger @enderror" oninput="getAddress(event)">
+            <div class="address_card">
+                <div class="address_listing list-group">
+
+                </div>
+            </div>
         </div>
 
         <div class="row">

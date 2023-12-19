@@ -134,6 +134,11 @@ Route::middleware(['auth'])->group(function () {
             Route::get('/remove/{id}', [WishListController::class, 'remove']);
             Route::put('/add_to_category/{product_id}', [WishListController::class, 'addWishListToCategory']);
         });
+
+        Route::group(['prefix' => '/subscription'], function(){
+            Route::get('/', [CustomerController::class, 'mySubscriptions']);
+            Route::get('/unsubscribe/{vendor_id}', [CustomerController::class, 'unsubscribe']);
+        });
     });
 
     Route::group(['prefix' => '/vendor'], function(){

@@ -183,6 +183,6 @@
     </script>
 <!--===============================================================================================-->
 	<script src="{{ asset('js/main.js') }}"></script>
-
+    <script src="{{asset('assets/js/apicalls.js')}}"></script>
 </body>
 </html>

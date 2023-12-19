@@ -65,7 +65,7 @@ function getAddress(event){
             let li = "";
             for (i in json['predictions']){
                 li += `
-                    <li onclick='selectAddress(event)' data-value="${json['predictions'][i]['description']}"> ${json['predictions'][i]['description']} </li>
+                    <a class="list-group-item list-group-item-action" onclick='selectAddress(event)' data-value="${json['predictions'][i]['description']}"> ${json['predictions'][i]['description']} </a>
                 `;
             }
 
@@ -78,6 +78,5 @@ function selectAddress(add){
     let address = document.getElementById('address');
     let addressListing = document.querySelector('.address_listing');
     addressListing.innerHTML = "";
-
     address.value = selection;
 }

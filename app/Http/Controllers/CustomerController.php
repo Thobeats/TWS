@@ -8,8 +8,10 @@ use App\Models\Chat;
 use App\Models\User;
 use App\Models\Order;
 use Illuminate\Http\Request;
+use App\Models\VendorSubscription;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Validator;
 
 class CustomerController extends Controller
@@ -104,7 +106,8 @@ class CustomerController extends Controller
     }
 
     public function newAddress(){
-        return view('customer.new_address');
+        $user = Auth::user();
+        return view('customer.new_address', compact('user'));
     }
 
     public function saveAddress(Request $request){
@@ -115,14 +118,14 @@ class CustomerController extends Controller
             'phone' => 'required|numeric',
             'add_phone' => 'nullable|numeric',
             'delivery_address' => 'required|string',
-            'add_info' => 'nullable|string',
-            'zip' => 'required|string',
-            'country' => 'required|string',
-            'region' => 'required|string'
+            'add_info' => 'nullable|string'
+            // 'zip' => 'required|string',
+            // 'country' => 'required|string',
+            // 'region' => 'required|string'
         ]);
 
         $address = json_decode($user->address, true);
-        $address[] = $request->all();
+        $address[] = $request->only('fname', 'lname', 'add_phone', 'delivery_address', 'add_info', 'phone');
         $user->address = json_encode($address);
         $user->save();
 
@@ -139,9 +142,9 @@ class CustomerController extends Controller
 
     public function editAddress($index){
         $user = Auth::user();
-        $address = json_decode($user->address, true);
-        $add = $address[$index];
-        return view('customer.edit_address', ['index' => $index, 'address' => $add]);
+        $addrs = json_decode($user->address, true);
+        $address = $addrs[$index];
+        return view('customer.edit_address', compact('index', 'user', 'address'));
     }
 
     public function deleteAddress($index){
@@ -162,14 +165,11 @@ class CustomerController extends Controller
             'phone' => 'required|numeric',
             'add_phone' => 'nullable|numeric',
             'delivery_address' => 'required|string',
-            'add_info' => 'nullable|string',
-            'zip' => 'required|string',
-            'country' => 'required|string',
-            'region' => 'required|string'
+            'add_info' => 'nullable|string'
         ]);
 
         $address = json_decode($user->address, true);
-        $address[$index] = $request->all();
+        $address[$index] = $request->only('fname','lname','phone','add_phone','delivery_address','add_info');
         $user->address = json_encode($address);
         $user->save();
 
@@ -278,12 +278,37 @@ class CustomerController extends Controller
 
     public function savedItems(){
         try{
-
             $user = Auth::user();
             $savedItems = Wishlist::where("user_id", $user->id)->get();
-
             return view('customer.saved_items', compact('user', 'savedItems'));
+        }catch(Exception $e){
 
+        }
+    }
+
+    public function mySubscriptions(){
+        try{
+            $user = Auth::user();
+            $subs = VendorSubscription::where('customer_id', $user->id)
+                    ->join('users', 'users.id', '=', 'vendor_subscriptions.vendor_id')
+                    ->select('users.profile', 'users.firstname', 'users.lastname','vendor_subscriptions.vendor_id')
+                    ->get();
+            return view('customer.subscription.all', compact('user', 'subs'));
+        }catch(Exception $e){
+
+        }
+    }
+
+    public function unsubscribe($id){
+        try{
+            $user = Auth::user();
+            $sub = VendorSubscription::where(['vendor_id' => $id, 'customer_id' => $user->id])->first();
+
+            if ($sub){
+                $sub->delete();
+            }
+
+            return redirect("/customer/subscription/");
         }catch(Exception $e){
 
         }

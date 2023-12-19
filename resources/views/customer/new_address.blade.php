@@ -43,13 +43,18 @@
             </div>
             <div class="form-group mt-3">
                 <label for="inputAddress">Delivery Address</label>
-                <input type="text" class="form-control @error('delivery_address') is-invalid @enderror" value="@error('delivery_address') {{ $message }}@enderror" name="delivery_address" placeholder="1234 Main St">
+                <input id="address" type="text" class="form-control @error('delivery_address') is-invalid @enderror" value="@error('delivery_address') {{ $message }}@enderror" name="delivery_address" placeholder="1234 Main St" oninput="getAddress(event)">
+                <div class="address_card">
+                    <div class="address_listing list-group">
+
+                    </div>
+                </div>
             </div>
             <div class="form-group mt-3">
                 <label for="inputAddress">Additional Information</label>
-                <input type="text" class="form-control" name='add_info' placeholder="1234 Main St">
+                <textarea name="add_info" class="form-control" cols="10" rows="10"></textarea>
             </div>
-            <div class="row mt-3">
+            {{-- <div class="row mt-3">
                 <div class="form-group col-md-6">
                     <label for="inputCity">Country</label>
                     <select id="inputState" class="form-control crs-country" name="country" data-region-id="ABC">
@@ -67,7 +72,7 @@
                     <label for="inputZip">Zip</label>
                     <input type="number" class="form-control" id="inputZip" name="zip">
                 </div>
-            </div>
+            </div> --}}
 
             <div class="text-end mt-3">
                 <button type="submit" class="btn btn-primary">Save</button>
