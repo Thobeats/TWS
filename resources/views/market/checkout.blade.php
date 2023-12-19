@@ -64,13 +64,18 @@
                             </div>
                             <div class="form-group">
                                 <label for="inputAddress">Delivery Address</label>
-                                <input type="text" class="form-control @error('delivery_address') is-invalid text-danger @enderror" value="@error('delivery_address') {{ $message }}@enderror" name="delivery_address" placeholder="1234 Main St">
+                                <input oninput="getAddress(event)" id="address" type="text" class="form-control @error('delivery_address') is-invalid text-danger @enderror" value="@error('delivery_address') {{ $message }}@enderror" name="delivery_address" placeholder="1234 Main St">
+                                <div class="address_card">
+                                    <div class="address_listing list-group">
+
+                                    </div>
+                                </div>
                             </div>
                             <div class="form-group">
                                 <label for="inputAddress">Additional Information</label>
-                                <input type="text" class="form-control" name='add_info' placeholder="1234 Main St">
+                                <textarea name="add_info" class="form-control" cols="5" rows="10"></textarea>
                             </div>
-                            <div class="form-row">
+                            {{-- <div class="form-row">
                                 <div class="form-group col-md-6">
                                     <label for="inputCity">Country</label>
                                     <select id="inputState" class="form-control crs-country" name="country" data-region-id="ABC">
@@ -97,7 +102,7 @@
                                         <p class='py-2 text-danger'>{{$message}}</p>
                                     @enderror
                                 </div>
-                            </div>
+                            </div> --}}
 
                             <button type="submit" name='save' class="btn home-btn-outline">Save</button>
                         </form>
@@ -120,8 +125,7 @@
                             <address>
                                 {{ $data['address']['fname'] . " " . $data['address']['lname'] }}<br>
                                 {{ $data['address']['delivery_address'] }}<br>
-                                {{ $data['address']['region'] . ", " . $data['address']['country'] }}<br>
-                                {{ $data['address']['zip'] }}<br>
+                                {{ isset($data['address']['country']) ? $data['address']['country'] : ""  }}<br>
                                 {{ $data['address']['phone'] }} {{ $data['address']['add_phone'] != null ? ', '. $data['address']['add_phone'] : '' }}<br>
                                 {{ $data['address']['add_info'] != null ? $data['address']['add_info'] : ''}}
                             </address>
@@ -169,14 +173,8 @@
                 </div>
                 @endif
             </div>
-
         </div>
     </div>
 
-
-
 </section>
-
-
-
 @endsection

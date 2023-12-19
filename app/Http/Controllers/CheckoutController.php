@@ -27,7 +27,7 @@ class CheckoutController extends Controller
             if($request->step == 'use_default'){
                 $address = $user->address();
                 $stage = 2;
-            }else if($request->method() == 'POST' && $request->save){
+            }else if($request->method() == 'POST' && $request->has('save')){
 
                 $messages = [
                     'fname' => 'Please enter a valid name',
@@ -42,16 +42,15 @@ class CheckoutController extends Controller
                     'add_phone' => 'nullable|numeric',
                     'delivery_address' => 'required|string',
                     'add_info' => 'nullable|string',
-                    'zip' => 'required|string',
-                    'country' => 'required|string',
-                    'region' => 'required|string'
                 ],$messages);
 
                 if($validate->fails()){
                     return redirect('/checkout')->withErrors($validate)->withInput();
                 }
 
-                $new_address = $request->only('fname','lname','phone','add_phone','delivery_address','add_info','zip','country','region');
+                $request->merge(['country' => "USA"]);
+
+                $new_address = $request->only('fname','lname','phone','add_phone','delivery_address','add_info','country');
 
                 $user_address = json_decode($user->address, true);
                 $user_address[] = $new_address;

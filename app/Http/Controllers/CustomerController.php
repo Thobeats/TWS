@@ -124,8 +124,10 @@ class CustomerController extends Controller
             // 'region' => 'required|string'
         ]);
 
+        $request->merge(['country' => "USA"]);
+
         $address = json_decode($user->address, true);
-        $address[] = $request->only('fname', 'lname', 'add_phone', 'delivery_address', 'add_info', 'phone');
+        $address[] = $request->only('fname', 'lname', 'add_phone', 'delivery_address', 'add_info', 'phone', 'country');
         $user->address = json_encode($address);
         $user->save();
 

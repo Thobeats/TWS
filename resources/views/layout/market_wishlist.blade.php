@@ -13,30 +13,8 @@
             </div>
         </div>
 
-        <div class="header-cart-content flex-w js-pscroll">
-            @if ($wcount > 0)
-            <ul class="header-cart-wrapitem w-full">
-
-                @forelse ($wishlists as $key => $item)
-                    @php
-                        $product = \App\Models\Product::find($item['product_id']);
-                    @endphp
-                    <li class="header-cart-item flex-w flex-t m-b-12">
-                        <div class="header-cart-item-img">
-                            <img src="{{ url('storage/products/'. json_decode($product->pics,true)[0]) }}" alt="IMG">
-                        </div>
-
-                        <div class="header-cart-item-txt p-t-8">
-                            <a href="#" class="header-cart-item-name m-b-18 hov-cl1 trans-04">
-                                {{$product->name}}
-                            </a>
-                        </div>
-                    </li>
-                @empty
-                @endforelse
-            </ul>
-            @endif
-
+        <div id='wishlist-bucket' class="header-cart-content flex-w js-pscroll">
+            
         </div>
     </div>
 </div>
