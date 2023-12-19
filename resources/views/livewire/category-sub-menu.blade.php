@@ -84,7 +84,7 @@
                     @endforelse
                 </div>
                 <div class="text-right mt-2">
-                    <a style="text-decoration: underline;" href="/shop">View More</a>
+                    <a style="text-decoration: underline;" href="{{ $url }}">View More</a>
                 </div>
             </div>
         </div>

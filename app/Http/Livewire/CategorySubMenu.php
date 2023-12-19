@@ -18,6 +18,7 @@ class CategorySubMenu extends Component
     public $sub_categories2;
     public $active2;
     public $col_lg = 'col-lg-10';
+    public $url;
 
 
     protected $listeners = ['get_subcategories' => 'getSubCategories'];
@@ -33,6 +34,7 @@ class CategorySubMenu extends Component
         $this->getSubCategories($firstCategory->id,1);
         $this->hasChildren = ParentToChild::select('parent_id')->get()->toArray();
         $this->sub_categories2 = [];
+        $this->url = "/shop?query=$firstCategory->id";
     }
 
     public function getSubCategories($category_id, $step){
@@ -70,6 +72,8 @@ class CategorySubMenu extends Component
             if (!empty($this->sub_categories2)){
                 $this->col_lg = 'col-lg-6';
             }
+
+            $this->url = "/shop?query=$category_id";
         }
 
     }
