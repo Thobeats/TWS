@@ -117,29 +117,29 @@
 <!-- Banner -->
 <div class="sec-banner bg0 p-b-40 mt-5">
    <div class="container-">
-    <div class="p-b-32">
-        <h6 class="ltext-107 cl5 txt-left respon1">
-            Trending Categories
-        </h6>
-    </div>
+        <div class="p-b-32">
+            <h6 class="ltext-107 cl5 txt-left respon1">
+                Trending Categories
+            </h6>
+        </div>
 
-    <div class="wrap-slick">
-       <ul class="trending_categories">
-            @forelse ($categories as $category)
-                <li>
-                    <a href="/shop?query={{$category->id}}" class="trending_badge">
-                        {{ $category->name }}
-                    </a>
-                </li>
-            @empty
-                <li>
-                    <a href="" class="trending_badge">
-                        Women
-                    </a>
-                </li>
-            @endforelse
-        </ul>
-    </div>
+        <div class="wrap-slick">
+        <ul class="trending_categories">
+                @forelse ($categories as $category)
+                    <li>
+                        <a href="/shop?query={{$category->id}}" class="trending_badge">
+                            {{ $category->name }}
+                        </a>
+                    </li>
+                @empty
+                    <li>
+                        <a href="" class="trending_badge">
+                            Women
+                        </a>
+                    </li>
+                @endforelse
+            </ul>
+        </div>
    </div>
 </div>
 
@@ -193,6 +193,9 @@
             @endforeach
             </div>
         </div>
+        <div class="my-2 p-2 text-right">
+            <a class="home-view-more" href="/shop">View More</a>
+        </div>
     </div>
 </section>
 @endif
@@ -215,7 +218,6 @@
 
         <div class="wrap-slick2">
             <div class="slick2">
-
                 @foreach ($section->products() as $product)
                 <div class="item-slick2 p-l-15 p-r-15 p-t-15 p-b-15">
                     <!-- Block2 -->
@@ -252,6 +254,9 @@
                 @endforeach
 
             </div>
+        </div>
+        <div class="my-2 p-2 text-right">
+            <a class="home-view-more" href="/shop">View More</a>
         </div>
     </div>
 </section>
@@ -375,6 +380,9 @@
 
             </div>
         </div>
+        <div class="my-2 p-2 text-right">
+            <a class="home-view-more" href="/shop">View More</a>
+        </div>
     </div>
 </section>
 
@@ -427,6 +435,9 @@
 
             </div>
         </div>
+        <div class="my-2 p-2 text-right">
+            <a class="home-view-more" href="/shop">View More</a>
+        </div>
     </div>
 </section>
 
@@ -462,6 +473,10 @@
                 @endforelse
 
             </div>
+        </div>
+
+        <div class="my-2 p-2 text-right">
+            <a class="home-view-more" href="/market/vendors">View All Vendors</a>
         </div>
     </div>
 </section>

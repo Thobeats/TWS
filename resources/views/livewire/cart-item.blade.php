@@ -23,13 +23,19 @@
                                     @endphp
                                     <tr class="table_row">
                                         <td class="column-1">
-                                            <div class="how-itemcart1">
-                                                {{-- Attach Vendor ID and Product ID --}}
-                                                <input type="hidden" value="{{ (int) $cartItem['id']}}" name="cartId[]">
-                                                <img src="{{ url('storage/products/'. json_decode($product->pics,true)[0]) }}" alt="IMG">
-                                            </div>
+                                            <a href="/market/product/{{$product->id}}">
+                                                <div class="how-itemcart1">
+                                                    {{-- Attach Vendor ID and Product ID --}}
+                                                    <input type="hidden" value="{{ (int) $cartItem['id']}}" name="cartId[]">
+                                                    <img src="{{ url('storage/products/'. json_decode($product->pics,true)[0]) }}" alt="IMG">
+                                                </div>
+                                            </a>
                                         </td>
-                                        <td class="column-2">{{ $product->name }}</td>
+                                        <td class="column-2">
+                                            <a href="/market/product/{{$product->id}}" class="text-dark">
+                                            {{ $product->name }}
+                                            </a>
+                                        </td>
                                         {{-- <td class="column-3">$ {{ number_format($product->price,2) }}</td> --}}
                                         <td class="column-3">
                                             <div class="wrap-num-product flex-w m-l-auto m-r-0">
@@ -78,7 +84,7 @@
                     </div>
                 </form>
                 @empty
-            
+
                 @endforelse
         </div>
         <div class="col-sm-10 col-lg-7 col-xl-5 m-lr-auto m-b-50">
@@ -142,9 +148,9 @@
                         Proceed to Checkout
                     </button>
                 </form>
-                
+
             </div>
         </div>
     </div>
-   
+
 </div>

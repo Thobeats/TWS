@@ -153,7 +153,7 @@
                     <hr>
                     <div class="shipping-info">
                         <label class="badge badge-warning"></label>
-                       <h6 class="mt-4 text-dark">14-15 days <br><span class="badge badge-info">Expected delivery Time</span></h6>
+                       <h6 class="mt-4 text-dark">14-15 days <br><span class="badge badge-info">Turn around Time</span></h6>
                     </div>
                     <hr>
                         <span class="text-primary" style="font-weight:700;">15% off $500+ Orders</span>

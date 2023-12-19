@@ -361,6 +361,16 @@ Secondary Color: #e39ff6
     margin-top: 5px;
 }
 
+.home-view-more{
+    font-weight: 600;
+    font-family: 'Titillium Web', sans-serif;
+    color: #710193;
+}
+
+.home-view-more:hover{
+    color:#320540
+}
+
 
 
 
