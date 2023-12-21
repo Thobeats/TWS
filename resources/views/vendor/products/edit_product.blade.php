@@ -333,8 +333,8 @@
               </div>
 
               <div class="text-end mt-3">
-                <button type="submit" name="save" class="btn btn-success">Publish</button>
-                <button name='draft' type="submit" class="btn btn-primary">Add to Draft</button>
+                <button name="save" id="editsubmitBtn" type="button" class="btn btn-success">Publish</button>
+                <button name='draft' id="editdraftBtn" type="button" class="btn btn-primary">Add to Draft</button>
               </div>
               </form><!-- End Multi Columns Form -->
 

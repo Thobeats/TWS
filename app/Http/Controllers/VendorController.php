@@ -945,7 +945,6 @@ class VendorController extends Controller
             parse_str($request->getContent(), $formData);
             $request = new Request($formData);
 
-            return $request->all();
             if($request->has('save')){
                 $ps = 1;
 
@@ -1076,7 +1075,7 @@ class VendorController extends Controller
 
             return [
                 "code" => 0,
-                "type" => "oublished",
+                "type" => "published",
                 "body" => "Success"
             ];
 

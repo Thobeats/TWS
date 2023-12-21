@@ -244,6 +244,16 @@
             action = "";
             $("#newProductForm").submit();
         });
+
+        $("#editsubmitBtn").on('click', function(){
+            action = "&save=1";
+            $("#editProduct").submit();
+        });
+        $("#editdraftBtn").on('click', function(){
+            action = "";
+            $("#editProduct").submit();
+        });
+
         $("#newProductForm").on('submit',(e)=>{
             e.preventDefault();
             tinymce.triggerSave();
@@ -299,28 +309,28 @@
             .then(response => response.json())
             .then(json => {
                console.log(json);
-            //    $(".invalid-feedback").html('');
+               $(".invalid-feedback").html('');
 
-            //     if (json.code == 2){
-            //         // Validation Error
-            //         for(x in json.body){
-            //             let inputError = x.split(".");
-            //             console.log(json.body);
-            //             validationHandler(inputError[0], json.body[x]);
-            //         }
-            //     }
+                if (json.code == 2){
+                    // Validation Error
+                    for(x in json.body){
+                        let inputError = x.split(".");
+                        console.log(json.body);
+                        validationHandler(inputError[0], json.body[x]);
+                    }
+                }
 
-            //     if (json.code == 1){
-            //         alert(json.body);
-            //     }
+                if (json.code == 1){
+                    alert(json.body);
+                }
 
-            //     if (json.code == 0 && json.type == 'draft'){
-            //         location.href = '/vendor/products/drafts';
-            //     }
+                if (json.code == 0 && json.type == 'draft'){
+                    location.href = '/vendor/products/drafts';
+                }
 
-            //     if (json.code == 0 && json.type == 'published'){
-            //         location.href = '/vendor/products';
-            //     }
+                if (json.code == 0 && json.type == 'published'){
+                    location.href = '/vendor/products';
+                }
             });
         });
 
