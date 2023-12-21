@@ -31,19 +31,18 @@
               </div>
 
               <!-- Multi Columns Form -->
-              <form class="row g-3" method="POST" action="/vendor/products/update">
+            <form id="editProduct"
+                class="row g-3"
+                {{-- method="POST" action="/vendor/products/update" --}}
+                >
                   @csrf
-                  @method('PUT')
-
                 <input type="hidden" name="product_id" value="{{$product->id}}">
                 <div class="row mt-3">
                   <div class="col-lg-12">
                     <div class="has-validation">
                           <label for="cat_name" class="form-label">Product Name</label>
-                          <input type="text" class="form-control  @error('name') is-invalid @enderror" id="name" name='name' value="{{ $product->name }}">
-                          <div class="invalid-feedback">
-                            @error('name') {{ $message }} @enderror
-                          </div>
+                          <input type="text" class="form-control" id="name" name='name' value="{{ $product->name }}">
+                          <div id="name_error" class="invalid-feedback"></div>
                       </div>
                   </div>
               </div>
@@ -85,9 +84,7 @@
                     <select id="category" name='category_id[]' class="@error('category_id') is-invalid @enderror" multiple style="width: 100%">
                         {!! $categoryTemp !!}
                     </select>
-                        <div class="invalid-feedback">
-                            @error('category_id') {{ $message }} @enderror
-                        </div>
+                    <div id="category_id_error" class="invalid-feedback"></div>
                     </div>
                 </div>
 
@@ -101,17 +98,13 @@
                         @endforeach
                     @endif
                   </select>
-                    <div class="invalid-feedback">
-                        @error('tags') {{ $message }} @enderror
-                    </div>
+                  <div id="tags_error" class="invalid-feedback"></div>
                 </div>
 
                 <div class="col-lg-6">
                   <label for="tag" class="form-label">Product SKU (optional)</label>
                   <input value="{{ $product->sku }}" type="text" name="sku" class="form-control @error('sku') is-invalid @enderror">
-                    <div class="invalid-feedback">
-                        @error('sku') {{ $message }} @enderror
-                    </div>
+                  <div id="sku_error" class="invalid-feedback"></div>
                 </div>
               </div>
 
@@ -125,24 +118,18 @@
                           @endforeach
                       @endif
                     </select>
-                    <div class="invalid-feedback">
-                      @error('sections') {{ $message }} @enderror
-                  </div>
+                    <div id="sections_error" class="invalid-feedback"></div>
                 </div>
 
                 <div class="col-lg-3 mb-3">
                   <label for="shipping_fee" class="form-label">Shipping Fee</label>
                       <input required type="number" value="{{$product->shipping_fee}}" id="shipping_fee" name='shipping_fee' class="form-control @error('shipping_fee') is-invalid @enderror">
-                      <div class="invalid-feedback">
-                          @error('shipping_fee') {{ $message }} @enderror
-                      </div>
+                      <div id="shipping_fee_error" class="invalid-feedback"></div>
                 </div>
                 <div class="col-lg-3 mb-3">
                   <label for="moq" class="form-label">Minimum Order Quantity</label>
                       <input required type="number" value="{{$product->moq}}"  id="moq" name='moq' class="form-control @error('moq') is-invalid @enderror">
-                      <div class="invalid-feedback">
-                          @error('moq') {{ $message }} @enderror
-                      </div>
+                      <div id="moq_error" class="invalid-feedback"></div>
                 </div>
               </div>
 
@@ -154,6 +141,7 @@
 
                 <div class="col-12">
                   <table class="table table-bordered">
+
                     <thead>
                       <tr>
                         <th scope="col"></th>
@@ -247,7 +235,7 @@
                       <tr>
                         <td></td>
                         <td>
-                            <select id="colors" name='colors[]' class="color-select" style="width: 100%">
+                            <select id="colors" name='colors[0][]' class="color-select" style="width: 100%">
                                 <option value="no_color">No Color</option>
                                 @if(!empty($colors))
                                     @foreach($colors as $color)
@@ -269,10 +257,10 @@
                             <tbody id="record0">
                               <tr>
                                 <td>
-                                  <input type="number" name="no_in_stock[0][]" required class="form-control @error('no_in_stock') is-invalid @enderror">
+                                  <input type="number" name="no_in_stock[0][0][]" required class="form-control @error('no_in_stock') is-invalid @enderror">
                                 </td>
                                 <td>
-                                  <select id="sizes" name='sizes[0][]' class="form-select @error('sizes') is-invalid @enderror" style="width: 100%">
+                                  <select id="sizes" name='sizes[0][0][]' class="form-select @error('sizes') is-invalid @enderror" style="width: 100%">
                                     <option value="">Select Size</option>
                                     @if(!empty($sizes))
                                         @foreach($sizes as $size)
@@ -282,7 +270,7 @@
                                   </select>
                                 </td>
                                 <td>
-                                    <input type="text" name="p_price[0][]" required id="">
+                                    <input type="text" name="p_price[0][0][]" required id="">
                                 </td>
                                 <td></td>
                               </tr>
@@ -304,6 +292,24 @@
 
                     </tbody>
                   </table>
+                  <table class="table table-borderless">
+                    <tfoot>
+                        <tr>
+                            <th>
+                                <div id="colors_error" class="invalid-feedback"></div>
+                            </th>
+                            <th>
+                                <div id="no_in_stock_error" class="invalid-feedback"></div>
+                            </th>
+                            <th>
+                                <div id="sizes_error" class="invalid-feedback"></div>
+                            </th>
+                            <th>
+                                <div id="p_price_error" class="invalid-feedback"></div>
+                            </th>
+                        </tr>
+                    </tfoot>
+                </table>
                 </div>
                 <div class="col-12 my-2 text-end">
                   <button type="button" onclick="addInventory()" class="btn btn-primary btn-sm">Add Inventory</button>
@@ -313,9 +319,8 @@
                 <div class="col-12">
                   <label for="product_description" class="form-label">Description</label>
                   <textarea name='description' rows="15" class="tinymce-editor form-control @error('description') is-invalid @enderror" id='product_description'>{{ $product->description}}</textarea>
-                   <div class="invalid-feedback">
-                        @error('description') {{ $message }} @enderror
-                    </div>
+                  <div id="description_error" class="invalid-feedback"></div>
+
                 </div>
               </div>
 
@@ -324,6 +329,7 @@
                       <label for="pics" class="form-label">Product Pictures</label>
                       <input id='pics' type="file" name="pics[]" multiple class="form-control @error('pics') is-invalid @enderror">
                 </div>
+                <div id="pics_error" class="invalid-feedback"></div>
               </div>
 
               <div class="text-end mt-3">

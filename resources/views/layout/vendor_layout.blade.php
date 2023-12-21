@@ -246,6 +246,7 @@
         });
         $("#newProductForm").on('submit',(e)=>{
             e.preventDefault();
+            tinymce.triggerSave();
             let formData = $("#newProductForm").serialize();
             formData += action;
             fetch("{{ url('/vendor/products/store') }}", {
@@ -257,7 +258,7 @@
             })
             .then(response => response.json())
             .then(json => {
-               //console.log(json);
+               console.log(json);
                $(".invalid-feedback").html('');
 
                 if (json.code == 2){
@@ -280,6 +281,46 @@
                 if (json.code == 0 && json.type == 'published'){
                     location.href = '/vendor/products';
                 }
+            });
+        });
+
+        $("#editProduct").on('submit',(e)=>{
+            e.preventDefault();
+            tinymce.triggerSave();
+            let formData = $("#editProduct").serialize();
+            formData += action;
+            fetch("{{ url('/vendor/products/update') }}", {
+                method : "PUT",
+                headers : {
+                    "X-CSRF-TOKEN" : $('meta[name="csrf-token"]').attr('content'),
+                },
+                body : formData
+            })
+            .then(response => response.json())
+            .then(json => {
+               console.log(json);
+            //    $(".invalid-feedback").html('');
+
+            //     if (json.code == 2){
+            //         // Validation Error
+            //         for(x in json.body){
+            //             let inputError = x.split(".");
+            //             console.log(json.body);
+            //             validationHandler(inputError[0], json.body[x]);
+            //         }
+            //     }
+
+            //     if (json.code == 1){
+            //         alert(json.body);
+            //     }
+
+            //     if (json.code == 0 && json.type == 'draft'){
+            //         location.href = '/vendor/products/drafts';
+            //     }
+
+            //     if (json.code == 0 && json.type == 'published'){
+            //         location.href = '/vendor/products';
+            //     }
             });
         });
 

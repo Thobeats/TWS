@@ -712,7 +712,7 @@ class VendorController extends Controller
                 parse_str($request->getContent(), $formData);
                 $request = new Request($formData);
 
-            //return $request->all();
+             //   return $request->all();
             if($request->has('save')){
                 $ps = 1;
 
@@ -721,10 +721,10 @@ class VendorController extends Controller
                     'description' => 'required|string',
                     'category_id' => 'required|array',
                     'tags' => 'required|array',
-                    'sizes.*.*' => 'required|array',
-                    'p_price.*.*' => 'required|array',
-                    'colors.*' => 'required|array',
-                    'no_in_stock.*.*' => 'required|array',
+                    'sizes.*.*' => 'required|string',
+                    'p_price.*.*' => 'required|string',
+                    'colors.*' => 'required|string',
+                    'no_in_stock.*.*' => 'required|integer',
                     'pics' => 'required|array',
                     'shipping_fee' => 'integer',
                     'sections' => 'required|array',
@@ -734,12 +734,15 @@ class VendorController extends Controller
                     'name.required' => 'The Product name is needed',
                     'tags.required' => 'Tags are needed to manage your products',
                     'pics.required' => 'Please Upload pictures before publishing a product',
-                    'sizes.*.*' => 'Please enter a size value for the #:position item in the #:second-position entry',
-                    'no_in_stock.*.*' => 'Please enter a value for the #:position item in the #:second-position entry',
-                    'p_price.*.*' => 'Please enter a price for the #:position item in the #:second-position entry',
+                    'sizes.*.*.required' => 'Please enter a size value for the #:position item in the #:second-position entry',
+                    'sizes.*.*.string' => 'The size value is invalid for the #:position item in the #:second-position entry',
+                    'no_in_stock.*.*.required' => 'No in stock for the #:position item in the #:second-position entry is required',
+                    'no_in_stock.*.*.integer' => 'No in stock for the #:position item in the #:second-position entry is invalid',
+                    'p_price.*.*.required' => 'Please enter a price for the #:position item in the #:second-position entry',
+                    'p_price.*.*.string' => 'Invalid price for the #:position item in the #:second-position entry',
                     'description' => 'Please enter a product Description before publishing',
                     'category_id' => 'Please choose a product category before publishing',
-                    'colors.*' => 'Please choose a color for the #:position item'
+                    'colors.*.required' => 'Please choose a color for the #:position item'
                 ]);
             }else{
                 $ps = 0;
@@ -938,114 +941,153 @@ class VendorController extends Controller
     }
 
     public function updateProduct(Request $request){
-        if($request->has('save')){
-            $ps = 1;
+        try{
+            parse_str($request->getContent(), $formData);
+            $request = new Request($formData);
 
-            $validator = Validator::make($request->all(),[
-                'name' => 'required|string',
-                'description' => 'required|string',
-                'category_id' => 'required|array',
-                'tags' => 'required|array',
-                'sizes.*' => 'required|array',
-                'colors' => 'required|array',
-                'no_in_stock.*' => 'required|array',
-                'pics' => 'required|array',
-                'shipping_fee' => 'integer',
-                'sections' => 'required|array',
-                'sku' => 'nullable|string',
-                'product_id' => 'required|integer',
-                'moq' => 'required|integer'
-            ],[
-                'name.required' => 'The Product name is needed',
-                'tags.required' => 'Tags are needed to manage your products'
-            ]);
+            return $request->all();
+            if($request->has('save')){
+                $ps = 1;
 
-        }else{
-            $ps = 0;
+                $validator = Validator::make($request->all(),[
+                    'name' => 'required|string',
+                    'description' => 'required|string',
+                    'category_id' => 'required|array',
+                    'tags' => 'required|array',
+                    'sizes.*.*' => 'required|string',
+                    'p_price.*.*' => 'required|string',
+                    'colors.*' => 'required|string',
+                    'no_in_stock.*.*' => 'required|integer',
+                    'pics' => 'required|array',
+                    'shipping_fee' => 'integer',
+                    'sections' => 'required|array',
+                    'sku' => 'nullable|string',
+                    'moq' => 'required|integer'
+                ],[
+                    'name.required' => 'The Product name is needed',
+                    'tags.required' => 'Tags are needed to manage your products',
+                    'pics.required' => 'Please Upload pictures before publishing a product',
+                    'sizes.*.*.required' => 'Please enter a size value for the #:position item in the #:second-position entry',
+                    'sizes.*.*.string' => 'The size value is invalid for the #:position item in the #:second-position entry',
+                    'no_in_stock.*.*.required' => 'No in stock for the #:position item in the #:second-position entry is required',
+                    'no_in_stock.*.*.integer' => 'No in stock for the #:position item in the #:second-position entry is invalid',
+                    'p_price.*.*.required' => 'Please enter a price for the #:position item in the #:second-position entry',
+                    'p_price.*.*.string' => 'Invalid price for the #:position item in the #:second-position entry',
+                    'description' => 'Please enter a product Description before publishing',
+                    'category_id' => 'Please choose a product category before publishing',
+                    'colors.*.required' => 'Please choose a color for the #:position item'
+                ]);
 
-            $validator = Validator::make($request->all(),[
-                'name' => 'nullable|string',
-                'description' => 'nullable|string',
-                'category_id' => 'nullable|array',
-                'tags' => 'nullable|array',
-                'sizes.*' => 'nullable|array',
-                'colors' => 'nullable|array',
-                'no_in_stock.*' => 'nullable|array',
-                'pics' => 'nullable|array',
-                'shipping_fee' => 'integer',
-                'sections' => 'nullable|array',
-                'sku' => 'nullable|string',
-                'product_id' => 'required|integer',
-                'moq' => 'nullable|integer'
-            ]);
-        }
+            }else{
+                $ps = 0;
 
-        $request->merge(['publish_status' => $ps]);
+                $validator = Validator::make($request->all(),[
+                    'name' => 'required|string',
+                    'description' => 'nullable|string',
+                    'category_id' => 'nullable|array',
+                    'tags' => 'nullable|array',
+                    'sizes.*' => 'nullable|array',
+                    'p_price.*' => 'nullable|array',
+                    'colors' => 'nullable|array',
+                    'no_in_stock.*' => 'nullable|array',
+                    'pics' => 'nullable|array',
+                    'shipping_fee' => 'integer',
+                    'sections' => 'nullable|array',
+                    'sku' => 'nullable|string',
+                    'moq' => 'required|integer'
+                ],[
+                    'name.required' => 'The name field needs a value, even as a placeholder',
+                    'moq.required' => 'The minimum order quantity needs a value, even as a placeholder'
+                ]);
+            }
 
-        $product = Product::find($request->product_id);
+            $request->merge(['publish_status' => $ps]);
 
-        if($validator->fails()){
-            return redirect()->back()->withErrors($validator->errors());
-        }
+            $product = Product::find($request->product_id);
 
-        $pics = $request->pics;
-            $item_listing = [];
-            $priceSum = 0;
-            $priceCount = 0;
-
-            for ($i=0; $i < count($request->colors); $i++) {
-                $listing = [
-                    $request->sizes[$i],
-                    $request->no_in_stock[$i],
-                    $request->p_price[$i]
+            if($validator->fails()){
+                return [
+                    "code" => 2,
+                    "type" => "error",
+                    "body" => $validator->errors()
                 ];
-
-                $priceSum += array_sum($request->p_price[$i]);
-                $priceCount += count($request->p_price[$i]);
-
-                $item_listing[$request->colors[$i]] = $listing;
             }
 
-            $request->merge(['price' => ceil($priceSum / $priceCount)]);
+                $pics = $request->pics;
+                $item_listing = [];
+                $priceSum = 0;
+                $priceCount = 0;
 
-            $user = Auth::user();
+                for ($i=0; $i < count($request->colors); $i++) {
+                    $listing = [
+                        $request->sizes[$i],
+                        $request->no_in_stock[$i],
+                        $request->p_price[$i]
+                    ];
 
-            // Attach the Vendor Id to the request
-            $request->merge(['vendor_id' => $user->id,
-                            'tags' => json_encode($request->tags),
-                            'item_listing' => json_encode($item_listing),
-                            'pics' => json_encode($pics),
-                            'category_id' => json_encode($request->category_id),
-                            'section_id' => json_encode($request->sections),
-                        ]);
+                    $priceSum += array_sum($request->p_price[$i]);
+                    $priceCount += count($request->p_price[$i]);
 
-                        //Update the Product
-        Product::where('id', $product->id)->update($request->only('vendor_id',
-                                                'name','description',
-                                                'tags','item_listing',
-                                                'pics','category_id','price',
-                                                'publish_status','section_id',
-                                                'shipping_fee', 'sku','moq'
-                                            ));
+                    $item_listing[$request->colors[$i]] = $listing;
+                }
 
-        // Return view with Success report
-        toastr()->success('Updated Saved');
-        if(!$ps){
-            return redirect('/vendor/products/drafts');
-        }
+                $request->merge(['price' => ceil($priceSum / $priceCount)]);
 
-        // Add the Category to the list of Products
-        $vendorProfile = Vendor::where('user_id', $user->id)->first();
-        $vendorProducts = json_decode($vendorProfile->products,true);
-        foreach(json_decode($request->category_id,true) as $cat){
-            if(!array_search($cat, $vendorProducts)){
-                $vendorProducts[] = "$cat";
+                $user = Auth::user();
+
+                // Attach the Vendor Id to the request
+                $request->merge(['vendor_id' => $user->id,
+                                'tags' => json_encode($request->tags),
+                                'item_listing' => json_encode($item_listing),
+                                'pics' => json_encode($pics),
+                                'category_id' => json_encode($request->category_id),
+                                'section_id' => json_encode($request->sections),
+                            ]);
+
+                            //Update the Product
+            Product::where('id', $product->id)->update($request->only('vendor_id',
+                                                    'name','description',
+                                                    'tags','item_listing',
+                                                    'pics','category_id','price',
+                                                    'publish_status','section_id',
+                                                    'shipping_fee', 'sku','moq'
+                                                ));
+
+            // Return view with Success report
+            toastr()->success('Updated Saved');
+            if(!$ps){
+                return [
+                    "code" => 0,
+                    "type" => "draft",
+                    "body" => "Success"
+                ];
             }
-        }
-        $vendorProfile->products = json_encode($vendorProducts);
-        $vendorProfile->save();
 
-        return redirect('/vendor/products');
+            // Add the Category to the list of Products
+            $vendorProfile = Vendor::where('user_id', $user->id)->first();
+            $vendorProducts = json_decode($vendorProfile->products,true);
+            foreach(json_decode($request->category_id,true) as $cat){
+                if(!array_search($cat, $vendorProducts)){
+                    $vendorProducts[] = "$cat";
+                }
+            }
+            $vendorProfile->products = json_encode($vendorProducts);
+            $vendorProfile->save();
+
+            return [
+                "code" => 0,
+                "type" => "oublished",
+                "body" => "Success"
+            ];
+
+        }catch(Exception $e){
+            info($e);
+            return [
+                "code" => 1,
+                "type" => "error",
+                "body" => $e->getMessage()
+            ];
+        }
     }
 
     public function deleteProduct($id){
