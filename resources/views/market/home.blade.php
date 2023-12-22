@@ -2,7 +2,6 @@
 
 @section('title', 'Home')
 
-
 @section('content')
 
 <!-- Slider -->

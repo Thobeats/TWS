@@ -28,9 +28,9 @@
                         </div>
 
                         <div class="flex-c-m h-full p-r-24">
-                            <div class="cl2 hov-cl1 trans-04 p-lr-11 js-show-modal-sign-up auth-buttons home-bg-color text-light">
+                            <a class="cl2 hov-cl1 trans-04 p-lr-11 auth-buttons home-bg-color text-light" href="/register">
                                 Register <i class="zmdi zmdi-account-add"></i>
-                            </div>
+                            </a>
                         </div>
                     </div>
                     @endguest

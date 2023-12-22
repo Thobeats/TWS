@@ -26,7 +26,7 @@
     </form>
     <div>
         Don't have an account?
-        <a href="/register" class='btn home-btn-outline js-show-modal-sign-up'>
+        <a href="/register" class='btn home-btn-outline'>
             <i class="zmdi zmdi-account-add"></i>
             Sign Up
         </a>

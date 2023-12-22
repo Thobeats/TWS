@@ -414,6 +414,14 @@ class AuthController extends Controller
         return $httpRequest->json();
     }
 
+    public function register(){
+        try{
+            return view('market.register');
+        }catch(Exception $e){
+            
+        }
+    }
+
 
 
 }
