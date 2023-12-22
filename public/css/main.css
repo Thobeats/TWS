@@ -325,6 +325,18 @@ body{
   background-color: #fff;
 }
 
+.twls-header{
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  z-index: 100;
+  height: fit-content;
+  border-bottom: 1px solid #e9ecef;
+  background-color: white;
+}
+
+
 
 /*---------------------------------------------*/
 .limiter-menu-desktop {
@@ -348,6 +360,7 @@ body{
   display: -moz-box;
   display: -ms-flexbox;
   display: flex;
+  flex-direction: column;
   align-items: center;
   height: 100%;
   transition: display 0.3s;
@@ -452,7 +465,7 @@ body{
 }
 
 .main-menu > li > .sub-menu {
-  top:90%;
+  top: 100%;
   left: 0;
 }
 

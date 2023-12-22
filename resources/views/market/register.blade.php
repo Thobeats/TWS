@@ -1,4 +1,4 @@
-@extends('layout.market_layout')
+@extends('layout.register_layout')
 
 @section('title', 'Register')
 
