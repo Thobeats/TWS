@@ -59,6 +59,7 @@ Route::get('/', [HomeController::class, 'home'])->name('home');
 Route::get('shop',[HomeController::class, 'shop'])->name('shop');
 Route::get('/buyer_signup', [AuthController::class, 'buyerSignup'])->name('buyerSignup');
 Route::post('/validate/buyer', [AuthController::class, 'validateBuyer']);
+Route::post('/validate/seller', [AuthController::class, 'validateSeller']);
 Route::post('/save_buyer', [AuthController::class, 'saveBuyer'])->name('saveBuyer');
 Route::match(['get', 'post'], '/seller_signup', [AuthController::class, 'sellerSignup'])->name('sellerSignup');
 Route::match(['get', 'post'],'/confirm_email', [AuthController::class, 'confirmEmail']);

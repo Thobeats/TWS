@@ -182,6 +182,49 @@ class AuthController extends Controller
         }
     }
 
+    public function validateSeller(Request $request)
+    {
+        try{
+            parse_str($request->getContent(), $formData);
+
+            $newRequest = new Request($formData);
+
+            $validator = Validator::make($newRequest->all(),[
+                'firstname' => 'required|string',
+                'lastname' => 'required|string',
+                'email' => 'required|email',
+                'password' => 'required|string|between:8,16',
+                'business_name' => 'required|string',
+                'address' => 'required|string',
+                'products_offered' => 'required|string',
+                'consent' => 'required|string'
+            ],[
+                'consent.required' => 'Please show your consent by entering your fullname',
+                'firstname.required' => 'Please enter your firstname',
+                'lastname.required' => 'Please enter your lastname',
+                'email.unique' => 'This email cannot be used',
+                'email.required' => 'Please enter your email',
+                'address.required' => 'Please enter your address'
+            ]);
+
+            if ($validator->fails()){
+                return [
+                    "code" => 1,
+                    "message" => "Validation Error",
+                    "data" => $validator->errors()
+                ];
+            }
+
+            return [
+                "code" => 0,
+                "message" => "Validated",
+                "data" => []
+            ];
+        }catch(Exception $e){
+
+        }
+    }
+
     public function saveBuyer(Request $request){
 
         $request->validate([

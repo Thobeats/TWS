@@ -323,6 +323,37 @@
                     showOtpModal();
                 }
             });
+        }
+
+        function registerSeller(){
+            let sellerdata = $("#sellerForm").serialize();
+
+            //Validate the Seller details
+            fetch('/validate/seller',{
+                method : "POST",
+                body : sellerdata,
+                headers : {
+                    "X-CSRF-TOKEN" : "{{ csrf_token() }}"
+                }
+            })
+            .then(res => res.json())
+            .then(json => {
+                console.log(json);
+                $(".invalid-feedback").html('');
+                if (json.code == 1){
+                    // Validation Error
+                    for(x in json.data){
+                        let inputError = x.split(".");
+                        console.log(json.data);
+                        validationHandler(inputError[0], json.data[x]);
+                    }
+                }
+
+                if (json.code == 0){
+                    // Send OTP to the email
+                    showOtpModal();
+                }
+            });
 
 
         }
