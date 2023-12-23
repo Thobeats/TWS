@@ -37,7 +37,7 @@ class AuthController extends Controller
             $request->validate([
                 'firstname' => 'required|string',
                 'lastname' => 'required|string',
-                'email' => 'required|email',
+                'email' => 'required|email|unique:users,email',
                 'password' => 'required|string|between:8,16',
                 'business_name' => 'required|string',
                 'address' => 'required|string',
@@ -192,7 +192,7 @@ class AuthController extends Controller
             $validator = Validator::make($newRequest->all(),[
                 'firstname' => 'required|string',
                 'lastname' => 'required|string',
-                'email' => 'required|email',
+                'email' => 'required|email|unique:users,email',
                 'password' => 'required|string|between:8,16',
                 'business_name' => 'required|string',
                 'address' => 'required|string',
@@ -230,7 +230,7 @@ class AuthController extends Controller
         $request->validate([
             'firstname' => 'required|string',
             'lastname' => 'required|string',
-            'email' => 'required|email',
+            'email' => 'required|email|unique:users,email',
             'password' => 'required|string|between:8,16',
             'business_name' => 'required|string',
             'address' => 'required|string',

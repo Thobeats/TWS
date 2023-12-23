@@ -25,7 +25,7 @@
         </div>
         <div class="form-group">
             <label for="email">Email <span class='text-danger'>*</span> </label>
-            <input type="email" name="email" value="{{ old('email') }}" required class="form-control">
+            <input id="email" type="email" name="email" value="{{ old('email') }}" required class="form-control">
             <div id="email_error" class="invalid-feedback"></div>
         </div>
         <div class="form-group">
