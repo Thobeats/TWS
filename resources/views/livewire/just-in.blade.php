@@ -24,17 +24,7 @@
                     </ul>
                 </div>
             </div>
-            <div class="col-lg-10">
-                <div class="d-flex justify-content-end">
-                    <div class="mr-2">
-                        <div class="just-in"><b class="home-text">TODAY</b></div>
-                        <h1 class="just-in-amount">{{ $today }}</h1>
-                    </div>
-                    <div>
-                        <div class="just-in">Last <b class="home-text">7 days</b></div>
-                        <h1 class="just-in-amount">{{ $last7days }}</h1>
-                    </div>
-                </div>
+            <div class="col-lg-8">
                 <div class="product-wrapper">
                     <div class="mt-3 d-flex justify-content-left">
                         @forelse ($newProducts as $new)
@@ -64,6 +54,18 @@
 
                             </div>
                         @endforelse
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-2">
+                <div class="d-flex justify-content-end">
+                    <div class="mr-2">
+                        <div class="just-in"><b class="home-text">TODAY</b></div>
+                        <h1 class="just-in-amount">{{ $today }}</h1>
+                    </div>
+                    <div>
+                        <div class="just-in">Last <b class="home-text">7 days</b></div>
+                        <h1 class="just-in-amount">{{ $last7days }}</h1>
                     </div>
                 </div>
             </div>

@@ -1,4 +1,4 @@
-<header class="header-v2" style="height: 180px;">
+<header class="header-v2" style="height: 100px;">
   <div class="twls-header">
       <div class="container-fluid border">
           <div class="row">
@@ -99,6 +99,6 @@
               </div>
           </div>
       </div>
-    
+
   </div>
 </header>

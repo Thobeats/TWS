@@ -2,15 +2,16 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\Models\Category;
 use Exception;
-use \Stripe\StripeClient as Stripe;
 use App\Models\User;
 use App\Models\Vendor;
+use App\Models\Category;
 use App\Models\Customer;
+use App\Models\OTPModel;
 use App\Traits\AppTrait;
 use App\Models\SecretKey;
 use Illuminate\Http\Request;
+use \Stripe\StripeClient as Stripe;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -25,10 +26,6 @@ class AuthController extends Controller
         $key = new SecretKey;
         $stripe = new Stripe($key->getSecret());
         return $stripe;
-    }
-
-    public function v (){
-        return view('market.register');
     }
 
     public function buyerSignup(){
@@ -141,6 +138,48 @@ class AuthController extends Controller
                                 ->get();
 
         return view('market.seller_signup')->with(['data' => 'seller_signup','categories' => $categories]);
+    }
+
+    public function validateBuyer(Request $request)
+    {
+        try{
+            parse_str($request->getContent(), $formData);
+
+            $newRequest = new Request($formData);
+
+            $validator = Validator::make($newRequest->all(),[
+                'firstname' => 'required|string',
+                'lastname' => 'required|string',
+                'email' => 'required|email|unique:users,email',
+                'password' => 'required|string|between:8,16',
+                'business_name' => 'required|string',
+                'address' => 'required|string',
+                'yes' => 'required|boolean'
+            ],[
+                'yes.required' => 'Please click yes to continue',
+                'firstname.required' => 'Please enter your firstname',
+                'lastname.required' => 'Please enter your lastname',
+                'email.unique' => 'This email cannot be used',
+                'email.required' => 'Please enter your email',
+                'address.required' => 'Please enter your address'
+            ]);
+
+            if ($validator->fails()){
+                return [
+                    "code" => 1,
+                    "message" => "Validation Error",
+                    "data" => $validator->errors()
+                ];
+            }
+
+            return [
+                "code" => 0,
+                "message" => "Validated",
+                "data" => []
+            ];
+        }catch(Exception $e){
+
+        }
     }
 
     public function saveBuyer(Request $request){
@@ -407,6 +446,32 @@ class AuthController extends Controller
         $this->sendConfirmEmail('tobiy23@gmail.com', "5555");
     }
 
+    public function sendOtp($email){
+        //Send OTP to user's email
+        $otpModel = new OTPModel;
+        $token  = $otpModel->getOTP($email);
+
+        $this->sendConfirmEmail($email, $token);
+
+        return [
+            "code" => 0,
+            "message" => "otp sent"
+        ];
+    }
+
+    public function confirmOtp(Request $request, $email){
+        try{
+            //Send OTP to user's email
+            $formData = json_decode($request->getContent(), true);
+            $otpModel = new OTPModel;
+            $response = $otpModel->verifyOTP($email, $formData['token']);
+            return $response;
+
+        }catch(Exception $e){
+
+        }
+    }
+
     public function getAddress(Request $request){
         $api_key = env('ADDRESS_API');
         $httpRequest = Http::get("https://maps.googleapis.com/maps/api/place/autocomplete/json?input=$request->address&types=address&key=$api_key");
@@ -418,7 +483,7 @@ class AuthController extends Controller
         try{
             return view('market.register');
         }catch(Exception $e){
-            
+
         }
     }
 

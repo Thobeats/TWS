@@ -17,17 +17,6 @@
 				</div>
 		</section>
 
-
-		<section class="my-3 p-3">
-				<div class="row">
-						<div class="col">
-								<div class="buyer-card">
-
-								</div>
-						</div>
-				</div>
-		</section>
-
 		<section class="p-3">
 				<div class="register-cards mx-auto text-light">
 						<div class="card flex-even mt-4">

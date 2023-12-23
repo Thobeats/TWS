@@ -58,6 +58,7 @@ Route::get('/testEvent', function(){
 Route::get('/', [HomeController::class, 'home'])->name('home');
 Route::get('shop',[HomeController::class, 'shop'])->name('shop');
 Route::get('/buyer_signup', [AuthController::class, 'buyerSignup'])->name('buyerSignup');
+Route::post('/validate/buyer', [AuthController::class, 'validateBuyer']);
 Route::post('/save_buyer', [AuthController::class, 'saveBuyer'])->name('saveBuyer');
 Route::match(['get', 'post'], '/seller_signup', [AuthController::class, 'sellerSignup'])->name('sellerSignup');
 Route::match(['get', 'post'],'/confirm_email', [AuthController::class, 'confirmEmail']);
@@ -66,8 +67,8 @@ Route::post('/save_email', [AuthController::class, 'saveEmail'])->name('saveEmai
 //Route::view('/success', 'market.success');
 Route::view('/email', 'emails.confirm_email_markdown');
 Route::get('/register', [AuthController::class,'register']);
-
-Route::get('/testEmail', [AuthController::class, 'testEmail']);
+Route::get('/sendotp/{email}', [AuthController::class, 'sendOtp']);
+Route::post('/confirmOtp/{email}', [AuthController::class, 'confirmOtp']);
 
 Route::prefix('market')->group(function () {
     Route::get('vendors', [HomeController::class, 'vendors']);

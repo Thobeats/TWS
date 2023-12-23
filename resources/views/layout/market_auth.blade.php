@@ -4,6 +4,7 @@
 	<title>@yield('title')</title>
 	<meta charset="UTF-8">
     <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 <!--===============================================================================================-->
@@ -37,6 +38,7 @@
 	<link rel="stylesheet" type="text/css" href="{{ asset('css/util.css') }}">
 	<link rel="stylesheet" type="text/css" href="{{ asset('css/main.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('css/app.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('css/toastr.min.css') }}">
 <!--===============================================================================================-->
 <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 
@@ -51,6 +53,32 @@
         </a>
     </div>
     @yield('form')
+
+    {{-- Confirm Email Modal --}}
+    <div class="modal" id="confirmEmail" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="staticBackdropLabel">Verify Email</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+                <div class="d-flex flex-column justify-content-center align-items-center">
+                    <label class="h4">Enter OTP</label>
+                    <input type="number" name="otp" maxlength="6" class="p-2 text-center border" oninput="cofirmOtp(event)">
+                    <div id="otp-action" class="text-center mt-2 h5"></div>
+
+                    <div class="mt-3">
+                        didn't get the otp? <a href="#" onclick="resendOTP()">Resend OTP</a>
+                    </div>
+                </div>
+            </div>
+            </div>
+        </div>
+    </div>
+
 </section>
 
 
@@ -77,6 +105,7 @@
 <!--===============================================================================================-->
 	<script src="{{ asset('vendor/slick/slick.min.js') }}"></script>
 	<script src="{{ asset('js/slick-custom.js') }}"></script>
+    <script src="{{ asset('js/toastr.min.js') }}"></script>
     <script src="https://unpkg.com/bootstrap-show-password@1.2.1/dist/bootstrap-show-password.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bs-custom-file-input/dist/bs-custom-file-input.min.js"></script>
 <!--===============================================================================================-->
@@ -181,6 +210,127 @@
             $(this).next('.custom-file-label').html(fileName);
         })
     </script>
+    {{-- Handle Buyer SignUp --}}
+
+    <script>
+
+        var count = 5*60;
+        var timer;
+
+        function validationHandler(target, value){
+            let input = document.getElementById(`${target}_error`);
+            for (c in value){
+                input.innerHTML +=  `<span class='text-danger'>${value[c]}</span> <br><br>`;
+            }
+
+            input.style.display = 'block';
+        }
+
+        function sendOtp(email){
+            fetch(`/sendotp/${email}`)
+            .then(res => res.json())
+            .then(json => {
+                console.log(json);
+                if (json.code == 0){
+                    // Send OTP to the email
+                    toastr.success(json.message)
+                    timer = setInterval(countTime, 1000);
+                }
+            });
+        }
+
+
+        function cofirmOtp(event){
+            let otp = event.target.value;
+            let email = document.getElementById('email').value;
+
+            if (otp.length == 6){
+                fetch(`/confirmOtp/${email}`,{
+                    method : "POST",
+                    body : JSON.stringify({ "token" : otp }),
+                    headers : {
+                        "X-CSRF-TOKEN" : "{{ csrf_token() }}"
+                    }
+                })
+                .then(res => res.json())
+                .then(json => {
+                    if (json.status == true){
+                        //Submit the form
+                        $('form').submit();
+                    }
+                });
+            }
+        }
+
+        function countTime(){
+          count--;
+
+          let minute = Math.floor(count / 60);
+          let seconds = Math.floor(count % 60);
+
+          if(count == 0){
+            clearInterval(timer);
+          }
+
+          let template = `
+            <span>${minute} : ${seconds} </span>
+          `;
+
+          $("#otp-action").html(template)
+
+        }
+
+        function resendOTP(){
+            clearInterval(timer);
+            count = 5*60;
+            let email = document.getElementById('email').value;
+            sendOtp(email);
+
+        }
+
+        function showOtpModal(){
+            let email = document.getElementById('email').value;
+            sendOtp(email);
+            $("#confirmEmail").modal('show');
+        }
+
+        function registerBuyer(){
+            let buyerdata = $("#BuyerForm").serialize();
+
+            //Validate the Buyer details
+            fetch('/validate/buyer',{
+                method : "POST",
+                body : buyerdata,
+                headers : {
+                    "X-CSRF-TOKEN" : "{{ csrf_token() }}"
+                }
+            })
+            .then(res => res.json())
+            .then(json => {
+                console.log(json);
+                $(".invalid-feedback").html('');
+                if (json.code == 1){
+                    // Validation Error
+                    for(x in json.data){
+                        let inputError = x.split(".");
+                        console.log(json.data);
+                        validationHandler(inputError[0], json.data[x]);
+                    }
+                }
+
+                if (json.code == 0){
+                    // Send OTP to the email
+                    showOtpModal();
+                }
+            });
+
+
+        }
+    </script>
+
+
+
+
 <!--===============================================================================================-->
 	<script src="{{ asset('js/main.js') }}"></script>
     <script src="{{asset('assets/js/apicalls.js')}}"></script>
