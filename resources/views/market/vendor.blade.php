@@ -25,30 +25,27 @@
     <div class="container">
 
         <div class="row">
-            <div class="col-lg-12">
-                <div class="d-flex justify-content-end" style="height:300px; background-image: url('{{ url('storage/' . $vendor->business_banner)}}'); background-position: top center;"></div>
+            <div class="col-lg-7">
+                <div class="d-flex justify-content-end" style="height:300px; background-image: url('{{ url('storage/' . $vendor->business_banner)}}'); background-position:center; background-size:cover;"></div>
             </div>
-        </div>
-
-        {{-- Subscribe and Chat --}}
-        <div class="row mt-3">
-            <div class="col-lg-12">
-                <div class="d-flex justify-content-between">
-                    <div>
-                      <span class="ltext-1071 ml-3">{{ $vendor->business_name }}</span>
-                      <span class="fs-18 cl11">
-                        <i class="item-rating zmdi zmdi-star"></i>
-                        <i class="item-rating zmdi zmdi-star"></i>
-                        <i class="item-rating zmdi zmdi-star"></i>
-                        <i class="item-rating zmdi zmdi-star"></i>
-                        <i class="item-rating zmdi zmdi-star"></i>
-                    </span>
+            <div class="col-lg-5">
+                <div class="d-flex flex-column pt-4">
+                    <div class="mt-2">
+                        <span class="ltext-1071 ml-3">{{ $vendor->business_name }}</span>
+                        <span class="fs-18 cl11">
+                            <i class="item-rating zmdi zmdi-star"></i>
+                            <i class="item-rating zmdi zmdi-star"></i>
+                            <i class="item-rating zmdi zmdi-star"></i>
+                            <i class="item-rating zmdi zmdi-star"></i>
+                            <i class="item-rating zmdi zmdi-star"></i>
+                        </span>
                     </div>
-                    <div>
+                    <div class="mt-2">
                         <a href="?step=reviews#about" class="btn btn-outline-primary btn-sm mr-2">
                             <i class="item-rating zmdi zmdi-star"></i>
                             View Reviews
                         </a>
+
                         @if($check == false)
                         <span onclick="subscribe(event)" data-vendorid = "{{ $vendor->user_id }}" style="cursor: pointer" class="btn btn-outline-danger btn-sm mr-2">
                             <i class="item-rating zmdi  zmdi-notifications"></i>
@@ -60,6 +57,7 @@
                                 Unsubscribe
                             </span>
                         @endif
+
                         <a class="btn btn-outline-success btn-sm" href="#" onclick="openChat()">
                             <i class="zmdi zmdi-comments"></i>
                             Chat with the Vendor
@@ -68,6 +66,10 @@
                 </div>
             </div>
 
+        </div>
+
+        {{-- Subscribe and Chat --}}
+        <div class="row mt-3">
              <!-- Chat -->
              @include('layout.market_chat')
         </div>
