@@ -318,6 +318,7 @@ Route::middleware(['auth'])->group(function () {
             Route::group(['prefix' => 'vendors'],function(){
                 Route::get('/', [AV::class, 'index']);
                 Route::get('/view/{id}', [AV::class,'show']);
+                Route::get('/toggle/{id}', [AV::class,'toggle']);
                 Route::get('/verifyBusiness/{response}/{id}', [AV::class, 'verifyProofOfBusiness']);
                 Route::get('/verifyCustomerReview/{response}/{id}', [AV::class, 'verifyCustomerReview']);
             });

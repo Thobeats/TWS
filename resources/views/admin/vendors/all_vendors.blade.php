@@ -22,6 +22,7 @@
                     <th scope="col">Business Name</th>
                     <th scope="col">Joined at</th>
                     <th scope="col">Action</th>
+                    <th scope="col">Status</th>
                   </tr>
                 </thead>
                 <tbody style="font-size: 12px;">
@@ -36,11 +37,22 @@
                 @endphp
                   <tr>
                     <th scope="row">{{ $index }}</th>
-                    <td>{{ $vendor->fullname() }}</td>
+                    <td>
+                        <a  href="/admin/vendors/view/{{$vendor->id}}"  data-bs-toggle="view vendor">
+                            {{ $vendor->fullname() }}
+                        </a>
+                    </td>
                     <td>{{ $vendor->email }}</td>
                     <td>{{ $vendor->business_name }}</td>
                     <td>{{ $joined_at }}</td>
-                    <td><a class='badge bg-primary' href="/admin/vendors/view/{{$vendor->id}}"  data-bs-toggle="tooltip" data-bs-placement="top">View <i class="bi bi-eye-fill"></i></a></td>
+                    <td>
+                        <a href="/admin/vendors/toggle/{{ $vendor->id }}" class='badge bg-primary' data-bs-placement="top">
+                            {!! $vendor->account_status == 0 ? "Activate <i class='bi bi-eye-fill'></i>" : "Deactivate <i class='bi bi-eye'></i>" !!}
+                        </a>
+                    </td>
+                    <td>
+                        {!! $vendor->account_status == 0 ? "<span class='badge bg-danger'>Deactivated</span>" : "<span class='badge bg-success'>Active</span>" !!}
+                    </td>
 
                     <!--<td>-->
                     <!--    <a class='text-info' href="/admin/customer/edit/{{$vendor->id}}"  data-bs-toggle="tooltip" data-bs-placement="top" title="Edit Category"><i class='bi bi-pencil-square'></i></a>-->

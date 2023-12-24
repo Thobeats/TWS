@@ -23,6 +23,21 @@ class VendorController extends Controller
         return view('admin.vendors.view_vendor', compact('vendor'));
     }
 
+
+    public function toggle($id){
+        $vendor = User::find($id);
+
+        if ($vendor->account_status == 0){
+            $vendor->account_status = 1;
+        }else{
+            $vendor->account_status = 0;
+        }
+
+        $vendor->save();
+
+        return redirect('/admin/vendors/');
+    }
+
     public function verifyProofOfBusiness($response,$id){
         $vendor = Vendor::where('user_id', $id)->first();
 
