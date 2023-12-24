@@ -278,7 +278,7 @@ class VendorController extends Controller
             $link = $session->url;
             return redirect($link);
         }catch(Exception $e){
-
+            return $e->getMessage();
         }
     }
 

@@ -77,7 +77,9 @@ class AuthController extends Controller
                 'account_status' => $request->account_status,
                 'password' => $request->password,
                 'user_code' => $user_code,
-                'country_code' => 840
+                'country_code' => 840,
+                "email_verified_at" => now(),
+                "account_status" => 1
             ];
 
             //Create an Account on stripe
@@ -226,78 +228,83 @@ class AuthController extends Controller
     }
 
     public function saveBuyer(Request $request){
+        try{
+            $request->validate([
+                'firstname' => 'required|string',
+                'lastname' => 'required|string',
+                'email' => 'required|email|unique:users,email',
+                'password' => 'required|string|between:8,16',
+                'business_name' => 'required|string',
+                'address' => 'required|string',
+                'cert' => 'required|mimes:pdf,doc',
+                'add_cert' => 'mimes:pdf,doc',
+                'yes' => 'required|boolean'
+            ]);
 
-        $request->validate([
-            'firstname' => 'required|string',
-            'lastname' => 'required|string',
-            'email' => 'required|email|unique:users,email',
-            'password' => 'required|string|between:8,16',
-            'business_name' => 'required|string',
-            'address' => 'required|string',
-            'cert' => 'required|mimes:pdf,doc',
-            'add_cert' => 'mimes:pdf,doc',
-            'yes' => 'required|boolean'
-        ]);
+            /**
+             * Give the buyer a role of 1 and set the account status to 0
+             * */
+            $user_code = $this->generateUserCode();
+            $request->merge(['role' => 1,'account_status' => 0,'password' => Hash::make($request->password)]);
 
-        /**
-         * Give the buyer a role of 1 and set the account status to 0
-         * */
-        $user_code = $this->generateUserCode();
-        $request->merge(['role' => 1,'account_status' => 0,'password' => Hash::make($request->password)]);
+            $customer_path = $this->uploadFile($request,'cert','customer');
 
-        $customer_path = $this->uploadFile($request,'cert','customer');
-
-        if(!$customer_path){
-            toastr()->error('File Exists!');
-            return redirect('/buyer_signup');
-        }
-
-        if($request->file('add_cert')){
-            $add_cert_path = $this->uploadFile($request,'add_cert','customer');
-
-            if(!$add_cert_path){
+            if(!$customer_path){
                 toastr()->error('File Exists!');
                 return redirect('/buyer_signup');
             }
-        }else{
-            $add_cert_path = "";
+
+            if($request->file('add_cert')){
+                $add_cert_path = $this->uploadFile($request,'add_cert','customer');
+
+                if(!$add_cert_path){
+                    toastr()->error('File Exists!');
+                    return redirect('/buyer_signup');
+                }
+            }else{
+                $add_cert_path = "";
+            }
+
+            $default_address = [
+                "fname" => $request->firstname,
+                "lname" => $request->lastname,
+                "country" => "USA",
+                "delivery_address" => $request->address
+            ];
+
+            $address[] = $default_address;
+
+            // Save to Users and Customers Table
+            $users_data = [
+                'firstname' => $request->firstname,
+                'lastname' => $request->lastname,
+                'email' => $request->email,
+                'password' => $request->password,
+                'zip_code' => $request->zip_code,
+                'business_name' => $request->business_name,
+                'address' => json_encode($address),
+                'role' => $request->role,
+                'account_status' => $request->account_status,
+                'user_code' => $user_code,
+                "email_verified_at" => now(),
+                "account_status" => 1
+            ];
+            $new_user = User::create($users_data);
+
+            //Insert customers
+            $new_customer = Customer::create([
+                'user_id' => $new_user->id,
+                'cert' => $customer_path,
+                'add_cert' => $add_cert_path
+            ]);
+
+             // Send Confirmation Email
+           //  $this->sendConfirmEmail($request->email, $user_code);
+
+            return redirect('/success');
+        }catch(Exception $e){
+
         }
-
-        $default_address = [
-            "fname" => $request->firstname,
-            "lname" => $request->lastname,
-            "country" => "USA",
-            "delivery_address" => $request->address
-        ];
-
-        $address[] = $default_address;
-
-        // Save to Users and Customers Table
-        $users_data = [
-            'firstname' => $request->firstname,
-            'lastname' => $request->lastname,
-            'email' => $request->email,
-            'password' => $request->password,
-            'zip_code' => $request->zip_code,
-            'business_name' => $request->business_name,
-            'address' => json_encode($address),
-            'role' => $request->role,
-            'account_status' => $request->account_status,
-            'user_code' => $user_code
-        ];
-        $new_user = User::create($users_data);
-
-        //Insert customers
-        $new_customer = Customer::create([
-            'user_id' => $new_user->id,
-            'cert' => $customer_path,
-            'add_cert' => $add_cert_path
-        ]);
-
-         // Send Confirmation Email
-       //  $this->sendConfirmEmail($request->email, $user_code);
-
-        return redirect('/success');
     }
 
     public function logout(){

@@ -167,6 +167,10 @@ Route::middleware(['auth'])->group(function () {
             Route::post('/business', [VendorController::class,'verifyBusiness']);
             Route::post('/customer_review', [VendorController::class,'verifyCustomerReview']);
        });
+       Route::group(['prefix' => 'store'], function(){
+            Route::get('/', [VendorController::class, 'myStore']);
+            Route::get('/setup', [VendorController::class, 'myStoreSetup']);
+        });
 
        //count Route
         Route::group(['prefix' => 'account'],function(){
@@ -205,11 +209,6 @@ Route::middleware(['auth'])->group(function () {
 
             Route::group(['prefix' => 'my_subscription'], function(){
                 Route::get('/', [VendorController::class, 'mySubscription']);
-            });
-
-            Route::group(['prefix' => 'store'], function(){
-                Route::get('/', [VendorController::class, 'myStore']);
-                Route::get('/setup', [VendorController::class, 'myStoreSetup']);
             });
 
             // Customers

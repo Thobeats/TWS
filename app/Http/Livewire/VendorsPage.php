@@ -115,7 +115,6 @@ class VendorsPage extends Component
                         ->selectRaw("count(orders.vendor_id) as cnt, users.business_name, users.profile, users.id")
                         ->groupBy('users.id')
                         ->orderBy('cnt', 'DESC')
-                        ->limit(3)
                         ->get();
     }
 
