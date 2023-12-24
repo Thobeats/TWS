@@ -170,12 +170,12 @@
 
                         <div class="block2-txt flex-w flex-t p-t-14 border p-3">
                             <div class="block2-txt-child1 flex-col-l">
-                                <a href="/market/vendor/{{$product->vendor_id}}" class="mtext-101 text-dark cl4 hov-cl1 trans-04 js-name-b2 p-b-6">
-                                    {{ $product->vendorName() }}
+                                <a href="/market/product/{{$product->id}}" class="mtext-101 cl4 hov-cl1 trans-04 js-name-b2 p-b-6">
+                                    {{ $product->name }}
                                 </a>
 
-                                <a href="/market/product/{{$product->id}}" class="stext-104 cl4 hov-cl1 trans-04 js-name-b2 p-b-6">
-                                    {{ $product->name }}
+                                <a href="/market/vendor/{{$product->vendor_id}}" class="stext-104 text-dark cl4 hov-cl1 trans-04 js-name-b2 p-b-6">
+                                    {{ $product->vendorName() }}
                                 </a>
                             </div>
 
@@ -231,12 +231,12 @@
 
                         <div class="block2-txt flex-w flex-t p-t-14 border p-3">
                             <div class="block2-txt-child1 flex-col-l">
-                                <a href="/market/vendor/{{$product->vendor_id}}" class="mtext-101 text-dark cl4 hov-cl1 trans-04 js-name-b2 p-b-6">
-                                    {{ $product->vendorName() }}
+                                <a href="/market/product/{{$product->id}}" class="mtext-101 cl4 hov-cl1 trans-04 js-name-b2 p-b-6">
+                                    {{ $product->name }}
                                 </a>
 
-                                <a href="/market/product/{{$product->id}}" class="stext-104 cl4 hov-cl1 trans-04 js-name-b2 p-b-6">
-                                    {{ $product->name }}
+                                <a href="/market/vendor/{{$product->vendor_id}}" class="stext-104 text-dark cl4 hov-cl1 trans-04 js-name-b2 p-b-6">
+                                    {{ $product->vendorName() }}
                                 </a>
                             </div>
 
@@ -356,12 +356,12 @@
 
                         <div class="block2-txt flex-w flex-t p-t-14 border p-3">
                             <div class="block2-txt-child1 flex-col-l">
-                                <a href="/market/vendor/{{$product->vendor_id}}" class="mtext-101 text-dark cl4 hov-cl1 trans-04 js-name-b2 p-b-6">
-                                    {{ $product->vendorName() }}
+                                <a href="/market/product/{{$product->id}}" class="mtext-101 cl4 hov-cl1 trans-04 js-name-b2 p-b-6">
+                                    {{ $product->name }}
                                 </a>
 
-                                <a href="/market/product/{{$product->id}}" class="stext-104 cl4 hov-cl1 trans-04 js-name-b2 p-b-6">
-                                    {{ $product->name }}
+                                <a href="/market/vendor/{{$product->vendor_id}}" class="stext-104 text-dark cl4 hov-cl1 trans-04 js-name-b2 p-b-6">
+                                    {{ $product->vendorName() }}
                                 </a>
                             </div>
 
@@ -410,12 +410,12 @@
 
                         <div class="block2-txt flex-w flex-t p-t-14 border p-3">
                             <div class="block2-txt-child1 flex-col-l">
-                                <a href="/market/vendor/{{$product->vendor_id}}" class="mtext-101 text-dark cl4 hov-cl1 trans-04 js-name-b2 p-b-6">
-                                    {{ $product->vendorName() }}
+                                <a href="/market/product/{{$product->id}}" class="mtext-101 cl4 hov-cl1 trans-04 js-name-b2 p-b-6">
+                                    {{ $product->name }}
                                 </a>
 
-                                <a href="/market/product/{{$product->id}}" class="stext-104 cl4 hov-cl1 trans-04 js-name-b2 p-b-6">
-                                    {{ $product->name }}
+                                <a href="/market/vendor/{{$product->vendor_id}}" class="stext-104 text-dark cl4 hov-cl1 trans-04 js-name-b2 p-b-6">
+                                    {{ $product->vendorName() }}
                                 </a>
                             </div>
 
@@ -461,7 +461,7 @@
 
                         <div class="block2-txt flex-w flex-t p-t-14 border p-3">
                             <div class="block2-txt-child1 flex-col-l">
-                                <a href="/market/vendor/{{$vendor->id}}" class="mtext-101 text-dark cl4 hov-cl1 trans-04 js-name-b2 p-b-6">
+                                <a href="/market/vendor/{{$vendor->id}}" class="stext-103 text-dark cl4 hov-cl1 trans-04 js-name-b2 p-b-6">
                                     {{ $vendor->business_name }}
                                 </a>
                             </div>
