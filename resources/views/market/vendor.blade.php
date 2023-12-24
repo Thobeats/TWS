@@ -29,7 +29,7 @@
                 <div class="d-flex justify-content-end" style="height:300px; background-image: url('{{ url('storage/' . $vendor->business_banner)}}'); background-position:center; background-size:cover;"></div>
             </div>
             <div class="col-lg-5">
-                <div class="d-flex flex-column pt-4">
+                <div class="d-flex flex-column justify-content-center align-content-center pt-4" style="height: 300px;">
                     <div class="mt-2">
                         <span class="ltext-1071 ml-3">{{ $vendor->business_name }}</span>
                         <span class="fs-18 cl11">
