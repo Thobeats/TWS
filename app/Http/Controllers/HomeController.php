@@ -109,10 +109,17 @@ class HomeController extends Controller
         //                         ];
         //                     });
 
-        $firstTimeBuyers = Product::where('publish_status', 1)
-                                ->inRandomOrder()->get();
+        $firstTimeBuyers = Product::where(['products.publish_status' => 1, 'users.account_status' => 1])
+                                ->join('users', 'users.id', '=', 'products.vendor_id')
+                                ->select('products.*')
+                                ->inRandomOrder()
+                                ->get();
 
-        $freeShipping = Product::where(['publish_status' => 1, 'shipping_fee' => 0])->inRandomOrder()->get();
+        $freeShipping = Product::where(['products.publish_status' => 1, 'shipping_fee' => 0, 'users.account_status' => 1])
+                                ->join('users', 'users.id', '=', 'products.vendor_id')
+                                ->select('products.*')
+                                ->inRandomOrder()
+                                ->get();
 
         $newVendors = User::where(['users.role' => 2, 'users.account_status' => 1, 'vendors.verified' => 1])
                                 ->join('vendors','vendors.user_id','=','users.id')
