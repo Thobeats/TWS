@@ -385,6 +385,7 @@
     </div>
 </section>
 
+@if ($freeShipping->count() > 0)
 <section class="sec-product bg0 p-b-50">
     <div class="container-fluid">
         <div class="p-b-32">
@@ -439,6 +440,8 @@
         </div>
     </div>
 </section>
+@endif
+
 
 <section class="sec-product bg0 p-b-50">
     <div class="container-fluid">
