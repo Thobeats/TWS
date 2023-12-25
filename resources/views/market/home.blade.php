@@ -13,7 +13,7 @@
                 <div class="container h-full">
                     {{-- Business Banner --}}
                     <a href="/market/vendor/{{$tv['vendor_id']}}">
-                        <div class="h-50" style="background-image: url('{{ $tv['business_banner'] != "" ? url('storage/' . $tv['business_banner']) : url('images/Welcome.png')}}'); background-size:cover; background-position: left center;">
+                        <div class="h-50 mx-auto w-75" style="background-image: url('{{ $tv['business_banner'] != "" ? url('storage/' . $tv['business_banner']) : url('images/Welcome.png')}}'); background-size:cover; background-position: left center;">
                         </div>
                     </a>
                     <div class="wrap-slick2">
