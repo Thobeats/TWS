@@ -48,7 +48,7 @@ class HomeController extends Controller
                             ->join('parent_to_children', 'parent_to_children.category_id', '=', 'categories.id')
                             ->limit(6)
                             ->get();
-        $vendors = User::where('role', 2)->select('id', 'business_name as name')->get();
+        $vendors = User::where(['role' => 2, 'account_status' => 1])->select('id', 'business_name as name')->get();
         $sections = Section::where(['status'=>1,'for' => 2])->orderBy('position')->get();
         $adminSections = Section::where(['status'=> 1,'for' => 3])->orderBy('position')->get();
         $new_arrivals = Product::select('*')
@@ -74,7 +74,8 @@ class HomeController extends Controller
         //                             "products" => $products
         //                         ];
         //                     });
-        $topVendors = Vendor::selectRaw("users.business_name, users.profile, users.id, vendors.business_banner")
+        $topVendors = Vendor::where('users.account_status', 1)
+                            ->selectRaw("users.business_name, users.profile, users.id, vendors.business_banner")
                             ->join('users','users.id','=','vendors.user_id')
                             ->groupBy('users.id', 'vendors.business_banner')
                             ->orderBy('users.id', 'DESC')
@@ -108,7 +109,8 @@ class HomeController extends Controller
         //                         ];
         //                     });
 
-        $firstTimeBuyers = Product::where('publish_status', 1)->inRandomOrder()->get();
+        $firstTimeBuyers = Product::where('publish_status', 1)
+                                ->inRandomOrder()->get();
 
         $freeShipping = Product::where(['publish_status' => 1, 'shipping_fee' => 0])->inRandomOrder()->get();
 
