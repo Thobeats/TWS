@@ -22,7 +22,9 @@ class Section extends Model
 
     public function products(){
         $products = Product::whereRaw("section_id LIKE '%". "$this->id" . "%'")
-                            ->where('publish_status', 1)
+                            ->where(['products.publish_status' => 1, 'users.account_status' => 1])
+                            ->join('users', 'users.id', '=', 'products.vendor_id')
+                            ->select('products.*')
                             ->get();
 
         return $products;
