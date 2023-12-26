@@ -5,8 +5,8 @@
 	<meta charset="UTF-8">
     <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <meta name="keywords" content="Wholesale clothes, trade show, wholesale fashion, wholesale apparel, sell wholesale apparel, buy clothes wholesale, boutique, clothing distributors, FashionGo, Fashiongo week, fashion week, online trade show, wholesale new collection, promotion, wholesale">
-    <meta name="description" content="One-stop Wholesale Platform for Clothing, Shoes, Accessories, Home decor, and more">
+    <meta name="keywords" content="Wholesale clothes, trade show, wholesale fashion, wholesale apparel, sell wholesale apparel, buy clothes wholesale, boutique, clothing distributors, FashionGo, Fashiongo week, fashion week, online trade show, wholesale new collection, promotion, wholesale, Wholesale USA, United States, America, United States Wholesale">
+    <meta name="description" content="One-stop Wholesale Platform for Clothing, Shoes, Accessories, Home decor, and more, Jewelries, Wholesale Clothing">
 
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 <!--===============================================================================================-->
