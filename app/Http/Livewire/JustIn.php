@@ -26,8 +26,10 @@ class JustIn extends Component
                         ->join('parent_to_children','parent_to_children.category_id','=','categories.id')
                         ->get()
                         ->map(function($item){
-                            $count = Product::whereJsonContains('category_id',"$item->id")
-                                            //->whereBetween('created_at', [now()->startOfWeek(), now()->endOfWeek()])
+                            $count = Product::whereJsonContains('products.category_id',"$item->id")
+                                            ->whereBetween('products.created_at', [now()->startOfWeek(), now()->endOfWeek()])
+                                            ->where('users.account_status', 1)
+                                            ->join('users', 'users.id', '=' , 'products.vendor_id')
                                             ->count();
                             return [
                                 'id' => $item->id,
@@ -41,9 +43,11 @@ class JustIn extends Component
         if($id == null){
             $id = Category::first()->id;
         }
-        $this->newProducts = Product::where('publish_status',1)
-                                    ->whereJsonContains('category_id', "$id")
-                                    //->whereBetween('created_at', [now()->startOfWeek(), now()->endOfWeek()])
+        $this->newProducts = Product::where('products.publish_status',1)
+                                    ->whereJsonContains('products.category_id', "$id")
+                                    ->whereBetween('products.created_at', [now()->startOfWeek(), now()->endOfWeek()])
+                                    ->where('users.account_status', 1)
+                                    ->join('users', 'users.id', '=' , 'products.vendor_id')
                                     ->orderBy('created_at','DESC')
                                     ->limit(5)
                                     ->get();
@@ -52,12 +56,16 @@ class JustIn extends Component
     public function countNewProducts(){
         $currentDate = Carbon::now();
         $sevenDaysAgo = Carbon::now()->subDays(7);
-        $this->today = Product::where('publish_status', 1)
-                                ->whereDate('created_at', $currentDate->toDateString())
+        $this->today = Product::where('products.publish_status', 1)
+                                ->whereDate('products.created_at', $currentDate->toDateString())
+                                ->where('users.account_status', 1)
+                                ->join('users', 'users.id', '=' , 'products.vendor_id')
                                 ->count();
 
-        $this->last7days =  Product::where('publish_status', 1)
-                                    ->whereBetween('created_at', [$sevenDaysAgo->toDateString(), $currentDate->toDateString()])
+        $this->last7days =  Product::where('products.publish_status', 1)
+                                    ->whereBetween('products.created_at', [$sevenDaysAgo->toDateString(), $currentDate->toDateString()])
+                                    ->where('users.account_status', 1)
+                                    ->join('users', 'users.id', '=' , 'products.vendor_id')
                                     ->count();
     }
 

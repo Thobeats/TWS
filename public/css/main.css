@@ -3299,7 +3299,7 @@ input.num-product::-webkit-inner-spin-button {
 .hov-img3 img{
     height: 100%;
     object-fit: cover;
-      object-position: top center;
+    object-position: top center;
     width : 100%;
     -webkit-transition: transform 0.9s ease;
     -o-transition: transform 0.9s ease;
