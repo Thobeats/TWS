@@ -15,9 +15,10 @@ use App\Models\Section;
 use App\Models\Category;
 use App\Models\VendorReview;
 use Illuminate\Http\Request;
+use App\Models\ProductReview;
+use App\Models\VendorSubscription;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\RegisterRequest;
-use App\Models\VendorSubscription;
 use Illuminate\Support\Facades\Validator;
 
 class HomeController extends Controller
@@ -259,40 +260,45 @@ class HomeController extends Controller
     }
 
     public function saveVendorRating(Request $request){
-        $validator = Validator::make($request->all(),[
-           "comment" => 'nullable|string',
-           "rating" => 'required|integer',
-           "vendor_id" => 'required|integer|exists:vendors,user_id'
-        ],
-        [
-            "rating.required" => "Please rate the vendor",
-            "vendor_id.exists" => "This vendor doesn't exist"
-        ]);
+        try{
+            $validator = Validator::make($request->all(),[
+                "comment" => 'nullable|string',
+                "rating" => 'required|integer',
+                "vendor_id" => 'required|integer|exists:vendors,user_id'
+             ],
+             [
+                 "rating.required" => "Please rate the vendor",
+                 "vendor_id.exists" => "This vendor doesn't exist"
+             ]);
 
-        if($validator->fails()){
-           return redirect()->back()->withErrors($validator->errors());
+             if($validator->fails()){
+                return redirect()->back()->withErrors($validator->errors());
+             }
+
+             $user = Auth::user();
+
+             // Save into Vendor Reviews
+             $saveNew = VendorReview::create([
+                 "from" => $user->id,
+                 "vendor_id" => $request->vendor_id,
+                 "comment" => $request->comment,
+                 "rating" => $request->rating
+             ]);
+
+             if(!$saveNew)
+             {
+                 toastr()->error('Review not saved');
+             }
+             else
+             {
+                 toastr()->success('Thank You');
+             }
+
+             return redirect("/market/vendor/$request->vendor_id?step=review");
+
+        }catch(Exception $e){
+
         }
-
-        $user = Auth::user();
-
-        // Save into Vendor Reviews
-        $saveNew = VendorReview::create([
-            "from" => $user->id,
-            "vendor_id" => $request->vendor_id,
-            "comment" => $request->comment,
-            "rating" => $request->rating
-        ]);
-
-        if(!$saveNew)
-        {
-            toastr()->error('Review not saved');
-        }
-        else
-        {
-            toastr()->success('Thank You');
-        }
-
-        return redirect("/market/vendor/$request->vendor_id?step=review");
     }
 
     public function subscribeVendor(){

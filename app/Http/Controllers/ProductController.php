@@ -10,6 +10,8 @@ use App\Models\Color;
 use App\Models\Product;
 use App\Traits\AppTrait;
 use Illuminate\Http\Request;
+use App\Models\ProductReview;
+use App\Models\VendorSubscription;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
@@ -53,53 +55,62 @@ class ProductController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Request $request, $id)
     {
-        $user = Auth::user();
-        $product = Product::find($id);
+        try{
+            $user = Auth::user();
+            $product = Product::find($id);
+            $step = $request->step ? $request->step : "";
 
-        $data = [];
+            $data = [];
 
-        if($product){
+            //Check if subscribed
+            $check = VendorSubscription::where(['customer_id' => $user->id, 'vendor_id' => $product->vendor_id])->first();
 
-            $chat = Chat::where([
-                'customer_id' => $user->id,
-                'vendor_id' => $product->vendor_id
-            ])->first();
+            if($product){
 
-            if(!$chat){
-                $chats = [];
-            }else{
-                $chats = json_decode($chat->chat_message,true);
+                $chat = Chat::where([
+                    'customer_id' => $user->id,
+                    'vendor_id' => $product->vendor_id
+                ])->first();
+
+                if(!$chat){
+                    $chats = [];
+                }else{
+                    $chats = json_decode($chat->chat_message,true);
+                }
+
+                $colors =[];
+
+                if (!is_null($product->item_listing())){
+                foreach($product->item_listing() as $key => $value){
+                        $color = Color::find($key);
+                        $listing = $this->getItemsByColor($product->id,$color->id);
+
+                        $colors[] = [
+                            'name' => $color->name,
+                            'id' => $color->id,
+                            'listing' => $listing
+                        ];
+                }
+                }
+
+                $data = [
+                    'product'=> $product,
+                    'images' => $product->images(),
+                    'item' => $colors,
+                    'user' => $user,
+                    'chats' => $chats,
+                    'productId' => $product->id,
+                    'check' => $check,
+                    'step' => $step
+                ];
+                // dd($data);
+                return view('market.product',$data);
             }
+        }catch(Exception $e){
 
-            $colors =[];
-
-            if (!is_null($product->item_listing())){
-               foreach($product->item_listing() as $key => $value){
-                    $color = Color::find($key);
-                    $listing = $this->getItemsByColor($product->id,$color->id);
-
-                    $colors[] = [
-                        'name' => $color->name,
-                        'id' => $color->id,
-                        'listing' => $listing
-                    ];
-               }
-            }
-
-            $data = [
-                'product'=> $product,
-                'images' => $product->images(),
-                'item' => $colors,
-                'user' => $user,
-                'chats' => $chats,
-                'productId' => $product->id
-            ];
-            // dd($data);
-            return view('market.product',$data);
         }
-
     }
 
 
@@ -107,7 +118,6 @@ class ProductController extends Controller
         $product = Product::find($productId);
         $listing = json_decode($product->item_listing,true);
         $item = $listing[$colorId];
-
         $items = []; $i = 0;
         foreach($item[0] as $size){
             $sizes = Size::find($size);
@@ -120,8 +130,6 @@ class ProductController extends Controller
             ];
             $i++;
         }
-
-
         return $items;
     }
 
@@ -172,6 +180,48 @@ class ProductController extends Controller
        }catch(Exception $e){
         //Return Exception page
        }
+    }
+
+    public function saveProductRating(Request $request){
+        try{
+            $validator = Validator::make($request->all(),[
+                "comment" => 'required|string',
+                "rating" => 'required|integer',
+                "product_id" => 'required|integer|exists:products,id'
+             ],
+             [
+                 "rating.required" => "Please rate the vendor",
+                 "product_id.exists" => "This product doesn't exist"
+             ]);
+
+             if($validator->fails()){
+                return redirect()->back()->withErrors($validator->errors());
+             }
+
+             $user = Auth::user();
+
+             // Save into Vendor Reviews
+                $saveNew = ProductReview::create([
+                 "from" => $user->id,
+                 "product_id" => $request->product_id,
+                 "comment" => $request->comment,
+                 "rating" => $request->rating
+                ]);
+
+             if(!$saveNew)
+             {
+                toastr()->error('Review not saved');
+             }
+             else
+             {
+                toastr()->success('Thank You');
+             }
+
+             return redirect("/market/product/$request->product_id?step=reviews");
+
+        }catch(Exception $e){
+            
+        }
     }
 
 

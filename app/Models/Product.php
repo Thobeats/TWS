@@ -120,6 +120,12 @@ class Product extends Model
         return $num_in_stock;
     }
 
+    public function reviews(){
+        return $this->hasMany(ProductReview::class,'product_id', 'id')
+                    ->join('users', 'users.id', '=', 'product_reviews.from')
+                    ->get();
+    }
+
 
 
 }

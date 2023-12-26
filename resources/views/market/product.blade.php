@@ -147,7 +147,17 @@
                         </div>
                         <div class="reviews">
                             <a href="" class="btn btn-outline-primary btn-sm">View Reviews</a>
-                            <a href="" class="btn btn-outline-dark btn-sm">Subscribe</a>
+                            @if($check == false)
+                                <span onclick="subscribe(event)" data-vendorid = "{{ $product->vendor_id }}" style="cursor: pointer" class="btn btn-outline-danger btn-sm mr-2">
+                                    <i class="item-rating zmdi  zmdi-notifications"></i>
+                                    Subscribe
+                                </span>
+                            @else
+                                <span onclick="subscribe(event)" data-vendorid = "{{ $product->vendor_id }}" style="cursor: pointer" class="btn btn-outline-danger btn-sm mr-2">
+                                    <i class="item-rating zmdi  zmdi-check"></i>
+                                    Unsubscribe
+                                </span>
+                            @endif
                         </div>
                     </div>
                     <hr>
@@ -175,22 +185,22 @@
                         <!-- Nav tabs -->
                         <ul class="nav nav-tabs" role="tablist">
                             <li class="nav-item p-b-10">
-                                <a class="nav-link active" data-toggle="tab" href="#description" role="tab">Description</a>
+                                <a class="nav-link {{ $step == 'about' ? 'show active' : ''}}" href="?step=about#about" role="tab">Description</a>
                             </li>
 
                             <li class="nav-item p-b-10">
-                                <a class="nav-link" data-toggle="tab" href="#information" role="tab">Reviews</a>
+                                <a class="nav-link {{ $step == 'reviews' ? 'show active' : ''}}"  href="?step=reviews#about" role="tab">All Reviews</a>
                             </li>
 
                             <li class="nav-item p-b-10">
-                                <a class="nav-link" data-toggle="tab" href="#reviews" role="tab">Add Review</a>
+                                <a class="nav-link {{ $step == 'new_review' ? 'show active' : ''}}" href="?step=new_review#about"> Add Review</a>
                             </li>
                         </ul>
 
                         <!-- Tab panes -->
                         <div class="tab-content p-t-43">
                             <!-- - -->
-                            <div class="tab-pane fade show active" id="description" role="tabpanel">
+                            <div class="tab-pane fade {{ $step == 'about' ? 'show active' : ''}}" id="description" role="tabpanel">
                                 <div class="how-pos2 p-lr-15-md">
                                     <div class="stext-102 cl6">
                                         {!! $product->description !!}
@@ -199,66 +209,48 @@
                             </div>
 
                             <!-- - -->
-                            <div class="tab-pane fade" id="information" role="tabpanel">
+                            <div class="tab-pane fade {{ $step == 'reviews' ? 'show active' : ''}}" id="information" role="tabpanel">
                                 <div class="row">
                                     <div class="col-sm-10 col-md-8 col-lg-6 m-lr-auto">
-                                        <ul class="p-lr-28 p-lr-15-sm">
-                                            <li class="flex-w flex-t p-b-7">
-                                                <span class="stext-102 cl3 size-205">
-                                                    Weight
-                                                </span>
+                                         <!-- Review -->
+                                         @forelse ($product->reviews() as $review)
+                                         <div class="flex-w flex-t p-b-68">
+                                             <div class="wrap-pic-s size-109 bor0 of-hidden m-r-18 m-t-6">
+                                                 <img src="{{url('storage/' . $review->profile)}}" alt="AVATAR">
+                                             </div>
 
-                                                <span class="stext-102 cl6 size-206">
-                                                    0.79 kg
-                                                </span>
-                                            </li>
+                                             <div class="size-207">
+                                                 <div class="flex-w flex-sb-m p-b-17">
+                                                     <span class="mtext-107 cl2 p-r-20">
+                                                         {{ $review->firstname }} {{ $review->lastname }}
+                                                     </span>
 
-                                            <li class="flex-w flex-t p-b-7">
-                                                <span class="stext-102 cl3 size-205">
-                                                    Dimensions
-                                                </span>
+                                                     <span class="fs-18 cl11">
+                                                         {{-- <i class="zmdi zmdi-star"></i>
+                                                         <i class="zmdi zmdi-star"></i>
+                                                         <i class="zmdi zmdi-star"></i>
+                                                         <i class="zmdi zmdi-star"></i>
+                                                         <i class="zmdi zmdi-star-half"></i> --}}
+                                                         @for ($i = 0; $i < $review->rating; $i++)
+                                                         <i class="zmdi zmdi-star"></i>
+                                                         @endfor
+                                                     </span>
+                                                 </div>
 
-                                                <span class="stext-102 cl6 size-206">
-                                                    110 x 33 x 100 cm
-                                                </span>
-                                            </li>
+                                                 <p class="stext-102 cl6">
+                                                     {{ $review->comment }}
+                                                 </p>
+                                             </div>
+                                         </div>
+                                     @empty
 
-                                            <li class="flex-w flex-t p-b-7">
-                                                <span class="stext-102 cl3 size-205">
-                                                    Materials
-                                                </span>
-
-                                                <span class="stext-102 cl6 size-206">
-                                                    60% cotton
-                                                </span>
-                                            </li>
-
-                                            <li class="flex-w flex-t p-b-7">
-                                                <span class="stext-102 cl3 size-205">
-                                                    Color
-                                                </span>
-
-                                                <span class="stext-102 cl6 size-206">
-                                                    Black, Blue, Grey, Green, Red, White
-                                                </span>
-                                            </li>
-
-                                            <li class="flex-w flex-t p-b-7">
-                                                <span class="stext-102 cl3 size-205">
-                                                    Size
-                                                </span>
-
-                                                <span class="stext-102 cl6 size-206">
-                                                    XL, L, M, S
-                                                </span>
-                                            </li>
-                                        </ul>
+                                     @endforelse
                                     </div>
                                 </div>
                             </div>
 
                             <!-- - -->
-                            <div class="tab-pane fade" id="reviews" role="tabpanel">
+                            <div class="tab-pane fade {{ $step == 'new_review' ? 'show active' : ''}}" id="reviews" role="tabpanel">
                                 <div class="row">
                                     <div class="col-sm-10 col-md-8 col-lg-6 m-lr-auto">
                                         <div class="p-b-30 m-lr-15-sm">
@@ -290,14 +282,16 @@
                                             </div> --}}
 
                                             <!-- Add review -->
-                                            <form class="w-full">
+                                            <form class="w-full" method="POST" action="{{ route('product.review') }}">
+                                                @csrf
+                                                <input type="hidden" value="{{ $product->id }}" name="product_id">
                                                 <h5 class="mtext-108 cl2 p-b-7">
                                                     Add a review
                                                 </h5>
 
-                                                <p class="stext-102 cl6">
+                                                {{-- <p class="stext-102 cl6">
                                                     Your email address will not be published. Required fields are marked *
-                                                </p>
+                                                </p> --}}
 
                                                 <div class="flex-w flex-m p-t-50 p-b-23">
                                                     <span class="stext-102 cl3 m-r-16">
@@ -312,15 +306,22 @@
                                                         <i class="item-rating pointer zmdi zmdi-star-outline"></i>
                                                         <input class="dis-none" type="number" name="rating">
                                                     </span>
+
+                                                </div>
+                                                <div class="invalid-feedback">
+                                                    @error('rating') {{ $message }} @enderror
                                                 </div>
 
                                                 <div class="row p-b-25">
                                                     <div class="col-12 p-b-5">
                                                         <label class="stext-102 cl3" for="review">Your review</label>
-                                                        <textarea class="size-110 bor8 stext-102 cl2 p-lr-20 p-tb-10" id="review" name="review"></textarea>
+                                                        <textarea class="size-110 bor8 stext-102 cl2 p-lr-20 p-tb-10" id="review" name="comment"></textarea>
+                                                    </div>
+                                                    <div class="invalid-feedback">
+                                                        @error('comment') {{ $message }} @enderror
                                                     </div>
 
-                                                    <div class="col-sm-6 p-b-5">
+                                                    {{-- <div class="col-sm-6 p-b-5">
                                                         <label class="stext-102 cl3" for="name">Name</label>
                                                         <input class="size-111 bor8 stext-102 cl2 p-lr-20" id="name" type="text" name="name">
                                                     </div>
@@ -328,7 +329,7 @@
                                                     <div class="col-sm-6 p-b-5">
                                                         <label class="stext-102 cl3" for="email">Email</label>
                                                         <input class="size-111 bor8 stext-102 cl2 p-lr-20" id="email" type="text" name="email">
-                                                    </div>
+                                                    </div> --}}
                                                 </div>
 
                                                 <button class="flex-c-m stext-101 cl0 size-112 bg7 bor11 hov-btn3 p-lr-15 trans-04 m-b-10">
@@ -506,6 +507,33 @@
             //console.log(max);
             document.getElementById("product_modal_stock").dataset.max = max;
             document.getElementById("product_modal_price").innerHTML = '$'+ price;
+        }
+
+        function subscribe(e){
+            let vendorId = e.target.dataset.vendorid;
+
+            fetch(`/market/subscribe/vendor/${vendorId}`, {
+                method : "GET",
+                headers : {
+                    "X-CSRF-TOKEN" : $('meta[name="csrf-token"]').attr('content'),
+                },
+            })
+            .then(response => response.json())
+            .then(json => {
+                if (json.code == 0){
+                    e.target.innerHTML = `
+                    <i class="item-rating zmdi  zmdi-check"></i>
+                        Unsubscribe
+                    `;
+                }
+
+               if (json.code == 1){
+                    e.target.innerHTML = `
+                        <i class="item-rating zmdi  zmdi-notifications"></i>
+                        Subscribe
+                    `;
+                }
+            });
         }
     </script>
 

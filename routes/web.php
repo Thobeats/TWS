@@ -90,6 +90,7 @@ Route::middleware(['auth'])->group(function () {
         Route::post('/saveChat', [HomeController::class, 'saveChat']);
         Route::get('vendor/{id}', [HomeController::class, 'vendor']);
         Route::post('vendor/review', [HomeController::class, 'saveVendorRating'])->name('vendor.review');
+        Route::post('product/review', [ProductController::class, 'saveProductRating'])->name('product.review');
         Route::get('/listing/{product_id}/{color_id}', [ProductController::class,'getItemsByColor']);
         Route::get('/subscribe/vendor/{id}', [VendorSubscribe::class, 'subscribe']);
     });

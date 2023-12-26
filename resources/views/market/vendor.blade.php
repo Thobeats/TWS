@@ -193,9 +193,9 @@
                                                     Add a review
                                                 </h5>
 
-                                                <p class="stext-102 cl6">
+                                                {{-- <p class="stext-102 cl6">
                                                     Your email address will not be published. Required fields are marked *
-                                                </p>
+                                                </p> --}}
 
                                                 <div class="flex-w flex-m p-t-50 p-b-23">
                                                     <span class="stext-102 cl3 m-r-16">
