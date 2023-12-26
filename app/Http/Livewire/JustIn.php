@@ -48,7 +48,7 @@ class JustIn extends Component
                                     ->whereBetween('products.created_at', [now()->startOfWeek(), now()->endOfWeek()])
                                     ->where('users.account_status', 1)
                                     ->join('users', 'users.id', '=' , 'products.vendor_id')
-                                    ->orderBy('created_at','DESC')
+                                    ->orderBy('products.created_at','DESC')
                                     ->limit(5)
                                     ->get();
     }
