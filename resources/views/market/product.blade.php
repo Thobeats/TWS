@@ -146,7 +146,7 @@
                             <i class="zmdi zmdi-star"></i>
                         </div>
                         <div class="reviews">
-                            <a href="" class="btn btn-outline-primary btn-sm">View Reviews</a>
+                            <a href="?step=reviews" class="btn btn-outline-primary btn-sm">View Reviews</a>
                             @if($check == false)
                                 <span onclick="subscribe(event)" data-vendorid = "{{ $product->vendor_id }}" style="cursor: pointer" class="btn btn-outline-danger btn-sm mr-2">
                                     <i class="item-rating zmdi  zmdi-notifications"></i>
