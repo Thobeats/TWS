@@ -49,7 +49,7 @@
                                         <a class="dropdown-item p-2" href="{{ route('customer_profile')}}"><i class="zmdi zmdi-account"></i> My Account</a>
                                         <a class="dropdown-item p-2" href="/customer/orders"><i class="zmdi zmdi-card-giftcard"></i> Orders</a>
                                         <a id="inbox" class="dropdown-item p-2" href="/customer/chat"><i class="zmdi zmdi-inbox"></i> Inbox </a>
-                                        <a class="dropdown-item p-2" href="#"><i class="zmdi zmdi-favorite-outline"></i> Saved Items</a>
+                                        <a class="dropdown-item p-2" href="/customer/wishlists"><i class="zmdi zmdi-favorite-outline"></i> Saved Items</a>
                                     </div>
                                 @endif
 

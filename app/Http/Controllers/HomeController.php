@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Exception;
 use Carbon\Carbon;
+use App\Models\Tag;
 use App\Models\Chat;
 use App\Models\User;
 use App\Models\Order;
@@ -83,7 +84,7 @@ class HomeController extends Controller
                             ->limit(5)
                             ->get()
                             ->map(function($item){
-                                $products = Product::where('vendor_id', $item->id)->limit(4)->get()->toArray();
+                                $products = Product::where('vendor_id', $item->id)->where('publish_status', 1)->limit(4)->get()->toArray();
                                 return [
                                     "vendor_id" => $item->id,
                                     "business_name" => $item->business_name,
@@ -135,8 +136,12 @@ class HomeController extends Controller
     public function shop(Request $request){
         $catgry = $request->get('query');
         $vendors = User::where('role', 2)->select('id', 'business_name as name')->get();
-        return view('market.shop',compact('vendors', 'catgry'));
+        $categories = Category::where('status',1)->get();
+        $tags = Tag::where('status', 1)->get();
+        $cats = explode(",", $catgry);
+        return view('market.shop',compact('vendors', 'catgry', 'categories', 'cats', 'tags'));
     }
+
 
     public function addToWishList($id){
 

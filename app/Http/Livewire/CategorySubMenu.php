@@ -34,7 +34,6 @@ class CategorySubMenu extends Component
         $this->getSubCategories($firstCategory->id,1);
         $this->hasChildren = ParentToChild::select('parent_id')->get()->toArray();
         $this->sub_categories2 = [];
-        $this->url = "/shop?query=$firstCategory->id";
     }
 
     public function getSubCategories($category_id, $step){
@@ -50,7 +49,7 @@ class CategorySubMenu extends Component
             }
             $this->active = $category_id;
 
-            $this->new_arrivals = Product::whereJsonContains('products.category_id', "$category_id")
+            $this->new_arrivals = Product::where('products.publish_status', 1)->whereJsonContains('products.category_id', "$category_id")
                                 ->select('products.pics','products.name','products.id', 'products.price', 'products.vendor_id')
                                 ->orderBy('id', 'DESC')
                                 ->limit(3)
@@ -63,7 +62,7 @@ class CategorySubMenu extends Component
                                 ->get()->toArray();
             $this->active2 = $category_id;
 
-            $this->new_arrivals = Product::whereJsonContains('products.category_id', "$category_id")
+            $this->new_arrivals = Product::where('products.publish_status', 1)->whereJsonContains('products.category_id', "$category_id")
                                 ->select('products.pics','products.name','products.id', 'products.price', 'products.vendor_id')
                                 ->orderBy('id', 'DESC')
                                 ->limit(3)
@@ -72,9 +71,9 @@ class CategorySubMenu extends Component
             if (!empty($this->sub_categories2)){
                 $this->col_lg = 'col-lg-6';
             }
-
-            $this->url = "/shop?query=$category_id";
         }
+
+        $this->url = "/shop?query=$category_id";
 
     }
 

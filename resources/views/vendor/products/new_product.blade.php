@@ -62,7 +62,7 @@
                 <div class="row mt-3">
                   <div class="col-lg-6">
                     <label for="tags" class="form-label">Tags</label>
-                    <select id="tags" name='tags[]' class="js-example-basic-multiple" multiple style="width: 100%">
+                    <select name='tags[]' class="product-tags" multiple style="width: 100%">
                       @if(!empty($tags))
                           @foreach($tags as $tag)
                           <option value="{{ $tag['id'] }}">{{ $tag['name'] }}</option>
@@ -156,12 +156,12 @@
                                   </td>
                                   <td>
                                     <select id="sizes" name='sizes[0][]' class="@error('sizes') is-invalid @enderror" style="width: 100%">
-                                      <option value="">Select Size</option>
-                                      @if(!empty($sizes))
-                                          @foreach($sizes as $size)
-                                          <option value="{{ $size['id'] }}">{{ $size['size_code'] }}</option>
-                                          @endforeach
-                                      @endif
+                                        <option value="">Select Size</option>
+                                        @if(!empty($sizes))
+                                            @foreach($sizes as $size)
+                                            <option value="{{ $size['id'] }}">{{ $size['size_code'] }}</option>
+                                            @endforeach
+                                        @endif
                                     </select>
                                   </td>
                                   <td>

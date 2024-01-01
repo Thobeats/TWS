@@ -3,6 +3,7 @@
 namespace App\View\Composers;
 
 use App\Models\Cart;
+use App\Models\Product;
 use App\Models\Wishlist;
 use Illuminate\View\View;
 use Illuminate\Support\Facades\Auth;
@@ -30,6 +31,11 @@ class MarketComposer
             $wishlists = $wquery->get();
             $view->with(compact('count', 'wcount', 'cart', 'sum', 'wishlists'));
         }
+
+        $galleries = Product::where('publish_status', 1)
+                                ->inRandomOrder()
+                                ->get();
+        $view->with(compact('galleries'));
 
     }
 }

@@ -262,5 +262,29 @@
         </script>
     @endauth
     <script src="{{asset('assets/js/apicalls.js')}}"></script>
+
+    <script>
+        function sort_by(event, sort){
+            $('.sort').removeClass('filter-link-active');
+            $(event.target).addClass('filter-link-active');
+            Livewire.emit('sortBy', sort);
+        }
+
+        function products_by_category(params) {
+            Livewire.emit('productsByCategory', params);
+        }
+
+        function priceSelect(event, price){
+            $('.price').removeClass('filter-link-active');
+            $(event.target).addClass('filter-link-active');
+            Livewire.emit('priceFilter', price);
+        }
+
+        function getTag(event, tag){
+            $('.tag').removeClass('flink-active');
+            $(event.target).addClass('flink-active');
+            Livewire.emit('tagFilter', tag);
+        }
+    </script>
 </body>
 </html>

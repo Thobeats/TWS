@@ -136,6 +136,10 @@
                 tags : true
             });
 
+            $('.product-tags').select2({
+                tags : true
+            });
+
             $('#category').select2();
 
             const steps = [
@@ -268,7 +272,6 @@
             })
             .then(response => response.json())
             .then(json => {
-               console.log(json);
                $(".invalid-feedback").html('');
 
                 if (json.code == 2){
