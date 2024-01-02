@@ -188,24 +188,35 @@
                             <tbody id="record{{$index}}">
                               @php
                                 $index2 = 0;
+                                $rows = [];
+                                
+                                foreach($item as $key => $rec)
+                                {
+                                    $i = 0;
+                                    foreach($rec as $val){
+                                        $rows[$i][$key] = $val;
+                                        $i++;
+                                    }
+                                }
+                                
                               @endphp
-                              @foreach ($item[1] as $key => $itemRecord)
+                              @foreach ($rows as $key => $itemRecord)
                               <tr id="record{{$index.$index2}}">
                                 <td>
-                                  <input type="number" value="{{$itemRecord}}" name="no_in_stock[{{$index}}][]" required class="@error('no_in_stock') is-invalid @enderror">
+                                  <input type="number" value="{{ isset($itemRecord[1]) ? $itemRecord[1] : ''}}" name="no_in_stock[{{$index}}][]" required class="@error('no_in_stock') is-invalid @enderror">
                                 </td>
                                 <td>
                                   <select id="sizes" name='sizes[{{$index}}][]' class="@error('sizes') is-invalid @enderror" style="width: 100%">
                                     <option value="">Select Size</option>
                                     @if(!empty($sizes))
                                         @foreach($sizes as $size)
-                                        <option {{ $item[0][$key] == $size['id'] ? 'selected' : '' }} value="{{ $size['id'] }}">{{ $size['size_code'] }}</option>
+                                        <option {{ isset($itemRecord[0]) && $itemRecord[0] == $size['id'] ? 'selected' : '' }} value="{{ $size['id'] }}">{{ $size['size_code'] }}</option>
                                         @endforeach
                                     @endif
                                   </select>
                                 </td>
                                 <td>
-                                    <input type="text" value="{{ $item[2][$key]}}" name="p_price[{{$index}}][]" required id="">
+                                    <input type="text" value="{{ isset($itemRecord[2]) ? $itemRecord[2] : '' }}" name="p_price[{{$index}}][]" required id="">
                                 </td>
                                 <td>
                                   <button class='btn btn-danger btn-sm' onclick=removeRecord(record{{$index.$index2}},record{{$index}})><i class='bi bi-trash'></i></button>
