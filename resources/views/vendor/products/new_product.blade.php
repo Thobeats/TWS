@@ -62,7 +62,7 @@
                 <div class="row mt-3">
                   <div class="col-lg-6">
                     <label for="tags" class="form-label">Tags</label>
-                    <select name='tags[]' class="product-tags" multiple style="width: 100%">
+                    <select name='tags[]' class="product-tags form-select" multiple style="width: 100%">
                       @if(!empty($tags))
                           @foreach($tags as $tag)
                           <option value="{{ $tag['id'] }}">{{ $tag['name'] }}</option>

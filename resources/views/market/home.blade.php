@@ -193,7 +193,7 @@
             </div>
         </div>
         <div class="my-2 p-2 text-right">
-            <a class="home-view-more" href="/shop">View More</a>
+            <a class="home-view-more js-show-modal-sign-up">View More</a>
         </div>
     </div>
 </section>
@@ -380,7 +380,7 @@
             </div>
         </div>
         <div class="my-2 p-2 text-right">
-            <a class="home-view-more" href="/shop">View More</a>
+            <a class="home-view-more js-show-modal-sign-up" href="#">View More</a>
         </div>
     </div>
 </section>
@@ -436,7 +436,7 @@
             </div>
         </div>
         <div class="my-2 p-2 text-right">
-            <a class="home-view-more" href="/shop">View More</a>
+            <a class="home-view-more" href="#">View More</a>
         </div>
     </div>
 </section>

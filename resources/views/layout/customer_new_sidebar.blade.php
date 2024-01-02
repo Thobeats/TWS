@@ -37,7 +37,7 @@
       <li class="nav-item">
         <a class="nav-link {{ $link == 'saved_items' ? 'active' : ''}}" href="/customer/wishlists/">
           <i class="bi bi-grid"></i>
-          <span>Saved Items</span>
+          <span>Favorites</span>
         </a>
       </li>
 

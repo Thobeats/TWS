@@ -129,7 +129,8 @@ class WishListController extends Controller
                             ->select('wishlists.*', 'products.name', 'products.pics', 'wish_list_categories.category_name')
                             ->get();
             $allCategories = WishListCategory::where('created_by', $user->id)->get();
-            return view('customer.wishlists.all', compact('user', 'allProducts', 'allCategories'));
+            $link = 'saved_items';
+            return view('customer.wishlists.all', compact('user', 'allProducts', 'allCategories', 'link'));
 
         }catch(QueryException $ex){
 

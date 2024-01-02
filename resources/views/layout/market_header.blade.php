@@ -49,7 +49,7 @@
                                         <a class="dropdown-item p-2" href="{{ route('customer_profile')}}"><i class="zmdi zmdi-account"></i> My Account</a>
                                         <a class="dropdown-item p-2" href="/customer/orders"><i class="zmdi zmdi-card-giftcard"></i> Orders</a>
                                         <a id="inbox" class="dropdown-item p-2" href="/customer/chat"><i class="zmdi zmdi-inbox"></i> Inbox </a>
-                                        <a class="dropdown-item p-2" href="/customer/wishlists"><i class="zmdi zmdi-favorite-outline"></i> Saved Items</a>
+                                        <a class="dropdown-item p-2" href="/customer/wishlists"><i class="zmdi zmdi-favorite-outline"></i> Favorites </a>
                                     </div>
                                 @endif
 
@@ -279,62 +279,8 @@
             <img src="images/icons/icon-close2.png" alt="CLOSE">
         </button>
 
-        <div class="container text-dark">
-            {{-- <section class="my-3 p-3">
-                <div class="row">
-                    <div class="col-lg-12">
-                        <p class="display-4 p-2">
-                            New Here?
-                        </p>
-                        <p class="p-2" style="font-size: 18px;">
-                            You can register as a buyer or a seller on our platform....content needed here
-                        </p>
-                    </div>
-                </div>
-            </section> --}}
+        <div class="container">
 
-            <section class="my-3 p-3">
-                <div class="register-cards mx-auto text-light">
-                    <div class="card flex-even mt-4">
-                        <div class="card-body card-buyer">
-                            <div class="card_title">
-                                <span class="text-light">Register as a Buyer</span>
-                            </div>
-
-                            <div class="card_action">
-                                <a href="{{ route('buyerSignup') }}" class="card_action_text text-light">Register now</a>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="card flex-even mt-4 ">
-                        <div class="card-body card-seller">
-                            <div class="card_title">
-                                <span class="text-light">Register as a Seller</span>
-                            </div>
-
-                            <div class="card_action">
-                                <a href="{{ route('sellerSignup') }}" class="card_action_text text-light">Register now</a>
-                            </div>
-                        </div>
-                    </div>
-                    {{-- <div class="col-lg-6">
-                        <div class="card">
-                            <div class="card-body bg-dark">
-                                Register as a buyer
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col-lg-6">
-                        <div class="card">
-                            <div class="card-body bg-dark">
-                                Register as a seller
-                            </div>
-                        </div>
-                    </div> --}}
-                </div>
-            </section>
         </div>
     </div>
 </header>

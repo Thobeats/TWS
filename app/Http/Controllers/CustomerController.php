@@ -282,6 +282,7 @@ class CustomerController extends Controller
         try{
             $user = Auth::user();
             $savedItems = Wishlist::where("user_id", $user->id)->get();
+
             return view('customer.saved_items', compact('user', 'savedItems'));
         }catch(Exception $e){
 
