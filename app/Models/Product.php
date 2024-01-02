@@ -82,13 +82,12 @@ class Product extends Model
     }
 
     public function otherVendorProducts(){
-        $products = Product::where('vendor_id', $this->vendor_id)->whereNot('id', $this->id)->limit(10)->get();
+        $products = Product::where(['vendor_id' => $this->vendor_id, 'publish_status' => 1])->whereNot('id', $this->id)->limit(10)->get();
         return $products;
     }
 
     public function otherProducts(){
-        $products = Product::whereJsonContains('category_id', json_decode($this->category_id,true))->whereNot('id', $this->id)->limit(10)->get();
-
+        $products = Product::where('publish_status', 1)->whereJsonContains('category_id', json_decode($this->category_id,true))->whereNot('id', $this->id)->limit(10)->get();
         return $products;
     }
 
