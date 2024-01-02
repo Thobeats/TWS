@@ -20,7 +20,7 @@
 
 <section class="section dashboard">
 
-     <div class="card">
+   <div class="card">
             <div class="card-body">
               <h5 class="card-title">Edit {{ $product->name }}</h5>
 
@@ -145,7 +145,7 @@
                     <thead>
                       <tr>
                         <th scope="col"></th>
-                        <th scope="col">Colors</th>
+                        <th scope="col">Colors (optional)</th>
                         <th scope="col" colspan="2"></th>
                       </tr>
                     </thead>
@@ -327,7 +327,7 @@
               <div class="row mt-3">
                 <div class="col-lg-12">
                       <label for="pics" class="form-label">Product Pictures</label>
-                      <input id='pics' type="file" name="pics[]" multiple class="form-control @error('pics') is-invalid @enderror">
+                      <input id='pics' type="file" name="pics[]" multiple class="form-control">
                 </div>
                 <div id="pics_error" class="invalid-feedback"></div>
               </div>

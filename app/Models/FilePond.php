@@ -16,15 +16,17 @@ class FilePond extends Model
 
 
     public function saveImage(Request $request,$folder){
+
         if($request->hasFile('pics')){
             $images = $request->file('pics');
             foreach($images as $image){
                $file_name = $image->getClientOriginalName();
                $directory = "public/$folder/". $file_name;
 
-               if(!file_exists($directory)){
+                if(!file_exists($directory))
+                {
                     $image->storeAs($folder,$file_name,"public");
-               }
+                }
 
                return $file_name;
 
@@ -85,7 +87,7 @@ class FilePond extends Model
         //     return response('');
         // }
 
-        $file = $request->filName;
+        $file = $request->fileName;
         $directory = storage_path("app/public/$folder/". $file);
 
         if(file_exists($directory)){

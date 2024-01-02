@@ -21,10 +21,24 @@
     <div class="card">
       <div class="card-body">
         <div class="mt-3 text-center">
-          <span>You can upload</span>
+          <span>You can upload a csv file</span>
           <a class="ml-3 btn btn-outline-primary btn-sm" href="uploadFile">Upload Products</a>
         </div>
       </div>
+    </div>
+
+    <div class="card">
+        <div class="card-body">
+          <div class="mt-3">
+             <h5 class="text-warning">Note</h5>
+             <ol style='font-size:12px;'>
+                <li>Colors are optional and can be created by you the vendor.</li>
+                <li>Should in case you can't find the desired color in the dropdown, type the color in the text field and press enter.</li>
+                <li>Select "No Color" if the product doesn't have a specified color.</li>
+                <li>All sizes are US based.</li>
+             </ol>
+          </div>
+        </div>
     </div>
 
      <div class="card">
@@ -115,7 +129,7 @@
                      <thead>
                         <tr>
                           <th scope="col"></th>
-                          <th scope="col">Colors</th>
+                          <th scope="col">Colors (optional)</th>
                           <th scope="col" colspan="2"></th>
                         </tr>
                       </thead>
@@ -123,14 +137,17 @@
                         <tr>
                           <td></td>
                           <td>
-                            <select id="colors" name='colors[]' class="color-select" style="width: 100%">
-                              <option value="no_color">No Color</option>
-                              @if(!empty($colors))
-                                  @foreach($colors as $color)
-                                  <option value="{{ $color['id'] }}">{{ $color['name'] }}</option>
-                                  @endforeach
-                              @endif
-                            </select>
+
+                            <div class="form-group">
+                                <select id="colors" name='colors[]' class="color-select form-select p-2">
+                                    <option value="no_color">No Color</option>
+                                    @if(!empty($colors))
+                                        @foreach($colors as $color)
+                                        <option value="{{ $color['id'] }}">{{ $color['name'] }}</option>
+                                        @endforeach
+                                    @endif
+                                </select>
+                            </div>
 
                           </td>
                          <td>
@@ -248,7 +265,7 @@
                 <div class="row mt-3">
                     <div class="col-lg-12">
                         <label for="pics" class="form-label">Product Pictures</label>
-                        <input id='pics' type="file"   name="pics[]" multiple class="form-control">
+                        <input id='pics' type="file" name="pics[]" multiple class="form-control">
                         <div id="pics_error" class="invalid-feedback"></div>
                     </div>
                 </div>

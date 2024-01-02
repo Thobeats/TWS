@@ -178,6 +178,7 @@
             acceptedFileTypes: ['image/png','image/jpg','image/jpeg'],
             allowImageValidateSize: true,
             imagePreviewHeight: 170,
+            maxFileSize : "3mb",
             maxFiles : 3,
           //  required : true,
             files : [
@@ -302,6 +303,7 @@
             tinymce.triggerSave();
             let formData = $("#editProduct").serialize();
             formData += action;
+
             fetch("{{ url('/vendor/products/update') }}", {
                 method : "PUT",
                 headers : {
