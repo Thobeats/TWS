@@ -480,6 +480,73 @@
             document.getElementById("chatForm").style.display = 'block';
         }
 
+        const messageWrapper = document.getElementById('messageWrapper');
+        const message = document.getElementById('textArea');
+        const recipient = "{{$product->vendor_id}}";
+        const time = "{{ date_format(date_create(now()), 'H:i a | M d') }}";
+        socket.onopen = function(e) {
+            console.log("[open] Connection established");
+        };
+
+        function sendMessage(){
+            if(message.value == ""){
+                return;
+            }
+
+            let data = {
+                recipient : recipient,
+                from : "{{$user->id}}",
+                message : message.value,
+                source : "customer",
+                time : time,
+                customerName : "{{ $user->fullname()}}",
+                _token : "{{ csrf_token() }}"
+            };
+
+            console.log(data);
+
+            myMessage(data);
+            saveChat(data);
+            message.value = "";
+
+        }
+
+        function myMessage(data){
+            let myTemplate = `
+                <div class="mt-4 text-right home-bg-color">
+                    <p class="p-2">${data.message}</p>
+                    <span class="badge text-light">${data.time}</span>
+                </div>
+            `;
+            messageWrapper.innerHTML += myTemplate;
+        }
+
+        function incomingMessage(data){
+            let responseTemplate = `
+                <div class="mt-4 text-left bg-light home-text">
+                    <p class="p-2">${data.message}</p>
+                    <span class="badge home-text">${data.time}</span>
+                </div>
+            `;
+            messageWrapper.innerHTML += responseTemplate;
+        }
+
+
+        function saveChat(data){
+            fetch('/market/saveChat', {
+                method : "POST",
+                headers : {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            })
+            .then(response=>response.json())
+            .then(json=>{
+                data.chat_id = json.message.id;
+                socket.send(JSON.stringify(data));
+            })
+        }
+
         function getListing(e){
             let id = e.target.value;
             let product = "{{ $productId }}";

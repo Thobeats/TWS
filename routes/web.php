@@ -93,6 +93,7 @@ Route::middleware(['auth'])->group(function () {
         Route::post('product/review', [ProductController::class, 'saveProductRating'])->name('product.review');
         Route::get('/listing/{product_id}/{color_id}', [ProductController::class,'getItemsByColor']);
         Route::get('/subscribe/vendor/{id}', [VendorSubscribe::class, 'subscribe']);
+        Route::get('/get/wishlist', [WishListController::class, 'getWishList']);
     });
 
     //Cart

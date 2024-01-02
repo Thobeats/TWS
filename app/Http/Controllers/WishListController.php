@@ -118,6 +118,40 @@ class WishListController extends Controller
         }
     }
 
+    public function getWishList(){
+        try{
+            $user = Auth::user();
+            // Get all products in wishlist
+            $allProducts = Wishlist::where('user_id', $user->id)
+                            ->leftjoin('wish_list_categories', 'wishlists.wish_category_id', '=', 'wish_list_categories.id')
+                            ->join('products', 'wishlists.product_id', '=', 'products.id')
+                            ->select('wishlists.*', 'products.name', 'products.pics')
+                            ->get();
+            $li = "";
+
+            if ($allProducts->count()){
+                foreach($allProducts as $key => $prd){
+                    $li .= "<li class='header-cart-item flex-w flex-t m-b-12'>
+                                <div class='header-cart-item-img'>
+                                    <img src='" . url('storage/products/'. json_decode($prd->pics,true)[0]) . "' alt='IMG' width='100px'>
+                                </div>
+
+                                <div class='header-cart-item-txt p-t-8'>
+                                    <a href='#' class='header-cart-item-name m-b-18 hov-cl1 trans-04'>
+                                        $prd->name
+                                    </a>
+                                </div>
+                            </li>";
+                }
+            }
+
+            return $li;
+
+        }catch(Exception $e){
+
+        }
+    }
+
     public function allWishList(){
         try{
             $user = Auth::user();
