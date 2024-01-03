@@ -50,8 +50,8 @@
             @forelse ($vendors as $vendor)
                 <div class="col-lg-3 mt-2">
                     <div class="block2">
-                        <div class="img-wrapper" style="height: 300px;">
-                            <img src="{{ $vendor->profile != null ? url('storage/'. $vendor->profile)  : asset('images/blank.jpg') }}" class="card-img-top h-100" alt="...">
+                        <div class="img-wrapper" style="height: 280px;">
+                            <img src="{{ $vendor->profile != null ? url('storage/'. $vendor->profile)  : asset('images/blank.jpg') }}" class="card-img-top h-full rounded-circle" alt="...">
                         </div>
                         <div class="p-2">
                             <div class="d-flex justify-content-between">
