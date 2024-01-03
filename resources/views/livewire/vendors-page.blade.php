@@ -50,17 +50,12 @@
             @forelse ($vendors as $vendor)
                 <div class="col-lg-3 mt-2">
                     <div class="block2">
-                        <div class="img-wrapper" style="height: 280px;">
-                            <img src="{{ $vendor->profile != null ? url('storage/'. $vendor->profile)  : asset('images/blank.jpg') }}" class="card-img-top h-full rounded-circle" alt="...">
+                        <div class="img-wrapper" style="height: 250px">
+                            <img src="{{ $vendor->profile != null ? url('storage/'. $vendor->profile)  : asset('images/blank.jpg') }}" class="card-img-top h-full rounded-circle" style="object-fit: contain;" alt="{{$vendor->business_name}}">
                         </div>
                         <div class="p-2">
-                            <div class="d-flex justify-content-between">
-                                <div>
-                                    <h6 class="my-2">{{ $vendor->business_name }}</h6>
-                                </div>
-                                <div>
-                                    <a class="btn btn-outline-dark btn-sm" href="/market/vendor/{{$vendor->id}}">View</a>
-                                </div>
+                            <div>
+                                <a class="stext-102 home-text" href="/market/vendor/{{$vendor->id}}">{{ $vendor->business_name }}</a>
                             </div>
                         </div>
                     </div>
