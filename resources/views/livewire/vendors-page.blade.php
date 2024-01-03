@@ -49,9 +49,9 @@
         <div class="row mt-2">
             @forelse ($vendors as $vendor)
                 <div class="col-lg-3 mt-2">
-                    <div class="block2">
+                    <div class="block2 border">
                         <div class="img-wrapper" style="height: 250px">
-                            <img src="{{ $vendor->profile != null ? url('storage/'. $vendor->profile)  : asset('images/blank.jpg') }}" class="card-img-top h-full rounded-circle" style="object-fit: contain;" alt="{{$vendor->business_name}}">
+                            <img src="{{ $vendor->profile != null ? url('storage/'. $vendor->profile)  : asset('images/blank.jpg') }}" class="card-img-top h-full rounded-circle" style="object-fit: cover;" alt="{{$vendor->business_name}}">
                         </div>
                         <div class="p-2">
                             <div>
