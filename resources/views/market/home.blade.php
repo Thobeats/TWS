@@ -10,10 +10,10 @@
         <div class="slick1">
             @forelse ($topVendors as $tv)
             <div class="item-slick1" data-caption="{{$tv['business_name']}}" data-thumb="{{ $tv['business_banner'] != "" ? url('storage/' . $tv['business_banner']) : url('images/Welcome.png')}}">
-                <div class="container h-full">
+                <div class="container-fluid h-full">
                     {{-- Business Banner --}}
                     <a href="/market/vendor/{{$tv['vendor_id']}}">
-                        <div class="h-50 mx-auto w-75" style="background-image: url('{{ $tv['business_banner'] != "" ? url('storage/' . $tv['business_banner']) : url('images/Welcome.png')}}'); background-size:cover; background-position: left center;">
+                        <div class="h-50 mx-auto" style="background-image: url('{{ $tv['business_banner'] != "" ? url('storage/' . $tv['business_banner']) : url('images/Welcome.png')}}'); background-size:cover; background-position: left center;">
                         </div>
                     </a>
                     <div class="wrap-slick2">
