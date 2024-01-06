@@ -66,6 +66,13 @@
         .select2-container--default .select2-selection--multiple{
             border-color: #dee2e6;
         }
+        .home-input{
+            padding: 5px;
+            border:1px solid #ccc;
+            outline: none;
+            width: 100%;
+            border-radius: 10px;
+        }
     </style>
 
  <script>
@@ -313,7 +320,6 @@
             })
             .then(response => response.json())
             .then(json => {
-               console.log(json);
                $(".invalid-feedback").html('');
 
                 if (json.code == 2){
@@ -342,6 +348,274 @@
 </script>
 
 <script>
+    var variantListings = [];
+
+    function addNewVariant(){
+        let variantForm = document.getElementById('variants-form');
+        let id = variantForm.children.length;
+        let newVariantRecord = document.createElement('div');
+        newVariantRecord.setAttribute('id', 'record'+id);
+        newVariantRecord.innerHTML = `
+            <div class='form-group mb-4' style='font-size:12px !important;'>
+                <div class='border my-2 p-2'>
+                    <div class='text-end'>
+                        <span class='text-danger' onclick='removeParentRecord("record${id}", "variants-form")' style='font-size:14px;cursor:pointer;'>
+                            <i class="bi bi-dash-circle"></i>
+                        </span>
+                    </div>
+                    <select id="variants${id}" name='variant[${id}][]' style="width: 400px" class='p-2' onchange='createVariantValue(event, ${id})'>
+                        <option value="">Select Variant</option>
+                        @foreach ($variants as $variant)
+                        <option value='{{$variant->id}}' data-value='{{$variant->name}}' data-placeholder='{{$variant->placeholder}}'>{{$variant->name}}</option>
+                        @endforeach
+                    </select>
+
+                    <table style='width: 400px' class='table table-borderless'>
+                        <colgroup>
+                            <col span="1" style="width: 85%;">
+                            <col span="1" style="width: 15%;">
+                        </colgroup>
+                        <tbody id='variant-value${id}'>
+                        </tbody>
+                    </table>
+                </div>
+                <div id='add-variant-value${id}' class='text-end'>
+                </div>
+            </div>
+        `;
+        variantForm.appendChild(newVariantRecord);
+    }
+
+    function createVariantValue(event,id){
+        let selectedIndex = event.target.selectedIndex;
+        let selectedOption = event.target.options[selectedIndex];
+        let placeHolder = selectedOption.dataset.placeholder;
+        let selectedValue = selectedOption.dataset.value;
+        let variantValueContainer = document.getElementById("variant-value"+id);
+        variantValueContainer.innerHTML = '';
+        let valueId = variantValueContainer.children.length;
+        let newValueRecord = document.createElement('tr');
+        newValueRecord.setAttribute('id',`${event.target.value}_${valueId}`)
+        newValueRecord.innerHTML = `
+            <td>
+                <input type='text' name='variantValue${event.target.value}[]' class='home-input inputClass${id}' placeholder='${placeHolder}'>
+            </td>
+            <td style='vertical-align:middle;'>
+                <span class='text-danger' onclick='removeRecord("${event.target.value}_${valueId}", "variant-value${id}")' style='font-size:15px; cursor:pointer;'>
+                    <i class="bi bi-dash-circle"></i>
+                </span>
+            </td>
+        `;
+
+        variantValueContainer.appendChild(newValueRecord);
+        document.getElementById('add-variant-value'+id).innerHTML = `
+            <button type="button" onclick="saveVariantValue('${id}', '${selectedValue}', 'inputClass${id}')" class="btn btn-success btn-sm" style='font-size:10px'>
+                <i class="bi bi-check-circle"></i> Done
+            </button>
+            <button type="button" onclick="addVariantValue('${event.target.value}', '${id}', '${placeHolder}')" class="btn btn-primary btn-sm me-1" style='font-size:10px'>
+                <i class="bi bi-plus-circle-fill"></i> Add Value
+            </button>
+        `;
+    }
+
+    function addVariantValue(type, id, placeholder){
+        let variantValueContainer = document.getElementById("variant-value"+id);
+        let valueId = variantValueContainer.children.length;
+        let newValueRecord = document.createElement('tr');
+        newValueRecord.setAttribute('id',`${type}_${valueId}`)
+        newValueRecord.innerHTML = `
+            <td>
+                <input type='text' name='variantValue${type}[]' class='home-input inputClass${id}' placeholder='${placeholder}'>
+            </td>
+            <td style='vertical-align:middle;'>
+                <span onclick='removeRecord("${type}_${valueId}", "variant-value${id}")' class='text-danger' style='font-size:15px;cursor:pointer;'>
+                    <i class="bi bi-dash-circle"></i>
+                </span>
+            </td>
+        `;
+        variantValueContainer.appendChild(newValueRecord);
+    }
+
+    function saveVariantValue(id, variant, inputClass){
+        let values = document.querySelectorAll(`.${inputClass}`);
+        let arrayValues = [];
+        let container = document.querySelector(`#record${id}`);
+        let vals = '';
+        let validateError = false;
+
+        values.forEach((item) => {
+
+            if (item.value == ''){
+                item.style.border = '1px solid red';
+                validateError = true;
+            }
+
+            arrayValues.push(item.value);
+            variantListings[variant] = arrayValues;
+            vals += `<span class='badge bg-secondary me-2'> ${item.value} </span>`;
+        });
+
+        if (validateError){
+            return;
+        }
+
+        let card = `
+        <div class='card'>
+            <div class='card-body pt-2'>
+                <div class='text-end'>
+                    <span class='text-dark' onclick='editRecord("${variant}", "${arrayValues}", ${id})' style='font-size:14px;cursor:pointer;'>
+                        <i class="bi bi-pencil"></i> Edit
+                    </span>
+                </div>
+                <h6>${variant}</h6>
+                <div>${vals}</div>
+            </div>
+        </div>
+        `;
+
+        container.innerHTML = card;
+        processVariantValues();
+    }
+
+    function editRecord(variant,values, id){
+        document.getElementById('table-variant').classList.add('d-none');
+        let container = document.querySelector(`#record${id}`);
+        let variants = {!! $variants !!};
+        let options = '';
+        let select = '';
+        let selectedIndex = '';
+        let variantValues = '';
+        let placeHolder = '';
+        values = values.split(",");
+        for(i in variants){
+            if (variant == variants[i].name){
+                select = 'selected';
+                selectedIndex = variants[i].id;
+                placeHolder = variants[i].placeholder
+            }else{
+                select = '';
+            }
+            options += `
+                <option value='${variants[i].id}' ${select} data-value='${variants[i].name}' data-placeholder='${variants[i].placeholder}'>${variants[i].name}</option>
+            `;
+        }
+
+        for(j = 0; j < values.length; j++){
+            variantValues += `
+            <tr id='${selectedIndex}_${j}'>
+                <td>
+                    <input type='text' name='variantValue${selectedIndex}[]' class='home-input inputClass${id}' placeholder='${placeHolder}' value='${values[j]}'>
+                </td>
+                <td style='vertical-align:middle;'>
+                    <span class='text-danger' onclick='removeRecord("${selectedIndex}_${j}", "variant-value${id}")' style='font-size:15px; cursor:pointer;'>
+                        <i class="bi bi-dash-circle"></i>
+                    </span>
+                </td>
+            </tr>
+            `;
+        }
+
+        container.innerHTML = `
+        <div class='form-group mb-4' style='font-size:12px !important;'>
+                <div class='border my-2 p-2'>
+                    <div class='text-end'>
+                        <span class='text-danger' onclick='removeParentRecord("record${id}", "variants-form", "${variant}")' style='font-size:14px;cursor:pointer;'>
+                            <i class="bi bi-dash-circle"></i>
+                        </span>
+                    </div>
+                    <select id="variants${id}" name='variant[${id}][]' style="width: 400px" class='p-2' onchange='createVariantValue(event, ${id})'>
+                        <option value="">Select Variant</option>
+                        ${options}
+                    </select>
+
+                    <table style='width: 400px' class='table table-borderless'>
+                        <colgroup>
+                            <col span="1" style="width: 85%;">
+                            <col span="1" style="width: 15%;">
+                        </colgroup>
+                        <tbody id='variant-value${id}'>
+                            ${variantValues}
+                        </tbody>
+                    </table>
+                </div>
+                <div id='add-variant-value${id}' class='text-end'>
+                    <button type="button" onclick="saveVariantValue('${id}', '${variant}', 'inputClass${id}')" class="btn btn-success btn-sm" style='font-size:10px'>
+                        <i class="bi bi-check-circle"></i> Done
+                    </button>
+                    <button type="button" onclick="addVariantValue('${selectedIndex}', '${id}', '${placeHolder}')" class="btn btn-primary btn-sm me-1" style='font-size:10px'>
+                        <i class="bi bi-plus-circle-fill"></i> Add Value
+                    </button>
+                </div>
+            </div>
+        `;
+    }
+
+    function removeRecord(id,parent){
+        let variantValueContainer = document.getElementById(parent);
+        variantValueContainer.removeChild(variantValueContainer.children.namedItem(`${id}`));
+    }
+
+    function removeParentRecord(id,parent,variant=0)
+    {
+        let variantValueContainer = document.getElementById(parent);
+        variantValueContainer.removeChild(variantValueContainer.children.namedItem(`${id}`));
+
+        if (variant != 0){
+            delete variantListings[variant]
+            processVariantValues();
+        }
+    }
+
+    function processVariantValues(){
+
+        let listings = Object.values(variantListings);
+        let result = generateCombinations(listings)
+        let variantTable = ``;
+
+        for(i in result){
+            let listingName = result[i].join(" / ");
+            variantTable += `
+            <tr>
+                <td>
+                    ${listingName}
+                    <input type='hidden' name="record[${i}]['listing_name']" value="${listingName}">
+                </td>
+                <td>
+                    <input type="number" name="record[${i}]['listing_no_in_stock']" class="">
+                </td>
+                <td>
+                    <input type="number" name="record[${i}]['listing_purchase_limit']" >
+                </td>
+                <td>
+                    <input type="text" name="record[${i}]['listing_price']" id="">
+                </td>
+            </tr>
+            `;
+        }
+
+        document.getElementById('variant-table').innerHTML = variantTable;
+        document.getElementById('table-variant').classList.remove('d-none');
+    }
+
+    function generateCombinations(arrays) {
+        const result = [];
+        const helper = (currentIndex, currentCombination) => {
+            if (currentIndex === arrays.length) {
+            result.push(currentCombination.slice()); // Clone the combination to avoid references
+            return;
+            }
+
+            for (const value of arrays[currentIndex]) {
+            currentCombination.push(value);
+            helper(currentIndex + 1, currentCombination);
+            currentCombination.pop();
+            }
+        };
+
+        helper(0, []);
+
+        return result;
+    }
 
     function addInventory(){
         let inventory = document.getElementById('inventory');

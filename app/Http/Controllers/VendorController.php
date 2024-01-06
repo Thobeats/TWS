@@ -14,6 +14,7 @@ use App\Models\Vendor;
 use App\Models\Package;
 use App\Models\Product;
 use App\Models\Section;
+use App\Models\Variant;
 use App\Models\Category;
 use App\Models\Customer;
 use App\Models\EINModel;
@@ -25,6 +26,7 @@ use App\Models\ShippingType;
 use App\Models\Subscription;
 use Illuminate\Http\Request;
 use App\Imports\ProductImport;
+use App\Models\ProductVariant;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
@@ -664,11 +666,12 @@ class VendorController extends Controller
         $cats = $this->buildTree($categories);
         $this->buildTemplate($cats);
         $categoryTemp = $this->category_template;
+        $variants = Variant::where('status', 1)->get();
 
         //Sizes
         $sizes = Size::select('id', 'size_code')->get()->toArray();
         $colors = Color::select('id', 'name')->get()->toArray();
-        return view('vendor.products.new_product', compact('tags', 'categoryTemp','sizes', 'colors','sections','shipping'));
+        return view('vendor.products.new_product', compact('variants','tags', 'categoryTemp','sizes', 'colors','sections','shipping'));
     }
 
     protected function buildTree($elements, $parent_id = 0){
@@ -712,7 +715,6 @@ class VendorController extends Controller
                 parse_str($request->getContent(), $formData);
                 $request = new Request($formData);
 
-             //   return $request->all();
             if($request->has('save')){
                 $ps = 1;
 
@@ -721,10 +723,10 @@ class VendorController extends Controller
                     'description' => 'required|string',
                     'category_id' => 'required|array',
                     'tags' => 'required|array',
-                    'sizes.*.*' => 'required|string',
-                    'p_price.*.*' => 'required|string',
-                    'colors.*' => 'required|string',
-                    'no_in_stock.*.*' => 'required|integer',
+                    'record.*.listing_name' => 'required|string',
+                    'record.*.listing_no_in_stock' => 'required|string',
+                    'record.*.listing_purchase_limit' => 'required|string',
+                    'record.*.listing_price' => 'required|string',
                     'pics' => 'required|array',
                     'shipping_fee' => 'integer',
                     'sections' => 'required|array',
@@ -752,10 +754,10 @@ class VendorController extends Controller
                     'description' => 'nullable|string',
                     'category_id' => 'nullable|array',
                     'tags' => 'nullable|array',
-                    'sizes.*' => 'nullable|array',
-                    'p_price.*' => 'nullable|array',
-                    'colors' => 'nullable|array',
-                    'no_in_stock.*' => 'nullable|array',
+                    'record.*.listing_name' => 'nullable|string',
+                    'record.*.listing_no_in_stock' => 'nullable|string',
+                    'record.*.listing_purchase_limit' => 'nullable|string',
+                    'record.*.listing_price' => 'nullable|string',
                     'pics' => 'nullable|array',
                     'shipping_fee' => 'integer',
                     'sections' => 'nullable|array',
@@ -777,32 +779,41 @@ class VendorController extends Controller
                 ];
             }
 
+            //Handle Variants
+
             $pics = $request->pics;
-            $item_listing = [];
-            $priceSum = 0;
+            // $item_listing = [];
+            // $priceSum = 0;
+            // $priceCount = 0;
+
+            // for ($i=0; $i < count($request->colors); $i++) {
+            //     $color = $request->colors[$i];
+            //     if ($color == 'no_color'){
+            //         $color = 234990;
+            //     }else {
+            //         if(!$this->findColor($color))
+            //         {
+            //             $color = $this->saveColor($color);
+            //         }
+            //     }
+
+            //     $listing = [
+            //         $request->sizes[$i],
+            //         $request->no_in_stock[$i],
+            //         $request->p_price[$i]
+            //     ];
+
+            //     $priceSum += array_sum($request->p_price[$i]);
+            //     $priceCount += count($request->p_price[$i]);
+
+            //     $item_listing[$color] = $listing;
+            // }
+
             $priceCount = 0;
-
-            for ($i=0; $i < count($request->colors); $i++) {
-                $color = $request->colors[$i];
-                if ($color == 'no_color'){
-                    $color = 234990;
-                }else {
-                    if(!$this->findColor($color))
-                    {
-                        $color = $this->saveColor($color);
-                    }
-                }
-
-                $listing = [
-                    $request->sizes[$i],
-                    $request->no_in_stock[$i],
-                    $request->p_price[$i]
-                ];
-
-                $priceSum += array_sum($request->p_price[$i]);
-                $priceCount += count($request->p_price[$i]);
-
-                $item_listing[$color] = $listing;
+            $priceSum = 0;
+            foreach ($request->record as $record){
+                $priceSum += $record["'listing_price'"];
+                $priceCount++;
             }
 
             $request->merge(['price' => ceil($priceSum / $priceCount)]);
@@ -811,21 +822,24 @@ class VendorController extends Controller
             // Attach the Vendor Id to the request
             $request->merge(['vendor_id' => $user->id,
                             'tags' => json_encode($request->tags),
-                            'item_listing' => json_encode($item_listing),
+                            // 'item_listing' => json_encode($item_listing),
                             'pics' => json_encode($pics),
                             'category_id' => json_encode($request->category_id),
                             'section_id' => json_encode($request->sections),
                         ]);
 
             //Create a new product
-            Product::create($request->only('vendor_id',
+            $product = Product::create($request->only('vendor_id',
                                 'name','description',
                                 'tags',
                                 'pics','category_id','price',
                                 'publish_status','section_id',
-                                'shipping_fee', 'sku','item_listing','moq'
+                                'shipping_fee', 'sku','moq'
                             ));
-
+            $variant = ProductVariant::create([
+                'product_id' => $product->id,
+                'variant_to_values' => json_encode($request->record),
+            ]);
             // Return view with Success report
             toastr()->success('New Product Saved');
 

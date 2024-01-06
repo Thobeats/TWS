@@ -17,14 +17,14 @@
                         </div>
                     </a>
                     <div class="wrap-slick2">
-                        <div class="slick2">
+                        <div class="slick2 container">
                             @foreach ($tv['products'] as $product)
-                                <a href="/market/product/{{$product['id']}}">
+                                <a href="/market/product/{{$product['id']}}" style="width:fit-content;">
                                     <div class="item-slick2 p-l-15 p-r-15 p-t-15 p-b-15">
                                         <!-- Block2 -->
                                         <div class="block2">
                                             <div class="block3-pic hov-img3">
-                                                <img src="{{ json_decode($product['pics'],true) != [] ? url('storage/products/'. json_decode($product['pics'],true)[0]) : '' }}" alt="IMG-PRODUCT">
+                                                <img class="" src="{{ json_decode($product['pics'],true) != [] ? url('storage/products/'. json_decode($product['pics'],true)[0]) : '' }}" alt="IMG-PRODUCT">
                                             </div>
                                         </div>
                                     </div>
