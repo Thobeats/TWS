@@ -27,20 +27,7 @@
       </div>
     </div>
 
-    <div class="card">
-        <div class="card-body">
-          <div class="mt-3">
-             <h5 class="text-warning">Note</h5>
-             <ol style='font-size:12px;'>
-                <li>Colors are optional and can be created by you the vendor.</li>
-                <li>Should in case you can't find the desired color in the dropdown, type the color in the text field and press enter.</li>
-                <li>Select "No Color" if the product doesn't have a specified color.</li>
-                <li>All sizes are US based.</li>
-             </ol>
-          </div>
-        </div>
-    </div>
-
+ 
         <div class="card">
             <div class="card-body">
               <h5 class="card-title">Add New Product</h5>

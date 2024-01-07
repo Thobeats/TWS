@@ -202,7 +202,6 @@
             server : {
                 process : "/api/saveImage/products",
                 revert : (fileName)=>{
-                    console.log(fileName)
                     fetch(`/api/deleteImage/products?fileName=${fileName}`, {
                           method: "DELETE"
                         }).then(res => res.text())
@@ -286,7 +285,6 @@
                     // Validation Error
                     for(x in json.body){
                         let inputError = x.split(".");
-                        console.log(json.body);
                         validationHandler(inputError[0], json.body[x]);
                     }
                 }
@@ -326,7 +324,6 @@
                     // Validation Error
                     for(x in json.body){
                         let inputError = x.split(".");
-                        console.log(json.body);
                         validationHandler(inputError[0], json.body[x]);
                     }
                 }
@@ -349,12 +346,22 @@
 
 <script>
     var variantListings = [];
+    var selectedVariants = [];
 
     function addNewVariant(){
         let variantForm = document.getElementById('variants-form');
         let id = variantForm.children.length;
         let newVariantRecord = document.createElement('div');
         newVariantRecord.setAttribute('id', 'record'+id);
+        let variants = {!! $variants !!}
+        let variant_temp = '';
+        for(i in variants){
+            let slct = Object.values(selectedVariants).includes(variants[i]['name']) ? 'disabled' : '';
+            variant_temp += `
+            <option value='${variants[i]['id']}' data-value='${variants[i]['name']}' ${slct} data-placeholder='${variants[i]['placeholder']}'>${variants[i]['name']}</option>
+            `;
+        }
+
         newVariantRecord.innerHTML = `
             <div class='form-group mb-4' style='font-size:12px !important;'>
                 <div class='border my-2 p-2'>
@@ -365,9 +372,7 @@
                     </div>
                     <select id="variants${id}" name='variant[${id}][]' style="width: 400px" class='p-2' onchange='createVariantValue(event, ${id})'>
                         <option value="">Select Variant</option>
-                        @foreach ($variants as $variant)
-                        <option value='{{$variant->id}}' data-value='{{$variant->name}}' data-placeholder='{{$variant->placeholder}}'>{{$variant->name}}</option>
-                        @endforeach
+                        ${variant_temp}
                     </select>
 
                     <table style='width: 400px' class='table table-borderless'>
@@ -407,6 +412,14 @@
             </td>
         `;
 
+
+        if(Object.values(selectedVariants).includes(selectedOption.dataset.value))
+        {
+            alert(`${selectedOption.dataset.value} is selected`);
+            return;
+        }
+
+        selectedVariants[`record${id}`] = selectedOption.dataset.value;
         variantValueContainer.appendChild(newValueRecord);
         document.getElementById('add-variant-value'+id).innerHTML = `
             <button type="button" onclick="saveVariantValue('${id}', '${selectedValue}', 'inputClass${id}')" class="btn btn-success btn-sm" style='font-size:10px'>
@@ -559,6 +572,7 @@
     {
         let variantValueContainer = document.getElementById(parent);
         variantValueContainer.removeChild(variantValueContainer.children.namedItem(`${id}`));
+        delete selectedVariants[id];
 
         if (variant != 0){
             delete variantListings[variant]
