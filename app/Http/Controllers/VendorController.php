@@ -714,7 +714,6 @@ class VendorController extends Controller
             try{
                 parse_str($request->getContent(), $formData);
                 $request = new Request($formData);
-
             if($request->has('save')){
                 $ps = 1;
 
@@ -723,10 +722,10 @@ class VendorController extends Controller
                     'description' => 'required|string',
                     'category_id' => 'required|array',
                     'tags' => 'required|array',
-                    'record.*.listing_name' => 'required|string',
-                    'record.*.listing_no_in_stock' => 'required|string',
-                    'record.*.listing_purchase_limit' => 'required|string',
-                    'record.*.listing_price' => 'required|string',
+                    "record.*.'listing_name'" => 'nullable|string',
+                    "record.*.'listing_no_in_stock'" => 'nullable|string',
+                    "record.*.'listing_purchase_limit'" => 'nullable|string',
+                    "record.*.'listing_price'" => 'nullable|string',
                     'pics' => 'required|array',
                     'shipping_fee' => 'integer',
                     'sections' => 'required|array',
@@ -754,10 +753,10 @@ class VendorController extends Controller
                     'description' => 'nullable|string',
                     'category_id' => 'nullable|array',
                     'tags' => 'nullable|array',
-                    'record.*.listing_name' => 'nullable|string',
-                    'record.*.listing_no_in_stock' => 'nullable|string',
-                    'record.*.listing_purchase_limit' => 'nullable|string',
-                    'record.*.listing_price' => 'nullable|string',
+                    "record.*.'listing_name'" => 'nullable|string',
+                    "record.*.'listing_no_in_stock'" => 'nullable|string',
+                    "record.*.'listing_purchase_limit'" => 'nullable|string',
+                    "record.*.'listing_price'" => 'nullable|string',
                     'pics' => 'nullable|array',
                     'shipping_fee' => 'integer',
                     'sections' => 'nullable|array',
@@ -770,7 +769,7 @@ class VendorController extends Controller
             }
 
             $request->merge(['publish_status' => $ps]);
-
+            
             if($validator->fails()){
                 return [
                     "code" => 2,
