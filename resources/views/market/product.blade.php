@@ -94,10 +94,7 @@
                                             <div class="size-204 respon6-next">
                                                 <div class="rs1-select2 bor8 bg0">
                                                     <select class="js-select2" name="size" id="product_modal_size" onchange="getNoInStock(event)">
-                                                       @forelse ($item[0]['listing'] as $listing)
-                                                            <option data-max="{{$listing['no_in_stock']}}" data-price="{{$listing['price']}}" value="{{$listing['size_id']}}">{{ $listing['size'] }}</option>
-                                                       @empty
-                                                       @endforelse
+                                                       
                                                     </select>
                                                     <div class="dropDownSelect2"></div>
                                                 </div>
