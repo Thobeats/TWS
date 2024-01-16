@@ -50,80 +50,72 @@
                             </div>
                         </div>
 
-                        <div class="col-md-6 col-lg-5 p-b-30">
-                            <div class="p-r-50 p-t-5 p-lr-0-lg">
-                                <div class="d-flex justify-content-between">
-                                    <h4 class="mtext-106 cl2 js-name-detail p-b-14" id="product_modal_name">
-                                        {{$product->name}}
-                                    </h4>
-                                    <div>
-                                        <a href="#" class="ltext-102 mt-4 cl3 hov-cl1 trans-04 lh-10 p-lr-5 p-tb-2 js-addwish-detail tooltip100" data-tooltip="Add to Wishlist">
-                                            <i class="zmdi zmdi-favorite-outline"></i>
-                                        </a>
-                                    </div>
+                        @livewire('product', ['productName' => $product->name, 'price' => $product->price, 'productId' => $product->id])
+
+                    {{-- <div class="col-md-6 col-lg-5 p-b-30">
+                        <div class="p-r-50 p-t-5 p-lr-0-lg">
+                            <div class="d-flex justify-content-between">
+                                <h4 class="mtext-106 cl2 js-name-detail p-b-14" id="product_modal_name">
+                                    {{$product->name}}
+                                </h4>
+                                <div>
+                                    <a href="#" class="ltext-102 mt-4 cl3 hov-cl1 trans-04 lh-10 p-lr-5 p-tb-2 js-addwish-detail tooltip100" data-tooltip="Add to Wishlist">
+                                        <i class="zmdi zmdi-favorite-outline"></i>
+                                    </a>
                                 </div>
-                                <span class="ltext-108 cl2" id="product_modal_price">
-                                    ${{$product->price}}
-                                </span>
-                                <!-- Cart Form  -->
-                                <form action="/addCart" method="post">
-                                    @csrf
-                                    <input type="hidden" name="product_id" value="{{$product->id}}">
+                            </div>
+                            <span class="ltext-108 cl2" id="product_modal_price">
+                                ${{$product->price}}
+                            </span>
+                            <!-- Cart Form  -->
+                            <form action="/addCart" method="post" class='mt-4'>
+                                @csrf
+                                <input type="hidden" name="product_id" value="{{$product->id}}">
+                                @forelse ($vrnts as $vrnt)
                                     <div class="flex-w flex-r-m p-b-10">
                                         <div class="size-203 flex-c-m respon6">
-                                            Color
+                                            {{$vrnt['variant']}}
                                         </div>
-
                                         <div class="size-204 respon6-next">
-                                            <div class="rs1-select2 bor8 bg0">
-                                                <select class="js-select2" name="color" id="product_modal_color" onchange="getListing(event)">
-                                                    @foreach ($item as $color)
-                                                        <option value="{{$color['id']}}">{{ $color['name'] }}</option>
-                                                    @endforeach
-                                                </select>
-                                                <div class="dropDownSelect2"></div>
-                                            </div>
+                                            @php
+                                                $vrntValues = explode(",",$vrnt['value']);
+                                            @endphp
+
+                                            @foreach ($vrntValues as $key => $vrntvl)
+                                                @if($vrntvl != "")
+                                                    <a href="#" class='badge btn {{ $key == 0 ? 'btn-home' : 'home-btn-outline' }} p-2'>{{$vrntvl}}</a>
+                                                @endif
+                                            @endforeach
                                         </div>
+
                                     </div>
-                                    <div class="p-t-33">
-                                        <div class="flex-w flex-r-m p-b-10">
-                                            <div class="size-203 flex-c-m respon6">
-                                                Size
-                                            </div>
+                                @empty
 
-                                            <div class="size-204 respon6-next">
-                                                <div class="rs1-select2 bor8 bg0">
-                                                    <select class="js-select2" name="size" id="product_modal_size" onchange="getNoInStock(event)">
-                                                       
-                                                    </select>
-                                                    <div class="dropDownSelect2"></div>
-                                                </div>
-                                            </div>
-                                        </div>
+                                @endforelse
 
-                                        <div class="flex-w flex-r-m p-b-10">
-                                            <div class="size-204 flex-w flex-m respon6-next">
-                                                <div class="wrap-num-product flex-w m-r-20 m-tb-10">
-                                                    <button type="button" class="btn-num-product-down cl8 hov-btn3 trans-04 flex-c-m">
-                                                        <i class="fs-16 zmdi zmdi-minus"></i>
-                                                    </button>
-
-                                                    <input class="mtext-104 cl3 txt-center num-product" type="number" name="quantity" id="product_modal_description" value="1">
-                                                    <button type="button" class="btn-num-product-up cl8 hov-btn3 trans-04 flex-c-m">
-                                                        <i class="fs-16 zmdi zmdi-plus"  id="product_modal_stock"></i>
-                                                    </button>
-                                                </div>
-
-                                                <button type="submit" class="flex-c-m stext-101 cl0 size-101 bg1 bor1 hov-btn1 p-lr-15 trans-04 js-addcart-detail">
-                                                    Add to cart
+                                <div class="p-t-33">
+                                    <div class="flex-w flex-r-m p-b-10">
+                                        <div class="size-204 flex-w flex-m respon6-next">
+                                            <div class="wrap-num-product flex-w m-r-20 m-tb-10">
+                                                <button type="button" class="btn-num-product-down cl8 hov-btn3 trans-04 flex-c-m">
+                                                    <i class="fs-16 zmdi zmdi-minus"></i>
                                                 </button>
-
+                                                <input class="mtext-104 cl3 txt-center num-product" type="number" name="quantity" id="product_modal_description" value="1">
+                                                <button type="button" class="btn-num-product-up cl8 hov-btn3 trans-04 flex-c-m">
+                                                    <i class="fs-16 zmdi zmdi-plus"  id="product_modal_stock"></i>
+                                                </button>
                                             </div>
+
+                                            <button type="submit" class="flex-c-m stext-101 cl0 size-101 bg1 bor1 hov-btn1 p-lr-15 trans-04 js-addcart-detail">
+                                                Add to cart
+                                            </button>
+
                                         </div>
                                     </div>
-                                </form>
-                            </div>
+                                </div>
+                            </form>
                         </div>
+                    </div> --}}
                     </div>
                 </div>
             </div>

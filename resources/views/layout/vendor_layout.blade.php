@@ -279,6 +279,8 @@
             })
             .then(response => response.json())
             .then(json => {
+                console.log(json)
+                return;
                $(".invalid-feedback").html('');
 
                 if (json.code == 2){
@@ -403,7 +405,7 @@
         newValueRecord.setAttribute('id',`${event.target.value}_${valueId}`)
         newValueRecord.innerHTML = `
             <td>
-                <input type='text' name='variantValue${event.target.value}[]' class='home-input inputClass${id}' placeholder='${placeHolder}'>
+                <input type='text' name='variantValue[${event.target.value}][]' class='home-input inputClass${id}' placeholder='${placeHolder}'>
             </td>
             <td style='vertical-align:middle;'>
                 <span class='text-danger' onclick='removeRecord("${event.target.value}_${valueId}", "variant-value${id}")' style='font-size:15px; cursor:pointer;'>
@@ -453,20 +455,27 @@
         let values = document.querySelectorAll(`.${inputClass}`);
         let arrayValues = [];
         let container = document.querySelector(`#record${id}`);
-        let vals = '';
+        let vals = '', valspan = '';
         let validateError = false;
+
+        if (values.length < 1){
+            return;
+        }
 
         values.forEach((item) => {
 
             if (item.value == ''){
                 item.style.border = '1px solid red';
                 validateError = true;
+                return;
             }
 
             arrayValues.push(item.value);
             variantListings[variant] = arrayValues;
-            vals += `<span class='badge bg-secondary me-2'> ${item.value} </span>`;
+            valspan += `<span class='badge bg-secondary me-2'> ${item.value} </span>`;
         });
+
+        vals = arrayValues.join(",");
 
         if (validateError){
             return;
@@ -481,7 +490,11 @@
                     </span>
                 </div>
                 <h6>${variant}</h6>
-                <div>${vals}</div>
+                <div>${valspan}</div>
+                <div class='d-b'ock'>
+                    <input name='variant[${id}]' type='hidden' value='${variant}'>
+                    <input name='variantValue[${id}]' type='hidden' value='${vals}'>
+                </div>
             </div>
         </div>
         `;

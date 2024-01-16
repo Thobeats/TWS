@@ -11,6 +11,7 @@ use App\Models\Product;
 use App\Traits\AppTrait;
 use Illuminate\Http\Request;
 use App\Models\ProductReview;
+use App\Models\ProductVariant;
 use App\Models\VendorSubscription;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
@@ -39,14 +40,25 @@ class ProductController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Get the variants of a product
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @param  $id
+     * @return \Illuminate\Http\ResponseJson
      */
-    public function store(Request $request)
+    public function getProductVariants($id)
     {
-        //
+        $productVariant = ProductVariant::where('product_id', $id)->first();
+        if (!$productVariant){
+            return [];
+        }
+        $variants = $productVariant->variant;
+        if ($variants != NULL){
+            $vrnts = json_decode($variants,true);
+        }else{
+            $vrnts = [];
+        }
+
+        return $vrnts;
     }
 
     /**
@@ -83,7 +95,7 @@ class ProductController extends Controller
                 $colors =[];
 
                 if (!is_null($product->item_listing())){
-                foreach($product->item_listing() as $key => $value){
+                    foreach($product->item_listing() as $key => $value){
                         $color = Color::find($key);
                         $listing = $this->getItemsByColor($product->id,$color->id);
 
@@ -92,7 +104,7 @@ class ProductController extends Controller
                             'id' => $color->id,
                             'listing' => $listing
                         ];
-                }
+                    }
                 }
 
                 $data = [
@@ -103,7 +115,7 @@ class ProductController extends Controller
                     'chats' => $chats,
                     'productId' => $product->id,
                     'check' => $check,
-                    'step' => $step
+                    'step' => $step,
                 ];
                 // dd($data);
                 return view('market.product',$data);
@@ -220,7 +232,7 @@ class ProductController extends Controller
              return redirect("/market/product/$request->product_id?step=reviews");
 
         }catch(Exception $e){
-            
+
         }
     }
 

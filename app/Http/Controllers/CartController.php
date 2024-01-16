@@ -17,7 +17,7 @@ class CartController extends Controller
         $cart = Cart::where("user_id", $user->id)->first();
 
         if(!$cart){
-            
+
             toastr()->error("No item in cart");
 
             return redirect()->back();
@@ -28,13 +28,12 @@ class CartController extends Controller
     public function store(Request $request){
         try{
             $user = Auth::user();
-            
+
             // Validate the Cart Item
-            $validated = Validator::make($request->only('product_id', 'quantity', 'color', 'size'),[
+            $validated = Validator::make($request->only('product_id', 'quantity', 'variants'),[
                                         "product_id" => "required|integer|exists:products,id",
                                         "quantity"=> "required|numeric",
-                                        "color" => "required|numeric",
-                                        "size" => "required|numeric"
+                                        "variants" => "required|string"
                                     ]);
 
             // CHeck if the quantity is still available
@@ -86,7 +85,7 @@ class CartController extends Controller
 
             $request->merge(["cartId" => $cartID]);
         }
-        
+
         $request->session()->put(['cartId' => $request->cartId]);
 
         return redirect('/checkout');

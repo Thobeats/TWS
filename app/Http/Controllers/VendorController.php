@@ -769,17 +769,26 @@ class VendorController extends Controller
             }
 
             $request->merge(['publish_status' => $ps]);
-            
-            if($validator->fails()){
-                return [
-                    "code" => 2,
-                    "type" => "error",
-                    "body" => $validator->errors()
+
+            // if($validator->fails()){
+            //     return [
+            //         "code" => 2,
+            //         "type" => "error",
+            //         "body" => $validator->errors()
+            //     ];
+            // }
+
+            //Handle Variants
+            $variant_records = [];
+
+            foreach ($request->variant as $key => $value){
+                $variant_records[] = [
+                    "variant" => $request->variant[$key],
+                    "value" => $request->variantValue[$key]
                 ];
             }
 
-            //Handle Variants
-
+            
             $pics = $request->pics;
             // $item_listing = [];
             // $priceSum = 0;
@@ -838,6 +847,7 @@ class VendorController extends Controller
             $variant = ProductVariant::create([
                 'product_id' => $product->id,
                 'variant_to_values' => json_encode($request->record),
+                'variant' => json_encode($variant_records)
             ]);
             // Return view with Success report
             toastr()->success('New Product Saved');
