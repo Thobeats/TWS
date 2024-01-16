@@ -14,9 +14,11 @@
             ${{$price}}
         </span>
         <!-- Cart Form  -->
-        <form action="/addCart" method="post" class='mt-4'>
+        <form wire:submit="addToCart">
             @csrf
-            <input type="hidden" name="product_id" value="{{$productId}}">
+            <input type="hidden" wire:model="productId">
+            <input type="hidden" wire:model="shippingFee">
+            <input type="hidden" wire:model="vendorId">
             @forelse ($productVariants as $index => $variant)
                 <div class="flex-w flex-r-m p-b-10">
                     <div class="size-203 flex-c-m respon6">
@@ -42,7 +44,7 @@
                             <button type="button" class="btn-num-product-down cl8 hov-btn3 trans-04 flex-c-m" wire:click="decrement">
                                 <i class="fs-16 zmdi zmdi-minus"></i>
                             </button>
-                            <input max="{{$limit}}" class="mtext-104 cl3 txt-center num-product" type="number" name="quantity" id="product_modal_description" value="{{$productCount}}">
+                            <input max="{{$limit}}" class="mtext-104 cl3 txt-center num-product" type="number" wire:model="productCount" id="product_modal_description" value="{{$productCount}}">
                             <button type="button" class="btn-num-product-up cl8 hov-btn3 trans-04 flex-c-m" wire:click="increment">
                                 <i class="fs-16 zmdi zmdi-plus"  id="product_modal_stock"></i>
                             </button>
@@ -52,6 +54,9 @@
                             Add to cart
                         </button>
 
+                        <div class="p-2 text-center mt-3">
+                            <span class='text-success' style="font-size: 15px;">{{$success}}</span>
+                        </div>
                     </div>
                 </div>
             </div>

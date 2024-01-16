@@ -2,8 +2,11 @@
 
 namespace App\Http\Livewire;
 
+use App\Models\Cart;
 use Livewire\Component;
+use Illuminate\Http\Request;
 use App\Models\ProductVariant;
+use Illuminate\Support\Facades\Auth;
 
 class Product extends Component
 {
@@ -19,10 +22,12 @@ class Product extends Component
     public $in_stock;
     public $limit;
     public $productCount;
+    public $shippingFee;
+    public $vendorId;
+    public $success;
 
     public function mount(){
         $productVariant = ProductVariant::where('product_id', $this->productId)->first();
-        $this->productCount = 0;
         $this->getVariantValues($productVariant);
         if ($productVariant){
             $this->productVariants = collect(json_decode($productVariant->variant, true));
@@ -32,6 +37,7 @@ class Product extends Component
 
         $this->processVariant();
         $this->loadProduct();
+        $this->loadSuccess();
     }
 
     public function processVariant(){
@@ -72,6 +78,17 @@ class Product extends Component
         $this->price = $selected['price'];
         $this->in_stock = $selected['in_stock'];
         $this->limit = $selected['limit'];
+        $this->productCount = 1;
+    }
+
+    public function loadSuccess($message=""){
+        if ($message != ""){
+            $this->success = $message;
+        }
+        else
+        {
+            $this->success = "";
+        }
     }
 
     public function increment(){
@@ -84,6 +101,31 @@ class Product extends Component
         if ($this->productCount > 0){
             $this->productCount--;
         }
+    }
+
+    public function addToCart(Request $request){
+        $user = Auth::user();
+
+        $variants = join(" / ", $this->selectedVariantValues);
+        // Check if the the product, color and size has been added already
+        $check = Cart::where(['product_id' => $this->productId,'user_id' => $user->id, 'variants' => $variants])->first();
+
+        if ($check){
+            $check->quantity += $this->productCount;
+            $check->price = $check->quantity *  $this->price;
+            $check->save();
+        }else{
+            $cart = new Cart;
+            $cart->user_id = $user->id;
+            $cart->vendor_id = $this->vendorId;
+            $cart->product_id = $this->productId;
+            $cart->quantity = $this->productCount;
+            $cart->price = $this->productCount *  $this->price;
+            $cart->shipping_fee = $this->shippingFee;
+            $cart->variants = $variants;
+            $cart->save();
+        }
+        $this->success = "Saved to Cart";
     }
 
     public function render()
