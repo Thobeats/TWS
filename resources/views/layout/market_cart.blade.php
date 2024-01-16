@@ -31,7 +31,7 @@
                             </a>
 
                             <span class="header-cart-item-info">
-                                {{ $item->quantity }} x ${{$product->price}}
+                                {{ $item->quantity }} x ${{$item->price / $item->quantity}}
                             </span>
                         </div>
                     </li>

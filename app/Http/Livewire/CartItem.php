@@ -47,28 +47,25 @@ class CartItem extends Component
 
     public function Increase($id){
        $cartItem = Cart::find($id);
-       $product = Product::find($cartItem->product_id);
+       $unitPrice = $cartItem->price / $cartItem->quantity;
        $cartItem->quantity += 1;
-       $cartItem->price = $cartItem->quantity * $product->price;
+       $cartItem->price = $cartItem->quantity * $unitPrice;
        $cartItem->save();
-
        $this->getCartItems();
     }
 
     public function Decrease($id){
         $cartItem = Cart::find($id);
-        $product = Product::find($cartItem->product_id);
+        $unitPrice = $cartItem->price / $cartItem->quantity;
         $cartItem->quantity -= 1;
-        $cartItem->price = $cartItem->quantity * $product->price;
+        $cartItem->price = $cartItem->quantity * $unitPrice;
         $cartItem->save();
-
         $this->getCartItems();
     }
 
     public function remove($id){
         $cartItem = Cart::find($id);
         $cartItem->delete();
-
         $this->getCartItems();
     }
 
