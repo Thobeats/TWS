@@ -292,11 +292,11 @@ class HomeController extends Controller
 
              if(!$saveNew)
              {
-                 toastr()->error('Review not saved');
+                 //toastr()->error('Review not saved');
              }
              else
              {
-                 toastr()->success('Thank You');
+                 //toastr()->success('Thank You');
              }
 
              return redirect("/market/vendor/$request->vendor_id?step=review");

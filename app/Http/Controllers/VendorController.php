@@ -74,7 +74,7 @@ class VendorController extends Controller
 
         $validate = $otpModel->verifyOTP($user->email,$request->token);
         // if($validate->status == false){
-        //     toastr()->error('Invalid OTP','Error');
+        //     //toastr()->error('Invalid OTP','Error');
 
         //     return redirect()->back();
         // }
@@ -83,7 +83,7 @@ class VendorController extends Controller
         $user->account_status = 1;
         $user->save();
 
-        toastr()->success('Email verified');
+        //toastr()->success('Email verified');
         return redirect('vendor/dashboard');
 
     }
@@ -114,7 +114,7 @@ class VendorController extends Controller
 
             if($validate->fails()){
                 foreach($validate->errors()->messages() as $key => $error){
-                    toastr()->error($error[0]);
+                    //toastr()->error($error[0]);
                 }
 
                 return redirect('/vendor/verify_business?step=business');
@@ -124,7 +124,7 @@ class VendorController extends Controller
             $file = $this->uploadFile($request,'proof_of_bus','businessDocs');
 
             if(!$file){
-                toastr()->error('File upload error: File exists');
+                //toastr()->error('File upload error: File exists');
                 return redirect('/vendor/verify_business?step=business');
             }
 
@@ -145,7 +145,7 @@ class VendorController extends Controller
             $user->address = json_encode($address);
             $user->save();
 
-            toastr()->success('Your documents have been submitted for approval');
+            //toastr()->success('Your documents have been submitted for approval');
 
             return redirect('/vendor/get_started');
 
@@ -168,7 +168,7 @@ class VendorController extends Controller
 
             if($validate->fails()){
                 foreach($validate->errors()->messages() as $key => $error){
-                    toastr()->error($error[0]);
+                    //toastr()->error($error[0]);
                 }
 
                 return redirect('/vendor/verify_business?step=customer');
@@ -178,7 +178,7 @@ class VendorController extends Controller
             $file = $this->uploadFile($request,'customer_review','businessDocs');
 
             if(!$file){
-                toastr()->error('File upload error: File exists');
+                //toastr()->error('File upload error: File exists');
                 return redirect('/vendor/verify_business?step=customer');
             }
 
@@ -191,7 +191,7 @@ class VendorController extends Controller
             // Save in Vendor
             $vendor = Vendor::where('user_id', $user->id)->update($data);
 
-            toastr()->success('Your document has been submitted for verification');
+            //toastr()->success('Your document has been submitted for verification');
 
             return redirect('/vendor/get_started');
 
@@ -216,7 +216,7 @@ class VendorController extends Controller
 
             if($validate->fails()){
                 foreach($validate->errors()->messages() as $key => $error){
-                    toastr()->error($error[0]);
+                    //toastr()->error($error[0]);
                 }
 
                 return redirect('/vendor/verify_business?step=ein');
@@ -229,7 +229,7 @@ class VendorController extends Controller
             $einDetails = $response['EIN'];
 
             if(empty($einDetails)){
-                toastr()->error('EIN record not found');
+                //toastr()->error('EIN record not found');
                 return redirect('/vendor/verify_business?step=ein');
             }
 
@@ -244,7 +244,7 @@ class VendorController extends Controller
             // Save in Vendor
             $vendor = Vendor::where('user_id', $user->id)->update($data);
 
-            toastr()->success('Your EIN is verified');
+            //toastr()->success('Your EIN is verified');
 
             return redirect('/vendor/dashboard');
 
@@ -339,7 +339,7 @@ class VendorController extends Controller
             $vendor->payment_setup = 1;
             $vendor->save();
 
-            toastr()->success('Card Saved');
+            //toastr()->success('Card Saved');
             return ['code' => 0, 'msg' => $vendorCard];
 
         }catch(Exception $e){
@@ -366,7 +366,7 @@ class VendorController extends Controller
             $user->payment_method = $payM_id;
             $user->save();
 
-            toastr()->success('Card Saved');
+            //toastr()->success('Card Saved');
             return ['code' => 0, 'msg' => "Payment Method Created"];
 
         }catch(Exception $e){
@@ -383,12 +383,12 @@ class VendorController extends Controller
         if($request->method() == "GET"){
             // Check if user has set payment and has verified business
             if($user->vendor()->verify_business != 3 || $user->vendor()->verify_customer_review != 3){
-                toastr()->error('Business details not verified yet');
+                //toastr()->error('Business details not verified yet');
                 return redirect()->back();
             }
 
             if(!$user->vendor()->payment_setup){
-                toastr()->error('payment details not verified yet');
+                //toastr()->error('payment details not verified yet');
                 return redirect()->back();
             }
 
@@ -430,7 +430,7 @@ class VendorController extends Controller
             $newSubscription = Subscription::create($data);
 
             if(!$newSubscription->id){
-                toastr()->error('Subscription Failed');
+                //toastr()->error('Subscription Failed');
                 return redirect()->back();
             }
 
@@ -438,7 +438,7 @@ class VendorController extends Controller
             $vendor->verified = 1;
             $vendor->save();
 
-            toastr()->success('Subscription Successful');
+            //toastr()->success('Subscription Successful');
             return redirect('/vendor/dashboard');
         }
     }
@@ -517,7 +517,7 @@ class VendorController extends Controller
         ]);
 
         if($validate->fails()){
-            toastr()->error($validate->errors()->first(), 'Validation Error');
+            //toastr()->error($validate->errors()->first(), 'Validation Error');
             return redirect()->back()->with('tab', 'edit_profile');
         }
 
@@ -525,7 +525,7 @@ class VendorController extends Controller
         $response = $this->uploadFile($request,'b_logo','businessLogo');
 
         if(!$response){
-            toastr()->error('File Exists', 'Upload Error');
+            //toastr()->error('File Exists', 'Upload Error');
             return redirect()->back();
         }
 
@@ -534,7 +534,7 @@ class VendorController extends Controller
         $vendor->save();
 
 
-        toastr()->success('Logo is set', 'Upload Success');
+        //toastr()->success('Logo is set', 'Upload Success');
 
         return redirect()->back();
     }
@@ -552,7 +552,7 @@ class VendorController extends Controller
         ]);
 
         if($validate->fails()){
-            toastr()->error($validate->errors()->first(), 'Validation Error');
+            //toastr()->error($validate->errors()->first(), 'Validation Error');
             return redirect()->back()->with('tab', 'edit_profile');
         }
 
@@ -560,7 +560,7 @@ class VendorController extends Controller
         $response = $this->uploadFile($request,'banner','businessBanners');
 
         if(!$response){
-            toastr()->error('File Exists', 'Upload Error');
+            //toastr()->error('File Exists', 'Upload Error');
             return redirect()->back();
         }
 
@@ -568,7 +568,7 @@ class VendorController extends Controller
 
         $vendor->save();
 
-        toastr()->success('Banner is set', 'Upload Success');
+        //toastr()->success('Banner is set', 'Upload Success');
 
         return redirect()->back();
     }
@@ -591,7 +591,7 @@ class VendorController extends Controller
 
         if($validate->fails()){
             foreach($validate->errors()->messages() as $error){
-                toastr()->error($error[0], 'Validation Error');
+                //toastr()->error($error[0], 'Validation Error');
             }
             return redirect()->back()->with('tab', 'edit_profile');
         }
@@ -608,11 +608,11 @@ class VendorController extends Controller
         ]);
 
         if(!$vendor){
-            toastr()->success('Update Failes, please check your inputs', 'Error');
+            //toastr()->success('Update Failes, please check your inputs', 'Error');
             return redirect()->back()->with('tab', 'edit_profile');
         }
 
-        toastr()->success('Update Successful', 'Success');
+        //toastr()->success('Update Successful', 'Success');
         return redirect()->back()->with('tab', 'edit_profile');
     }
 
@@ -633,7 +633,7 @@ class VendorController extends Controller
 
         if($validate->fails()){
             foreach($validate->errors()->messages() as $key => $error){
-                toastr()->error($error[0]);
+                //toastr()->error($error[0]);
             }
 
             return redirect('/vendor/account/uploadDoc');
@@ -644,14 +644,14 @@ class VendorController extends Controller
         $doc = $this->uploadFile($request,'doc',$request->type);
 
         if(!$doc){
-            toastr()->error('File Exists');
+            //toastr()->error('File Exists');
             return redirect('/vendor/account/uploadDoc');
         }
 
         //Save the Doc
         $update = Vendor::where('user_id', $user->id)->update(["$request->type" => $doc]);
 
-        toastr()->success('File Saved');
+        //toastr()->success('File Saved');
 
         return redirect('/vendor/dashboard');
     }
@@ -788,7 +788,7 @@ class VendorController extends Controller
                 ];
             }
 
-            
+
             $pics = $request->pics;
             // $item_listing = [];
             // $priceSum = 0;
@@ -850,7 +850,7 @@ class VendorController extends Controller
                 'variant' => json_encode($variant_records)
             ]);
             // Return view with Success report
-            toastr()->success('New Product Saved');
+            //toastr()->success('New Product Saved');
 
             if(!$ps){
                 return [
@@ -1076,7 +1076,7 @@ class VendorController extends Controller
                                                 ));
 
             // Return view with Success report
-            toastr()->success('Updated Saved');
+            //toastr()->success('Updated Saved');
             if(!$ps){
                 return [
                     "code" => 0,
@@ -1124,7 +1124,7 @@ class VendorController extends Controller
         $product->delete();
 
         // Return view with Success report
-        toastr()->success('Product Deleted');
+        //toastr()->success('Product Deleted');
         return redirect('/vendor/products');
     }
 
@@ -1134,7 +1134,7 @@ class VendorController extends Controller
         ]);
 
         if($validate->fails()){
-            toastr()->error($validate->errors()[0]);
+            //toastr()->error($validate->errors()[0]);
             return redirect('/vendor/products');
         }
 
@@ -1146,7 +1146,7 @@ class VendorController extends Controller
         $message = $product->publish_status == 0 ? 'Disabled' : "Activated";
 
         // Return view with Success report
-        toastr()->success("Product $message");
+        //toastr()->success("Product $message");
         return redirect('/vendor/products');
     }
 
@@ -1247,7 +1247,7 @@ class VendorController extends Controller
             return view('vendor.subscriptions.index', compact('mySub', 'start', 'end'));
 
         }catch(Exception $e){
-            toastr()->error($e->getMessage());
+            //toastr()->error($e->getMessage());
             return redirect()->back();
         }
     }
@@ -1369,7 +1369,7 @@ class VendorController extends Controller
     public function importProducts(Request $request){
         Excel::import(new ProductImport, request()->file('csv_file'), null,\Maatwebsite\Excel\Excel::CSV);
 
-        toastr()->success('Upload Successful');
+        //toastr()->success('Upload Successful');
         return redirect('/vendor/products/drafts');
     }
 
@@ -1387,7 +1387,7 @@ class VendorController extends Controller
 
                 $newCustomer->save();
 
-                toastr()->success('Document Uploaded for approval');
+                //toastr()->success('Document Uploaded for approval');
                 return redirect('/vendor/dashboard');
             }
 
@@ -1395,7 +1395,7 @@ class VendorController extends Controller
                 $user->role = 1;
                 $user->save();
 
-                toastr()->success('Switched to a customer');
+                //toastr()->success('Switched to a customer');
 
                 return redirect('/customer');
             }else{

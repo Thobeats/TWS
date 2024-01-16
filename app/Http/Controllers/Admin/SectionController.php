@@ -45,11 +45,11 @@ class SectionController extends Controller
         $new_section = Section::create($request->only('name','description','status','for','position'));
 
         if($new_section->id){
-            toastr()->success("$request->name Created");
+            //toastr()->success("$request->name Created");
             return redirect('admin/section/');
         }
 
-        toastr()->error("Error: $request->name not created, Please try again");
+        //toastr()->error("Error: $request->name not created, Please try again");
         return redirect('admin/section/create');
     }
 
@@ -75,11 +75,11 @@ class SectionController extends Controller
         $update_section = Section::where('id', $request->id)->update($request->only('name','description','status','for','position'));
 
         if($update_section){
-            toastr()->success("$request->name Updated");
+            //toastr()->success("$request->name Updated");
             return redirect('admin/section/');
         }
 
-        toastr()->error("Error: $request->name not updated, Please try again");
+        //toastr()->error("Error: $request->name not updated, Please try again");
         return redirect("admin/section/edit/$request->id");
     }
 

@@ -38,7 +38,7 @@ class BannerController extends Controller
 
         Banner::create($request->only('title','subtitle','image','tags','status','slug'));
 
-        toastr()->success('banner created');
+        //toastr()->success('banner created');
         return redirect('/admin/banner/');
     }
 
@@ -68,7 +68,7 @@ class BannerController extends Controller
 
          Banner::where('id', $request->id)->update($request->only('title','subtitle','image','tags','status','slug'));
 
-         toastr()->success('banner updated');
+         //toastr()->success('banner updated');
          return redirect('/admin/banner/');
     }
 

@@ -18,7 +18,7 @@ class CartController extends Controller
 
         if(!$cart){
 
-            toastr()->error("No item in cart");
+            //toastr()->error("No item in cart");
 
             return redirect()->back();
         }
@@ -43,7 +43,7 @@ class CartController extends Controller
 
             if ($num_in_stock < $request->quantity)
             {
-                toastr()->error("Quantity ordered is more than the available stock quantity");
+                //toastr()->error("Quantity ordered is more than the available stock quantity");
                 return redirect()->back();
             }
 
@@ -69,7 +69,7 @@ class CartController extends Controller
                 $cart->save();
             }
 
-            toastr()->success('Added to Cart');
+            //toastr()->success('Added to Cart');
             return redirect()->back();
 
 

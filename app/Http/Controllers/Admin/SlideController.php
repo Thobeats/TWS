@@ -38,7 +38,7 @@ class SlideController extends Controller
 
         Slide::create($request->only('title','subtitle','image','tags','status','slug'));
 
-        toastr()->success('slide created');
+        //toastr()->success('slide created');
         return redirect('/admin/slide/');
     }
 
@@ -68,7 +68,7 @@ class SlideController extends Controller
 
          Slide::where('id', $request->id)->update($request->only('title','subtitle','image','tags','status','slug'));
 
-         toastr()->success('slide updated');
+         //toastr()->success('slide updated');
          return redirect('/admin/slide/');
     }
 
@@ -80,7 +80,7 @@ class SlideController extends Controller
         $request->validate([
             'status' => 'required|boolean'
         ]);
-        
+
         // Deactivate the Slide
         $slide = Slide::find($id);
         $slide->status = $request->status;

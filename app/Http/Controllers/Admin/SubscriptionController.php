@@ -102,7 +102,7 @@ class SubscriptionController extends Controller
             // Notify the vendor
             $this->notifyUser("You have been subscribed to the $package->package_name","",$vendor->user_id,"success","Subscription");
 
-            toastr()->success('Vendor is subscribed');
+            //toastr()->success('Vendor is subscribed');
             return redirect('/admin/subscription/create');
         }catch(Exception $e){
             return $e->getMessage();

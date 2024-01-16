@@ -41,7 +41,7 @@ class CategoryController extends Controller
         ParentToChild::create(['parent_id' => $request->parent_id, 'category_id' => $new_category->id]);
 
         // Return view with Success report
-        toastr()->success('New Category Saved');
+        //toastr()->success('New Category Saved');
         return redirect('/admin/categories');
     }
 

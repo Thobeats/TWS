@@ -45,7 +45,7 @@ class VendorController extends Controller
             $vendor->verify_business = 3;
             $vendor->save();
 
-            toastr()->success('verified');
+            //toastr()->success('verified');
             return redirect()->back();
         }
 
@@ -58,7 +58,7 @@ class VendorController extends Controller
             // Delete the image
             unlink($document);
 
-            toastr()->success('rejected');
+            //toastr()->success('rejected');
             return redirect('');
         }
 
@@ -71,7 +71,7 @@ class VendorController extends Controller
             $vendor->verify_customer_review = 3;
             $vendor->save();
 
-            toastr()->success('verified');
+            //toastr()->success('verified');
             return redirect()->back();
         }
 
@@ -84,7 +84,7 @@ class VendorController extends Controller
             // Delete the image
             unlink($document);
 
-            toastr()->success('rejected');
+            //toastr()->success('rejected');
             return redirect()->back();
         }
     }

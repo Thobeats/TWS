@@ -86,7 +86,7 @@ class PackageController extends Controller
 
         $package = Package::create($request->only('package_name', 'description', 'details','package_price','status', 'stripe_reference'));
 
-        toastr()->success("$request->package_name created");
+        //toastr()->success("$request->package_name created");
         return redirect('/admin/package/');
     }
 
@@ -162,7 +162,7 @@ class PackageController extends Controller
 
         $package = Package::where($request->only('id'))->update($request->only('package_name', 'description', 'details','package_price','status','stripe_reference'));
 
-        toastr()->success("$request->package_name updated");
+        //toastr()->success("$request->package_name updated");
         return redirect('/admin/package/');
     }
 

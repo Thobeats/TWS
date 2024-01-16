@@ -17,7 +17,7 @@ class VendorVerification
     public function handle(Request $request, Closure $next)
     {
         if ($request->user()->role != 2){
-            toastr()->warning('unauthorized');
+            //toastr()->warning('unauthorized');
             return redirect('/');
         }
 

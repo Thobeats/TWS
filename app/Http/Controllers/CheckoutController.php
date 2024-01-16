@@ -202,7 +202,7 @@ class CheckoutController extends Controller
     }
 
     public function error(){
-        toastr()->error('Payment Failed');
+        //toastr()->error('Payment Failed');
         return redirect('/');
     }
 }

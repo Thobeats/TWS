@@ -222,11 +222,11 @@ class ProductController extends Controller
 
              if(!$saveNew)
              {
-                toastr()->error('Review not saved');
+                //toastr()->error('Review not saved');
              }
              else
              {
-                toastr()->success('Thank You');
+                //toastr()->success('Thank You');
              }
 
              return redirect("/market/product/$request->product_id?step=reviews");

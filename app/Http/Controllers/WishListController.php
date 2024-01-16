@@ -89,14 +89,14 @@ class WishListController extends Controller
             $record = Wishlist::find($id);
 
             if (!$record){
-                toastr()->error("Record does not exist", "Error");
+                //toastr()->error("Record does not exist", "Error");
                 return redirect('/customer/wishlists');
             }
 
             /// remove product from Wishlist
             $removeWishList = Wishlist::destroy($id);
 
-            toastr()->success("Product Removed from your Wish list", "Success");
+            //toastr()->success("Product Removed from your Wish list", "Success");
             return redirect('/customer/wishlists');
         }catch(QueryException $ex){
             return [
@@ -220,7 +220,7 @@ class WishListController extends Controller
             ]);
 
             if ($newWishListCategory){
-                toastr()->success('New Category Added', 'success');
+                //toastr()->success('New Category Added', 'success');
                 return [
                     "code" => 0,
                     "type" => "success",
@@ -258,7 +258,7 @@ class WishListController extends Controller
             ]);
 
             if ($validator->fails()){
-                toastr()->error('Category is invalid', 'error');
+                //toastr()->error('Category is invalid', 'error');
                 return redirect('/customer/wishlists');
             }
 
@@ -266,7 +266,7 @@ class WishListController extends Controller
             $wishlist = Wishlist::find($wishlistId);
 
             if (!$wishlist){
-                toastr()->error('Wishlist does not exist', 'error');
+                //toastr()->error('Wishlist does not exist', 'error');
                 return redirect('/customer/wishlists');
             }
 
@@ -274,20 +274,20 @@ class WishListController extends Controller
                 // Add The Wishlist to the new category
                 $wishlist->wish_category_id = $request->category_id;
                 $wishlist->save();
-                toastr()->success("WishList added to general", 'success');
+                //toastr()->success("WishList added to general", 'success');
             }else{
                 // Check if the category exist
                 $category = WishListCategory::where(['id' => $request->category_id, 'created_by' => $user->id])->first();
 
                 if (!$category){
-                    toastr()->error('Category does not exist', 'error');
+                    //toastr()->error('Category does not exist', 'error');
                     return redirect('/customer/wishlists');
                 }
 
                 // Add The Wishlist to the new category
                 $wishlist->wish_category_id = $request->category_id;
                 $wishlist->save();
-                toastr()->success("WishList added to $category->category_name", 'success');
+                //toastr()->success("WishList added to $category->category_name", 'success');
             }
 
 

@@ -36,7 +36,7 @@ class TagController extends Controller
         $new_tag = Tag::create($request->only('name','description','slug','status'));
 
         // Return view with Success report
-        toastr()->success('New Tag Saved');
+        //toastr()->success('New Tag Saved');
         return redirect('/admin/tag/');
     }
 

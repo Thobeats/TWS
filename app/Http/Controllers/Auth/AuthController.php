@@ -48,7 +48,7 @@ class AuthController extends Controller
             $fullname = $request->firstname . " " . $request->lastname;
 
             if(strtolower($request->consent) != strtolower($fullname)){
-                toastr()->error('Please enter your fullname to agree with the T and C');
+                //toastr()->error('Please enter your fullname to agree with the T and C');
                 return redirect('/seller_signup');
             }
 
@@ -250,7 +250,7 @@ class AuthController extends Controller
             $customer_path = $this->uploadFile($request,'cert','customer');
 
             if(!$customer_path){
-                toastr()->error('File Exists!');
+                //toastr()->error('File Exists!');
                 return redirect('/buyer_signup');
             }
 
@@ -258,7 +258,7 @@ class AuthController extends Controller
                 $add_cert_path = $this->uploadFile($request,'add_cert','customer');
 
                 if(!$add_cert_path){
-                    toastr()->error('File Exists!');
+                    //toastr()->error('File Exists!');
                     return redirect('/buyer_signup');
                 }
             }else{
@@ -318,7 +318,7 @@ class AuthController extends Controller
         $user = User::where('user_code', $request->user)->first();
 
         if(!$user){
-            toastr()->error('Invald ID, email not confirmed');
+            //toastr()->error('Invald ID, email not confirmed');
         }else{
             if(Hash::check($user->email, $request->token)){
                 // Update the email to confirmed
@@ -327,7 +327,7 @@ class AuthController extends Controller
 
                 //Login the User
                 Auth::login($user);
-                toastr()->success('Email Verified, you can start using our services');
+                //toastr()->success('Email Verified, you can start using our services');
 
                 // redirect to the respective routes
                 if($user->role == 1){
@@ -341,7 +341,7 @@ class AuthController extends Controller
                 }
 
             }else{
-                toastr()->error('Invald token, email not confirmed');
+                //toastr()->error('Invald token, email not confirmed');
             }
         }
 
@@ -359,20 +359,20 @@ class AuthController extends Controller
         ]);
 
         if($validator->fails()){
-            toastr()->error($validator->errors()->first());
+            //toastr()->error($validator->errors()->first());
             return redirect('/login');
         }
 
         $user = User::where('email', $request->email)->first();
 
         if(!$user){
-            toastr()->error('Email does not exist');
+            //toastr()->error('Email does not exist');
             return redirect('/login');
         }else{
 
             if(Hash::check($request->password, $user->password)){
                 Auth::login($user);
-                toastr()->success('Login Succesful');
+                //toastr()->success('Login Succesful');
 
                 if($user->role == 1){
                     return redirect('/');
@@ -389,7 +389,7 @@ class AuthController extends Controller
                 return back();
 
             }else{
-                toastr()->error('Wrong Password');
+                //toastr()->error('Wrong Password');
                 return redirect('/login');
             }
         }
@@ -415,7 +415,7 @@ class AuthController extends Controller
         ]);
 
         if($validate->fails()){
-            toastr()->error($validate->errors()->first(), 'Validation Error');
+            //toastr()->error($validate->errors()->first(), 'Validation Error');
             return redirect()->back()->with('tab', 'edit_profile');
         }
 
@@ -423,7 +423,7 @@ class AuthController extends Controller
         $response = $this->uploadFile($request,'profile','profileImage');
 
         if(!$response){
-            toastr()->error('File Exists', 'Upload Error');
+            //toastr()->error('File Exists', 'Upload Error');
             return redirect()->back();
         }
 
@@ -431,7 +431,7 @@ class AuthController extends Controller
         $user->save();
 
 
-        toastr()->success('Profile Image set', 'Upload Success');
+        //toastr()->success('Profile Image set', 'Upload Success');
 
         return redirect()->back();
     }
@@ -450,7 +450,7 @@ class AuthController extends Controller
         ]);
 
         if($validate->fails()){
-            toastr()->error($validate->errors()->first(), 'Validation Error');
+            //toastr()->error($validate->errors()->first(), 'Validation Error');
             return redirect()->back()->with('tab', 'edit_profile');
         }
 
@@ -465,7 +465,7 @@ class AuthController extends Controller
 
         $user->save();
 
-        toastr()->success('Profile Updated', 'Update Successful');
+        //toastr()->success('Profile Updated', 'Update Successful');
         return redirect()->back();
     }
 
@@ -478,7 +478,7 @@ class AuthController extends Controller
         ]);
 
         if($validate->fails()){
-            toastr()->error($validate->errors()->first(), 'Validation Error');
+            //toastr()->error($validate->errors()->first(), 'Validation Error');
             return redirect()->back()->with('tab', 'edit_profile');
         }
 
@@ -488,7 +488,7 @@ class AuthController extends Controller
 
         $user->save();
 
-        toastr()->success('Profile Updated', 'Update Successful');
+        //toastr()->success('Profile Updated', 'Update Successful');
         return redirect()->back();
     }
 

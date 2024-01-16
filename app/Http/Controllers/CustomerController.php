@@ -30,7 +30,7 @@ class CustomerController extends Controller
 
         if($request->has('filter')){
             if(!$request->month and !$request->status){
-                toastr()->error('No filter values');
+                //toastr()->error('No filter values');
 
                 return redirect()->back();
             }
@@ -92,7 +92,7 @@ class CustomerController extends Controller
         ]);
 
         if($validator->fails()){
-            toastr()->error($validator->errors()->first());
+            //toastr()->error($validator->errors()->first());
             return redirect('/customer/profile');
         }
 
@@ -101,7 +101,7 @@ class CustomerController extends Controller
         $user->lastname = $request->lastname;
         $user->save();
 
-        toastr()->success('Update Successful');
+        //toastr()->success('Update Successful');
         return redirect('/customer/profile');
     }
 
@@ -131,7 +131,7 @@ class CustomerController extends Controller
         $user->address = json_encode($address);
         $user->save();
 
-        toastr()->success('New Address Saved');
+        //toastr()->success('New Address Saved');
 
         return redirect('/customer/address');
     }
@@ -175,7 +175,7 @@ class CustomerController extends Controller
         $user->address = json_encode($address);
         $user->save();
 
-        toastr()->success('Address Updated');
+        //toastr()->success('Address Updated');
 
         return redirect('/customer/address');
     }
