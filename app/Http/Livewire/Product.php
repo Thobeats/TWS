@@ -28,7 +28,10 @@ class Product extends Component
 
     public function mount(){
         $productVariant = ProductVariant::where('product_id', $this->productId)->first();
-        $this->getVariantValues($productVariant);
+        if ($productVariant){
+            $this->getVariantValues($productVariant);
+        }
+
         if ($productVariant){
             $this->productVariants = collect(json_decode($productVariant->variant, true));
         }else{
@@ -49,6 +52,8 @@ class Product extends Component
                 $this->selectVariantValues($key, $variantArray['values'][0]);
                 $this->productVariants->put($key, $variantArray);
             }
+        }else{
+            $this->selectVariantValues = [];
         }
     }
 
@@ -73,12 +78,15 @@ class Product extends Component
     }
 
     public function loadProduct(){
-        $pointer = join(" / ", $this->selectedVariantValues);
-        $selected = $this->variantValues[$pointer];
-        $this->price = $selected['price'];
-        $this->in_stock = $selected['in_stock'];
-        $this->limit = $selected['limit'];
-        $this->productCount = 1;
+        if ($this->selectedVariantValues != null){
+            $pointer = join(" / ", $this->selectedVariantValues);
+            $selected = $this->variantValues[$pointer];
+            $this->price = $selected['price'];
+            $this->in_stock = $selected['in_stock'];
+            $this->limit = $selected['limit'];
+            $this->productCount = 1;
+        }
+
     }
 
     public function loadSuccess($message=""){

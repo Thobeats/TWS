@@ -14,6 +14,7 @@
             ${{$price}}
         </span>
         <!-- Cart Form  -->
+        @if (count($productVariants) > 0)
         <form wire:submit="addToCart">
             @csrf
             <input type="hidden" wire:model="productId">
@@ -61,5 +62,10 @@
                 </div>
             </div>
         </form>
+        @else
+        <div class="mt-4">
+            <p class='text-home'>Variants not available</p>
+        </div>
+        @endif
     </div>
 </div>
