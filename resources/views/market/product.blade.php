@@ -50,7 +50,7 @@
                             </div>
                         </div>
 
-                        @livewire('product', ['vendorId' => $product->vendor_id, 'productName' => $product->name, 'price' => $product->price, 'productId' => $product->id, 'shippingFee' => $product->shipping_fee])
+                        @livewire('product', ['vendorId' => $product->vendor_id, 'productName' => $product->name, 'price' => $product->price, 'productId' => $product->id, 'shippingFee' => $product->shipping_fee, 'limit' => $product->moq])
 
                     {{-- <div class="col-md-6 col-lg-5 p-b-30">
                         <div class="p-r-50 p-t-5 p-lr-0-lg">

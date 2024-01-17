@@ -5,8 +5,12 @@
                 {{$productName}}
             </h4>
             <div>
-                <a href="#" class="ltext-102 mt-4 cl3 hov-cl1 trans-04 lh-10 p-lr-5 p-tb-2 js-addwish-detail tooltip100" data-tooltip="Add to Wishlist">
-                    <i class="zmdi zmdi-favorite-outline"></i>
+                <a href="#" wire:click="addToWishList" class="ltext-102 mt-4 cl3 hov-cl1 trans-04 lh-10 p-lr-5 p-tb-2 tooltip100" data-tooltip="Add to Wishlist">
+                    @if($inWishList)
+                        <i class="zmdi zmdi-favorite-outline"></i>
+                    @else
+                        <i class="zmdi zmdi-favorite"></i>
+                    @endif
                 </a>
             </div>
         </div>
@@ -14,8 +18,7 @@
             ${{$price}}
         </span>
         <!-- Cart Form  -->
-        @if (count($productVariants) > 0)
-        <form wire:submit="addToCart">
+        <form wire:submit.prevent="addToCart">
             @csrf
             <input type="hidden" wire:model="productId">
             <input type="hidden" wire:model="shippingFee">
@@ -62,10 +65,5 @@
                 </div>
             </div>
         </form>
-        @else
-        <div class="mt-4">
-            <p class='text-home'>Variants not available</p>
-        </div>
-        @endif
     </div>
 </div>

@@ -9,6 +9,8 @@ class VendorProduct extends Component
     public $productId;
     public $variants;
 
+    
+
     public function render()
     {
         return view('livewire.vendor-product');

@@ -4,6 +4,7 @@ namespace App\Http\Livewire;
 
 use App\Models\Cart;
 use Livewire\Component;
+use App\Models\Wishlist;
 use Illuminate\Http\Request;
 use App\Models\ProductVariant;
 use Illuminate\Support\Facades\Auth;
@@ -25,6 +26,7 @@ class Product extends Component
     public $shippingFee;
     public $vendorId;
     public $success;
+    public $inWishList;
 
     public function mount(){
         $productVariant = ProductVariant::where('product_id', $this->productId)->first();
@@ -41,6 +43,7 @@ class Product extends Component
         $this->processVariant();
         $this->loadProduct();
         $this->loadSuccess();
+        $this->loadWishlist();
     }
 
     public function processVariant(){
@@ -86,6 +89,9 @@ class Product extends Component
             $this->limit = $selected['limit'];
             $this->productCount = 1;
         }
+        else{
+            $this->productCount = 1;
+        }
 
     }
 
@@ -111,10 +117,42 @@ class Product extends Component
         }
     }
 
+    public function loadWishlist(){
+        $check = Wishlist::where(['product_id' => $this->productId, "user_id" => Auth::id()])->first();
+
+        if ($check){
+            $this->inWishList = false;
+        }else{
+            $this->inWishList = true;
+        }
+    }
+
+    public function addToWishList(){
+
+        $check = Wishlist::where(['product_id' => $this->productId, "user_id" => Auth::id()])->first();
+
+        if ($check){
+            $check->delete();
+            $this->inWishList = false;
+        }
+        else
+        {
+            $wishlist = Wishlist::create([
+                "user_id" => Auth::id(),
+                "wish_category_id" => 0,
+                "product_id" => $this->productId
+            ]);
+            $this->inWishList = true;
+        }
+
+        $this->emit('checkWishList');
+
+    }
+
     public function addToCart(Request $request){
         $user = Auth::user();
 
-        $variants = join(" / ", $this->selectedVariantValues);
+        $variants = $this->selectedVariantValues != null ? join(" / ", $this->selectedVariantValues) : "";
         // Check if the the product, color and size has been added already
         $check = Cart::where(['product_id' => $this->productId,'user_id' => $user->id, 'variants' => $variants])->first();
 
@@ -134,6 +172,8 @@ class Product extends Component
             $cart->save();
         }
         $this->success = "Saved to Cart";
+
+        $this->emit('checkCart');
     }
 
     public function render()
