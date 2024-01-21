@@ -146,7 +146,7 @@
 @foreach ($adminSections as $section)
 
 @if($section->adminSectionProducts()->count() > 0)
-<section class="sec-product bg0 p-b-50">
+<section class="sec-product bg0">
     <div class="container-fluid">
         <div class="p-b-32">
             <h6 class="ltext-107 cl5 txt-left respon1">
@@ -207,7 +207,7 @@
 @foreach ( $sections as $section)
 
 @if($section->products()->count() > 0)
-<section class="sec-product bg0 p-b-50">
+<section class="sec-product bg0">
     <div class="container-fluid">
         <div class="p-b-32">
             <h6 class="ltext-107 cl5 txt-left respon1">
@@ -331,7 +331,7 @@
 </section> --}}
 
 
-<section class="sec-product bg0 p-b-50">
+<section class="sec-product bg0">
     <div class="container-fluid">
         <div class="p-b-32">
             <h6 class="ltext-107 cl5 txt-left respon1">
@@ -386,7 +386,7 @@
 </section>
 
 @if ($freeShipping->count() > 0)
-<section class="sec-product bg0 p-b-50">
+<section class="sec-product bg0">
     <div class="container-fluid">
         <div class="p-b-32">
             <h6 class="ltext-107 cl5 txt-left respon1">
@@ -443,7 +443,7 @@
 @endif
 
 
-<section class="sec-product bg0 p-b-50">
+<section class="sec-product bg0">
     <div class="container-fluid">
         <div class="p-b-32">
             <h6 class="ltext-107 cl5 txt-left respon1">

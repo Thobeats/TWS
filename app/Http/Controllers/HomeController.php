@@ -123,7 +123,7 @@ class HomeController extends Controller
                                 ->inRandomOrder()
                                 ->get();
 
-        $newVendors = User::where(['users.role' => 2, 'users.account_status' => 1, 'vendors.verified' => 1])
+        $newVendors = User::where(['users.role' => 2, 'users.account_status' => 1, 'vendors.verified' => 1, 'users.logged_in' => true])
                                 ->join('vendors','vendors.user_id','=','users.id')
                                 ->select('users.business_name','users.id', 'users.profile')
                                 ->orderBy('vendors.created_at', 'DESC')

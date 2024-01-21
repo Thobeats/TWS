@@ -308,6 +308,9 @@ class AuthController extends Controller
     }
 
     public function logout(){
+        $user = Auth::user();
+        $user->logged_in = false;
+        $user->save();
         Auth::logout();
 
         return redirect('/');
@@ -371,6 +374,8 @@ class AuthController extends Controller
         }else{
 
             if(Hash::check($request->password, $user->password)){
+                $user->logged_in = true;
+                $user->save();
                 Auth::login($user);
                 //toastr()->success('Login Succesful');
 
