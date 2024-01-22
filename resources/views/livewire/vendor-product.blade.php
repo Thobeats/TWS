@@ -104,196 +104,72 @@
             </div>
 
             <div class="row mt-3">
+                @if(count($variants) > 0)
                 <div class="col-12">
                     <h5 class='card-title'>Variants</h5>
                 </div>
-
-              <div class="col-12">
-                <table class="table table-bordered">
-
-                  <thead>
-                    <tr>
-                      <th scope="col"></th>
-                      <th scope="col">Colors (optional)</th>
-                      <th scope="col" colspan="2"></th>
-                    </tr>
-                  </thead>
-                  <tbody id="inventory">
-                    @php
-                      $index = 0;
-                    @endphp
-                    @if($product->item_listing)
-                    @forelse (json_decode($product->item_listing, true) as $key => $item)
-                    <tr id="{{$index}}">
-                      <td>
-                         <button class='btn btn-danger btn-sm' type='button' onclick=removeInventory({{$index}})><i class='bi bi-trash'></i></button>
-                      </td>
-                      <td>
-                          <select id="colors" name='colors[]' class="color-select" style="width: 100%">
-                              <option value="no_color">No Color</option>
-                              @if(!empty($colors))
-                                  @foreach($colors as $color)
-                                  <option {{ $color['id'] == $key ? 'selected' : '' }} value="{{ $color['id'] }}">{{ $color['name'] }}</option>
-                                  @endforeach
-                              @endif
-                          </select>
-                      </td>
-                     <td>
-                        <table class="table table-bordered">
-                          <colgroup>
-                              <col span="1" style="width: 30%;">
-                              <col span="1" style="width: 30%;">
-                              <col span="1" style="width: 30%;">
-                              <col span="1" style="width: 10%;">
-                          </colgroup>
-                          <thead>
+                <div class="col-12">
+                    @foreach ($productVariants as $variant)
+                    <div class='card'>
+                        <div class='card-body pt-2'>
+                            <div class='text-end'>
+                                <span class='text-dark' style='font-size:14px;cursor:pointer;'>
+                                    <i class="bi bi-pencil"></i> Edit
+                                </span>
+                            </div>
+                            <h6>{{$variant['variant']}}</h6>
+                            <div>
+                                @foreach (explode(",",$variant['value']) as $value)
+                                <span class='badge bg-secondary me-2'> {{$value}}</span>
+                                @endforeach
+                            </div>
+                            <div class='d-block'>
+                                <input wire:model="" type='hidden' value='{{$variant['variant']}}'>
+                                <input wire:model="" type='hidden' value='{{$variant['value']}}'>
+                            </div>
+                        </div>
+                    </div>
+                    @endforeach
+                </div>
+                <div class="col-12">
+                    <table class="table table-borderless" id='table-variant'>
+                        <colgroup>
+                            <col span="1" style="width: 40%;">
+                            <col span="1" style="width: 20%;">
+                            <col span="1" style="width: 20%;">
+                            <col span="1" style="width: 20%;">
+                        </colgroup>
+                        <thead class="border">
                             <tr>
-                              <th>no in stock</th>
-                              <th>Size</th>
-                              <th>Price</th>
-                              <th>Action</th>
+                                <th>listings</th>
+                                <th>no in stock</th>
+                                <th>purchase limit</th>
+                                <th>price</th>
                             </tr>
-                          </thead>
-                          <tbody id="record{{$index}}">
-                            @php
-                              $index2 = 0;
-                              $rows = [];
-
-                              foreach($item as $key => $rec)
-                              {
-                                  $i = 0;
-                                  foreach($rec as $val){
-                                      $rows[$i][$key] = $val;
-                                      $i++;
-                                  }
-                              }
-
-                            @endphp
-                            @foreach ($rows as $key => $itemRecord)
-                            <tr id="record{{$index.$index2}}">
-                              <td>
-                                <input type="number" value="{{ isset($itemRecord[1]) ? $itemRecord[1] : ''}}" name="no_in_stock[{{$index}}][]" required class="@error('no_in_stock') is-invalid @enderror">
-                              </td>
-                              <td>
-                                <select id="sizes" name='sizes[{{$index}}][]' class="@error('sizes') is-invalid @enderror" style="width: 100%">
-                                  <option value="">Select Size</option>
-                                  @if(!empty($sizes))
-                                      @foreach($sizes as $size)
-                                      <option {{ isset($itemRecord[0]) && $itemRecord[0] == $size['id'] ? 'selected' : '' }} value="{{ $size['id'] }}">{{ $size['size_code'] }}</option>
-                                      @endforeach
-                                  @endif
-                                </select>
-                              </td>
-                              <td>
-                                  <input type="text" value="{{ isset($itemRecord[2]) ? $itemRecord[2] : '' }}" name="p_price[{{$index}}][]" required id="">
-                              </td>
-                              <td>
-                                <button class='btn btn-danger btn-sm' onclick=removeRecord(record{{$index.$index2}},record{{$index}})><i class='bi bi-trash'></i></button>
-                              </td>
+                        </thead>
+                        <tbody id="variant-table">
+                            @foreach ($variantListings as $index => $variantListing)
+                            <tr>
+                                <td>
+                                    {{$variantListing["'listing_name'"]}}
+                                    <input type='hidden' value=`{{$variantListing["'listing_name'"]}}`>
+                                </td>
+                                <td>
+                                    <input type="number" class="" value="{{$variantListing["'listing_no_in_stock'"]}}">
+                                </td>
+                                <td>
+                                    <input type="number" value="{{$variantListing["'listing_purchase_limit'"]}}">
+                                </td>
+                                <td>
+                                    <input type="text" value="{{$variantListing["'listing_price'"]}}">
+                                </td>
                             </tr>
-                            @php
-                              $index2++;
-                            @endphp
                             @endforeach
-                          </tbody>
-                          <tfoot>
-                            <tr>
-                              <th colspan="4" class="text-end">
-                                <button type="button" onclick="addNewRecord({{$index}})" class="btn btn-primary btn-sm">
-                                  <i class="bi bi-plus-circle-fill"></i> Add
-                                </button>
-                              </th>
-                            </tr>
-                          </tfoot>
-                        </table>
-                     </td>
-                    </tr>
-                    @php
-                      $index++;
-                    @endphp
-                    @empty
-                    <tr>
-                      <td></td>
-                      <td>
-                          <select id="colors" name='colors[0][]' class="color-select" style="width: 100%">
-                              <option value="no_color">No Color</option>
-                              @if(!empty($colors))
-                                  @foreach($colors as $color)
-                                  <option value="{{ $color['id'] }}">{{ $color['name'] }}</option>
-                                  @endforeach
-                              @endif
-                          </select>
-                      </td>
-                     <td>
-                        <table class="table table-bordered">
-                          <thead>
-                            <tr>
-                              <th>no in stock</th>
-                              <th>Size</th>
-                              <th>Price</th>
-                              <th>Action</th>
-                            </tr>
-                          </thead>
-                          <tbody id="record0">
-                            <tr>
-                              <td>
-                                <input type="number" name="no_in_stock[0][0][]" required class="form-control @error('no_in_stock') is-invalid @enderror">
-                              </td>
-                              <td>
-                                <select id="sizes" name='sizes[0][0][]' class="form-select @error('sizes') is-invalid @enderror" style="width: 100%">
-                                  <option value="">Select Size</option>
-                                  @if(!empty($sizes))
-                                      @foreach($sizes as $size)
-                                      <option value="{{ $size['id'] }}">{{ $size['size_code'] }}</option>
-                                      @endforeach
-                                  @endif
-                                </select>
-                              </td>
-                              <td>
-                                  <input type="text" name="p_price[0][0][]" required id="">
-                              </td>
-                              <td></td>
-                            </tr>
-                          </tbody>
-                          <tfoot>
-                            <tr>
-                              <th colspan="4" class="text-end">
-                                <button type="button" onclick="addNewRecord(0)" class="btn btn-primary btn-sm">
-                                  <i class="bi bi-plus-circle-fill"></i> Add
-                                </button>
-                              </th>
-                            </tr>
-                          </tfoot>
-                        </table>
-                     </td>
-                    </tr>
-                    @endforelse
-                    @endif
+                        </tbody>
+                    </table>
 
-                  </tbody>
-                </table>
-                <table class="table table-borderless">
-                  <tfoot>
-                      <tr>
-                          <th>
-                              <div id="colors_error" class="invalid-feedback"></div>
-                          </th>
-                          <th>
-                              <div id="no_in_stock_error" class="invalid-feedback"></div>
-                          </th>
-                          <th>
-                              <div id="sizes_error" class="invalid-feedback"></div>
-                          </th>
-                          <th>
-                              <div id="p_price_error" class="invalid-feedback"></div>
-                          </th>
-                      </tr>
-                  </tfoot>
-              </table>
-              </div>
-              <div class="col-12 my-2 text-end">
-                <button type="button" onclick="addInventory()" class="btn btn-primary btn-sm">Add Inventory</button>
-              </div>
+                </div>
+                @endif
             </div>
             <div class="row mt-3">
               <div class="col-12">
