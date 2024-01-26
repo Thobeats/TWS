@@ -34,11 +34,11 @@ class Product extends Component
             $this->getVariantValues($productVariant);
         }
 
-        // if ($productVariant){
-        //     $this->productVariants = collect(json_decode($productVariant->variant, true));
-        // }else{
-        //     $this->productVariants = collect([]);
-        // }
+        if ($productVariant){
+            $this->productVariants = collect(json_decode($productVariant->variant, true));
+        }else{
+            $this->productVariants = collect([]);
+        }
 
         $this->processVariant();
         $this->loadProduct();
@@ -67,10 +67,12 @@ class Product extends Component
     public function getVariantValues($productVariants){
         $variantValues = json_decode($productVariants->variant_to_values, true);
         foreach ($variantValues as $key => $value) {
+
             $this->variantValues[$value["'listing_name'"]] = [
                 'price' => $value["'listing_price'"],
                 'in_stock' => $value["'listing_no_in_stock'"],
-                'limit' => $value["'listing_purchase_limit'"]
+                'limit' => $value["'listing_purchase_limit'"],
+                'pics' => isset($value["'pics'"]) ? $value["'pics'"] : []
             ];
         }
     }

@@ -17,5 +17,6 @@ class ProductVariant extends Model
         'sessionId',
         'session_status',
         'vendor_id',
+        'variant'
     ];
 }
