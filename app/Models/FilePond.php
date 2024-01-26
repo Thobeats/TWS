@@ -33,6 +33,22 @@ class FilePond extends Model
             }
         }
 
+        if($request->hasFile('listing_pics')){
+            $images = $request->file('listing_pics');
+            foreach($images as $image){
+               $file_name = $image->getClientOriginalName();
+               $directory = "public/$folder/". $file_name;
+
+                if(!file_exists($directory))
+                {
+                    $image->storeAs($folder,$file_name,"public");
+                }
+
+               return $file_name;
+
+            }
+        }
+
         //Upload Single Pics
         if($request->hasFile('pic')){
             $image = $request->file('pic');

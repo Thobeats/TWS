@@ -15,6 +15,13 @@
         padding: 5px;
         font-size: 12px;
     }
+    label{
+        font-size: 13px;
+        font-weight: 600;
+    }
+    a:active{
+        font-size: 13px;
+    }
 </style>
 
 <section class="section dashboard">
@@ -27,7 +34,7 @@
       </div>
     </div>
 
- 
+
         <div class="card">
             <div class="card-body">
               <h5 class="card-title">Add New Product</h5>
@@ -44,7 +51,7 @@
                     <div class="row mt-3">
                         <div class="col-lg-12">
                             <div class="has-validation">
-                                <label for="cat_name" class="form-label">Product Name</label>
+                                <label for="cat_name"  >Product Name</label>
                                 <input type="text" class="form-control" id="name" name='name'>
                                 <div id="name_error" class="invalid-feedback"></div>
                             </div>
@@ -53,7 +60,7 @@
 
                     <div class="row mt-3">
                         <div class="col-12">
-                            <label for="category" class="form-label">Category</label>
+                            <label for="category"  >Category</label>
                             <select id="category" name='category_id[]' multiple style="width: 100%">
                             {!! $categoryTemp !!}
                             </select>
@@ -63,7 +70,7 @@
 
                     <div class="row mt-3">
                         <div class="col-lg-6">
-                            <label for="tags" class="form-label">Tags</label>
+                            <label for="tags"  >Tags</label>
                             <select name='tags[]' class="product-tags form-select" multiple style="width: 100%">
                                 @if(!empty($tags))
                                     @foreach($tags as $tag)
@@ -75,7 +82,7 @@
                         </div>
 
                         <div class="col-lg-6">
-                            <label for="tag" class="form-label">Product SKU (optional)</label>
+                            <label for="tag"  >Product SKU (optional)</label>
                             <input type="text" name="sku" class="form-control">
                             <div id="sku_error" class="invalid-feedback"></div>
                         </div>
@@ -83,7 +90,7 @@
 
                     <div class="row mt-3">
                         <div class="col-lg-6">
-                            <label for="sections" class="form-label">Section</label>
+                            <label for="sections"  >Section</label>
                             <select id="sections" name='sections[]' class="form-select js-example-basic-multiple" multiple style="width: 100%">
                             @if(!empty($sections))
                                 @foreach($sections as $section)
@@ -95,12 +102,12 @@
                         </div>
 
                         <div class="col-lg-3 mb-3">
-                        <label for="shipping_fee" class="form-label">Shipping Fee</label>
+                        <label for="shipping_fee"  >Shipping Fee</label>
                             <input type="text" id="shipping_fee" name='shipping_fee' class="form-control">
                             <div id="shipping_fee_error" class="invalid-feedback"></div>
                         </div>
                         <div class="col-lg-3 mb-3">
-                        <label for="moq" class="form-label">Minimum Order Quantity</label>
+                        <label for="moq"  >Minimum Order Quantity</label>
                             <input   type="number" id="moq" name='moq' class="form-control">
                             <div id="moq_error" class="invalid-feedback"></div>
                         </div>
@@ -109,6 +116,25 @@
             </div>
 
             <div class="card">
+                <div class="card-body">
+                    <div class="row mt-3">
+                        <div class="col-12">
+                        <label for="product_description"  >Description</label>
+                        <textarea name='description' rows="15" class="tinymce-editor form-control" id='product_description'></textarea>
+                            <div id="description_error" class="invalid-feedback"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="my-3">
+                <div class="form-check form-switch">
+                    <input class="form-check-input" type="checkbox" id="flexSwitchCheckChecked" checked name='hasVariant' onchange='switchVariant()'>
+                    <label class="form-check-label" for="flexSwitchCheckChecked" id='switchLabel'>Variants On</label>
+                </div>
+            </div>
+
+            <div class="card" id='variant'>
                 <div class="card-body">
                     <div class="row mt-3">
                         <div class="col-12">
@@ -258,19 +284,23 @@
                 </div>
             </div>
 
+            <div class="card d-none" id='price'>
+                <div class="card-body">
+                    <div class="row mt-3">
+                        <div class="col-lg-12">
+                            <label for="pics">Price Per Item</label>
+                            <input type="number" name="price" class="form-control">
+                            <div id="pics_error" class="invalid-feedback"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <div class="card">
                 <div class="card-body">
                     <div class="row mt-3">
-                        <div class="col-12">
-                        <label for="product_description" class="form-label">Description</label>
-                        <textarea name='description' rows="15" class="tinymce-editor form-control" id='product_description'></textarea>
-                            <div id="description_error" class="invalid-feedback"></div>
-                        </div>
-                    </div>
-
-                    <div class="row mt-3">
                         <div class="col-lg-12">
-                            <label for="pics" class="form-label">Product Pictures</label>
+                            <label for="pics">Display Picture</label>
                             <input id='pics' type="file" name="pics[]" multiple class="form-control">
                             <div id="pics_error" class="invalid-feedback"></div>
                         </div>
@@ -292,6 +322,22 @@
 
 
 <script>
+    function switchVariant()
+    {
+        let variant = document.getElementById('variant');
+        let label = document.getElementById('switchLabel');
+        let price = document.getElementById('price');
+
+        if (variant.classList.contains('d-none')){
+            variant.classList.remove('d-none');
+            price.classList.add('d-none');
+            label.innerHTML = "Variant On";
+        }else{
+            variant.classList.add('d-none');
+            price.classList.remove('d-none');
+            label.innerHTML = "Variant Off";
+        }
+    }
   function addNewRecord(recordID){
     let record = document.getElementById(`record${recordID}`);
     let id = record.children.length;

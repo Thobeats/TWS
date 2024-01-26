@@ -657,21 +657,41 @@ class VendorController extends Controller
     }
 
     public function create_product(){
-        $categories = Category::where(['categories.status' => '1'])
-                                ->join('parent_to_children', 'parent_to_children.category_id', '=', 'categories.id')
-                                ->select('categories.id', 'categories.name','parent_to_children.parent_id')->get()->toArray();
-        $tags = Tag::where('status', 1)->get()->toArray();
-        $sections = Section::where('for',2)->get();
-        $shipping = ShippingType::select('id','name')->get();
-        $cats = $this->buildTree($categories);
-        $this->buildTemplate($cats);
-        $categoryTemp = $this->category_template;
-        $variants = Variant::where('status', 1)->get();
+        try
+        {
+            $user = Auth::user();
+            //Create a new Session
+            $session = ProductVariant::where([
+                'vendor_id' => $user->id,
+                'session_status' => false
+            ])->first();
 
-        //Sizes
-        $sizes = Size::select('id', 'size_code')->get()->toArray();
-        $colors = Color::select('id', 'name')->get()->toArray();
-        return view('vendor.products.new_product', compact('variants','tags', 'categoryTemp','sizes', 'colors','sections','shipping'));
+            if (!$session){
+                $sessionId = "#newSess_" . $user->id . "_" . rand(10000000, 99999999);
+                $session = collect();
+            }else{
+                $sessionId = $session->sessionId;
+            }
+
+            $categories = Category::where(['categories.status' => '1'])
+            ->join('parent_to_children', 'parent_to_children.category_id', '=', 'categories.id')
+            ->select('categories.id', 'categories.name','parent_to_children.parent_id')->get()->toArray();
+            $tags = Tag::where('status', 1)->get()->toArray();
+            $sections = Section::where('for',2)->get();
+            $shipping = ShippingType::select('id','name')->get();
+            $cats = $this->buildTree($categories);
+            $this->buildTemplate($cats);
+            $categoryTemp = $this->category_template;
+            $variants = Variant::where('status', 1)->get();
+
+            //Sizes
+            $sizes = Size::select('id', 'size_code')->get()->toArray();
+            $colors = Color::select('id', 'name')->get()->toArray();
+            return view('vendor.products.new_product', compact('variants','tags', 'categoryTemp','sizes', 'colors','sections','shipping', 'session', 'sessionId'));
+        }catch(Exception $e){
+            //Create a redirect page
+
+        }
     }
 
     protected function buildTree($elements, $parent_id = 0){
@@ -714,8 +734,14 @@ class VendorController extends Controller
             try{
                 parse_str($request->getContent(), $formData);
                 $request = new Request($formData);
+
             if($request->has('save')){
                 $ps = 1;
+                if ($request->has('hasVariant')){
+                    $request->merge(['hasVariant' => true]);
+                }else{
+                    $request->merge(['hasVariant' => false]);
+                }
 
                 $validator = Validator::make($request->all(),[
                     'name' => 'required|string',
@@ -726,21 +752,18 @@ class VendorController extends Controller
                     "record.*.'listing_no_in_stock'" => 'nullable|string',
                     "record.*.'listing_purchase_limit'" => 'nullable|string',
                     "record.*.'listing_price'" => 'nullable|string',
+                    "record.*.'pics'" => 'nullable|array',
                     'pics' => 'required|array',
                     'shipping_fee' => 'integer',
                     'sections' => 'required|array',
                     'sku' => 'nullable|string',
-                    'moq' => 'required|integer'
+                    'moq' => 'required|integer',
+                    'hasVariant' => 'required|boolean',
+                    'price' => 'required_if:hasVariant,true'
                 ],[
                     'name.required' => 'The Product name is needed',
                     'tags.required' => 'Tags are needed to manage your products',
                     'pics.required' => 'Please Upload pictures before publishing a product',
-                    'sizes.*.*.required' => 'Please enter a size value for the #:position item in the #:second-position entry',
-                    'sizes.*.*.string' => 'The size value is invalid for the #:position item in the #:second-position entry',
-                    'no_in_stock.*.*.required' => 'No in stock for the #:position item in the #:second-position entry is required',
-                    'no_in_stock.*.*.integer' => 'No in stock for the #:position item in the #:second-position entry is invalid',
-                    'p_price.*.*.required' => 'Please enter a price for the #:position item in the #:second-position entry',
-                    'p_price.*.*.string' => 'Invalid price for the #:position item in the #:second-position entry',
                     'description' => 'Please enter a product Description before publishing',
                     'category_id' => 'Please choose a product category before publishing',
                     'colors.*.required' => 'Please choose a color for the #:position item'
@@ -757,6 +780,7 @@ class VendorController extends Controller
                     "record.*.'listing_no_in_stock'" => 'nullable|string',
                     "record.*.'listing_purchase_limit'" => 'nullable|string',
                     "record.*.'listing_price'" => 'nullable|string',
+                    "record.*.'pics'" => 'nullable|array',
                     'pics' => 'nullable|array',
                     'shipping_fee' => 'integer',
                     'sections' => 'nullable|array',
@@ -770,67 +794,35 @@ class VendorController extends Controller
 
             $request->merge(['publish_status' => $ps]);
 
-            // if($validator->fails()){
-            //     return [
-            //         "code" => 2,
-            //         "type" => "error",
-            //         "body" => $validator->errors()
-            //     ];
-            // }
-
-            //Handle Variants
-            $variant_records = [];
-
-            foreach ($request->variant as $key => $value){
-                $variant_records[] = [
-                    "variant" => $request->variant[$key],
-                    "value" => $request->variantValue[$key]
-                ];
-            }
-
-
             $pics = $request->pics;
-            // $item_listing = [];
-            // $priceSum = 0;
-            // $priceCount = 0;
 
-            // for ($i=0; $i < count($request->colors); $i++) {
-            //     $color = $request->colors[$i];
-            //     if ($color == 'no_color'){
-            //         $color = 234990;
-            //     }else {
-            //         if(!$this->findColor($color))
-            //         {
-            //             $color = $this->saveColor($color);
-            //         }
-            //     }
+            if ($request->hasVariant == true)
+            {
+                //Handle Variants
+                $variant_records = [];
 
-            //     $listing = [
-            //         $request->sizes[$i],
-            //         $request->no_in_stock[$i],
-            //         $request->p_price[$i]
-            //     ];
+                foreach ($request->variant as $key => $value){
+                    $variant_records[] = [
+                        "variant" => $request->variant[$key],
+                        "value" => $request->variantValue[$key]
+                    ];
+                }
+                $priceCount = 0;
+                $priceSum = 0;
+                foreach ($request->record as $record){
+                    $priceSum += $record["'listing_price'"];
+                    $priceCount++;
+                }
 
-            //     $priceSum += array_sum($request->p_price[$i]);
-            //     $priceCount += count($request->p_price[$i]);
-
-            //     $item_listing[$color] = $listing;
-            // }
-
-            $priceCount = 0;
-            $priceSum = 0;
-            foreach ($request->record as $record){
-                $priceSum += $record["'listing_price'"];
-                $priceCount++;
+                $request->merge(['price' => ceil($priceSum / $priceCount)]);
             }
 
-            $request->merge(['price' => ceil($priceSum / $priceCount)]);
+
             $user = Auth::user();
 
             // Attach the Vendor Id to the request
             $request->merge(['vendor_id' => $user->id,
                             'tags' => json_encode($request->tags),
-                            // 'item_listing' => json_encode($item_listing),
                             'pics' => json_encode($pics),
                             'category_id' => json_encode($request->category_id),
                             'section_id' => json_encode($request->sections),
@@ -844,11 +836,15 @@ class VendorController extends Controller
                                 'publish_status','section_id',
                                 'shipping_fee', 'sku','moq'
                             ));
-            $variant = ProductVariant::create([
-                'product_id' => $product->id,
-                'variant_to_values' => json_encode($request->record),
-                'variant' => json_encode($variant_records)
-            ]);
+            if ($request->hasVariant == true)
+            {
+                $variant = ProductVariant::create([
+                    'product_id' => $product->id,
+                    'variant_to_values' => json_encode($request->record),
+                    'variant' => json_encode($variant_records)
+                ]);
+            }
+
             // Return view with Success report
             //toastr()->success('New Product Saved');
 
@@ -871,17 +867,31 @@ class VendorController extends Controller
             $vendorProfile->products = json_encode($vendorProducts);
             $vendorProfile->save();
 
-            return [
-                "code" => 0,
-                "type" => "published",
-                "body" => "Success"
-            ];
+            if ($request->hasVariant == true)
+            {
+                return [
+                    "code" => 0,
+                    "type" => "published",
+                    "body" => "Success",
+                    "redirect" => 1,
+                    "productId" => $product->id
+                ];
+            }else
+            {
+                return [
+                    "code" => 0,
+                    "type" => "published",
+                    "body" => "Success",
+                    "redirect" => 0
+                ];
+            }
         }catch(Exception $e){
             info($e);
             return [
                 "code" => 1,
                 "type" => "error",
-                "body" => $e->getMessage()
+                "body" => $e->getMessage(),
+                "redirect" => 0
             ];
         }
     }
@@ -976,25 +986,16 @@ class VendorController extends Controller
                     'description' => 'required|string',
                     'category_id' => 'required|array',
                     'tags' => 'required|array',
-                    'sizes.*.*' => 'required|string',
-                    'p_price.*.*' => 'required|string',
-                    'colors.*' => 'required|string',
-                    'no_in_stock.*.*' => 'required|integer',
                     'pics' => 'required|array',
                     'shipping_fee' => 'integer',
                     'sections' => 'required|array',
                     'sku' => 'nullable|string',
-                    'moq' => 'required|integer'
+                    'moq' => 'required|integer',
+                    'price' => 'nullable|integer'
                 ],[
                     'name.required' => 'The Product name is needed',
                     'tags.required' => 'Tags are needed to manage your products',
                     'pics.required' => 'Please Upload pictures before publishing a product',
-                    'sizes.*.*.required' => 'Please enter a size value for the #:position item in the #:second-position entry',
-                    'sizes.*.*.string' => 'The size value is invalid for the #:position item in the #:second-position entry',
-                    'no_in_stock.*.*.required' => 'No in stock for the #:position item in the #:second-position entry is required',
-                    'no_in_stock.*.*.integer' => 'No in stock for the #:position item in the #:second-position entry is invalid',
-                    'p_price.*.*.required' => 'Please enter a price for the #:position item in the #:second-position entry',
-                    'p_price.*.*.string' => 'Invalid price for the #:position item in the #:second-position entry',
                     'description' => 'Please enter a product Description before publishing',
                     'category_id' => 'Please choose a product category before publishing',
                     'colors.*.required' => 'Please choose a color for the #:position item'
@@ -1481,5 +1482,50 @@ class VendorController extends Controller
 
     protected function findColor($color){
         return Color::find($color);
+    }
+
+    public function editVariant($productId, Request $request){
+        try{
+            $user = Auth::user();
+            $variantRecord = ProductVariant::where(['product_id' => $productId])->first();
+
+            if ($variantRecord){
+
+                $product = Product::find($variantRecord->product_id);
+                $variantArray = json_decode($variantRecord->variant_to_values, true);
+                $active = $request->has('variantIndex') ? $request->get('variantIndex') : 0;
+                $images = isset($variantArray[$active]["'pics'"]) ? json_decode($variantArray[$active]["'pics'"],true) : [];
+                return view('vendor.products.edit_variant', compact('variantRecord', 'product', 'active', 'images'));
+            }
+
+        }catch(Exception $e){
+
+        }
+    }
+
+    public function saveVariant(Request $request){
+        try{
+            $variantRecord = ProductVariant::where(['product_id' => $request->productId])->first();
+
+            if ($variantRecord){
+                $variants = json_decode($variantRecord->variant_to_values, true);
+                $currentIndex = $variants[$request->index];
+                $currentIndex["'listing_no_in_stock'"] = $request->no_in_stock;
+                $currentIndex["'listing_price'"] = $request->price;
+                $currentIndex["'listing_purchase_limit'"] = $request->purchase_limit;
+                $currentIndex["'pics'"] = json_encode($request->listing_pics);
+
+                $variants[$request->index] = $currentIndex;
+
+                $variantRecord->variant_to_values = json_encode($variants);
+                $variantRecord->save();
+
+                return redirect('/vendor/products/');
+            }
+
+            return redirect()->back();
+        }catch(Exception $e){
+
+        }
     }
 }

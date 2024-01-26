@@ -34,11 +34,11 @@ class Product extends Component
             $this->getVariantValues($productVariant);
         }
 
-        if ($productVariant){
-            $this->productVariants = collect(json_decode($productVariant->variant, true));
-        }else{
-            $this->productVariants = collect([]);
-        }
+        // if ($productVariant){
+        //     $this->productVariants = collect(json_decode($productVariant->variant, true));
+        // }else{
+        //     $this->productVariants = collect([]);
+        // }
 
         $this->processVariant();
         $this->loadProduct();

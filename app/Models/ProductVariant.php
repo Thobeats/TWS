@@ -13,6 +13,9 @@ class ProductVariant extends Model
         'product_id',
         'variant_to_values',
         'created_at',
-        'updated_at'
+        'updated_at',
+        'sessionId',
+        'session_status',
+        'vendor_id',
     ];
 }

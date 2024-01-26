@@ -81,6 +81,15 @@
         selector: "textarea#product_description",
         theme: "modern",
         height: 500,
+        setup: function (editor) {
+            editor.on('init change', function () {
+
+                editor.save();
+            });
+            editor.on('change', function (e) {
+                livewire.emit('saveDescription', editor.getContent())
+            });
+        },
         plugins: [
             "advlist autolink link lists charmap preview hr anchor pagebreak spellchecker",
             "searchreplace wordcount visualblocks visualchars code fullscreen insertdatetime nonbreaking",
@@ -130,55 +139,8 @@
   <script src="{{ asset('js/bs5-intro-tour.js')}}"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.0/js/select2.min.js"></script>
   @include('layout.filepond')
-@livewireScripts
-
-
 <script>
-        // Get a file input reference
-        const pics = document.querySelector('#pics');
-        const business = document.querySelector('#business');
-         $(document).ready(function() {
-            $('.js-example-basic-multiple').select2();
-            $('.color-select').select2({
-                tags : true
-            });
-
-            $('.product-tags').select2({
-                tags : true
-            });
-
-            $('#category').select2();
-
-            const steps = [
-                {
-                    title: "Hello",
-                    content: "<p> Welcome to The Wholesale Lounge, Let's show you around</p>"
-                }, {
-                    id: "first",
-                    title: "Products",
-                    content: "<p>Add new products and view all added products</p>"
-                },{
-                    id: "second",
-                    title: "Orders",
-                    content: "<p>View all orders from customers</p>"
-                }
-            ];
-
-            const tour = new Tour(steps);
-
-            document.getElementById('take-a-tour').addEventListener('click', function(){
-                tour.show();
-            });
-        });
-
-
-        //Register FilePond functions
-        FilePond.registerPlugin(
-          FilePondPluginImagePreview,
-          FilePondPluginFileValidateSize,
-          FilePondPluginFileValidateType
-        );
-
+    var switchery = new Switchery(document.getElementById('switchVariant'),{size: 'small'});
         $('#category').on('select2:select', function(e){
             let selected = $("#category").select2('data');
             let mapped = selected.map(function(item){
@@ -227,7 +189,6 @@
             e.preventDefault();
             tinymce.triggerSave();
             let formData = $("#newProductForm").serialize();
-            console.log(formData);
             formData += action;
             fetch("{{ url('/vendor/products/store') }}", {
                 method : "POST",
@@ -238,6 +199,8 @@
             })
             .then(response => response.json())
             .then(json => {
+                console.log(json)
+                return;
                $(".invalid-feedback").html('');
 
                 if (json.code == 2){
@@ -256,12 +219,8 @@
                     location.href = '/vendor/products/drafts';
                 }
 
-                if (json.code == 0 ){
-                    if (json.redirect == 1){
-                        location.href = '/vendor/products/editVariant/' + json.productId
-                    }else{
-                        location.href = '/vendor/products';
-                    }
+                if (json.code == 0 && json.type == 'published'){
+                    location.href = '/vendor/products';
                 }
             });
         });
@@ -304,44 +263,6 @@
                 }
             });
         });
-
-        // Create a FilePond instance
-        FilePond.create(pics, {
-            storeAsFile: true,
-            acceptedFileTypes: ['image/png','image/jpg','image/jpeg'],
-            allowImageValidateSize: true,
-            imagePreviewHeight: 170,
-            maxFileSize : "3mb",
-            maxFiles : 3,
-          //  required : true,
-            files : [
-            <?php
-            if(isset($images) && $images != []):
-                foreach($images as $image){
-                    if($image != ""){
-            ?>
-                {
-                    source : "/storage/products/{{$image}}"
-                },
-            <?php }} endif; ?>
-            ],
-            labelMaxFileSize: "Maximum file size is {filesize}",
-            server : {
-                process : "/api/saveImage/products",
-                revert : (fileName)=>{
-                    fetch(`/api/deleteImage/products?fileName=${fileName}`, {
-                          method: "DELETE"
-                        }).then(res => res.text())
-                          .then(text => {
-                              console.log(text)
-                          });
-                },
-                headers:{
-                    'X-CSRF-TOKEN' : '{{ csrf_token() }}'
-                }
-            }
-        });
-
 
 </script>
 
@@ -595,29 +516,33 @@
     function processVariantValues(){
 
         let listings = Object.values(variantListings);
+        let aryKeys = Object.keys(variantListings);
         let result = generateCombinations(listings)
         let variantTable = ``;
+        console.log(variantListings);
 
-        for(i in result){
-            let listingName = result[i].join(" / ");
-            variantTable += `
-            <tr>
-                <td>
-                    ${listingName}
-                    <input type='hidden' name="record[${i}]['listing_name']" value="${listingName}">
-                </td>
-                <td>
-                    <input type="number" name="record[${i}]['listing_no_in_stock']" class="">
-                </td>
-                <td>
-                    <input type="number" name="record[${i}]['listing_purchase_limit']" >
-                </td>
-                <td>
-                    <input type="text" name="record[${i}]['listing_price']" id="">
-                </td>
-            </tr>
-            `;
-        }
+        livewire.emit('processVariantTable', [aryKeys, listings, result]);
+
+       // for(i in result){
+        //     let listingName = result[i].join(" / ");
+        //     variantTable += `
+        //     <tr>
+        //         <td>
+        //             ${listingName}
+        //             <input type='hidden' name="record[${i}]['listing_name']" value="${listingName}">
+        //         </td>
+        //         <td>
+        //             <input type="number" name="record[${i}]['listing_no_in_stock']" class="">
+        //         </td>
+        //         <td>
+        //             <input type="number" name="record[${i}]['listing_purchase_limit']" >
+        //         </td>
+        //         <td>
+        //             <input type="text" name="record[${i}]['listing_price']" id="">
+        //         </td>
+        //     </tr>
+        //     `;
+        // }
 
         document.getElementById('variant-table').innerHTML = variantTable;
         document.getElementById('table-variant').classList.remove('d-none');
@@ -643,7 +568,7 @@
         return result;
     }
 
-    function addInventory(){
+   /** function addInventory(){
         let inventory = document.getElementById('inventory');
         let id = inventory.children.length;
         let row = document.createElement('tr');
@@ -726,10 +651,158 @@
         $(`#colors${id}`).select2({
             tags : true
         });
-    }
+    }**/
+</script>
+
+<script>
+
+    $(document).ready(()=>{
+
+         // Get a file input reference
+            const pics = document.querySelector('#pics');
+            const business = document.querySelector('#business');
+            $(document).ready(function() {
+                $('.js-example-basic-multiple').select2();
+                $('.color-select').select2({
+                    tags : true
+                });
+
+                $('.product-tags').select2({
+                    tags : true
+                });
+
+                $('#category').select2();
+                $('.product_section').select2();
+
+                $('#category').on('change', function (e) {
+                    livewire.emit('selectedCategory', $('#category').val())
+                });
+
+                $('.product_section').on('change', function (e) {
+                    livewire.emit('selectedSections', $('.product_section').val())
+                });
+
+                $('.product-tags').on('change', function (e) {
+                    livewire.emit('selectedTags', $('.product-tags').val())
+                });
+
+                $('.product-tags').on('change', function (e) {
+                    livewire.emit('selectedTags', $('.product-tags').val())
+                });
+
+                const steps = [
+                    {
+                        title: "Hello",
+                        content: "<p> Welcome to The Wholesale Lounge, Let's show you around</p>"
+                    }, {
+                        id: "first",
+                        title: "Products",
+                        content: "<p>Add new products and view all added products</p>"
+                    },{
+                        id: "second",
+                        title: "Orders",
+                        content: "<p>View all orders from customers</p>"
+                    }
+                ];
+
+                const tour = new Tour(steps);
+
+                document.getElementById('take-a-tour').addEventListener('click', function(){
+                    tour.show();
+                });
+            });
+
+
+                //Register FilePond functions
+                FilePond.registerPlugin(
+                FilePondPluginImagePreview,
+                FilePondPluginFileValidateType
+                );
+
+            window.addEventListener('jquery', event => {
+                const pics = document.querySelector('#pics');
+                // Create a FilePond instance
+                FilePond.create(pics, {
+                    storeAsFile: true,
+                    acceptedFileTypes: ['image/png','image/jpg','image/jpeg'],
+                    imagePreviewHeight: 170,
+                    maxFileSize : "3mb",
+                    maxFiles : 3,
+                    labelMaxFileSize: "Maximum file size is {filesize}",
+                    server : {
+                        process : "/api/saveImage/products",
+                        revert : (fileName)=>{
+                            fetch(`/api/deleteImage/products?fileName=${fileName}`, {
+                                method: "DELETE"
+                                }).then(res => res.text())
+                                .then(text => {
+                                    console.log(text)
+                                });
+                        },
+                        load: (source, load, error, progress, abort, headers) => {
+                            console.log('attempting to load', source);
+                            // implement logic to load file from server here
+                            // https://pqina.nl/filepond/docs/patterns/api/server/#load-1
+                        },
+                        headers:{
+                            'X-CSRF-TOKEN' : '{{ csrf_token() }}'
+                        }
+                    }
+                });
+            });
+
+            document.addEventListener('FilePond:processfile', (e) => {
+                let target = e.target;
+                let allImages = [];
+
+                target.querySelectorAll('[name="pics[]"]').forEach((fil)=>{
+                    allImages.push(fil.value);
+                })
+                livewire.emit('test', allImages)
+
+            });
+
+            // Create a FilePond instance
+            FilePond.create(pics, {
+                storeAsFile: true,
+                acceptedFileTypes: ['image/png','image/jpg','image/jpeg'],
+                allowImageValidateSize: true,
+                imagePreviewHeight: 170,
+                maxFileSize : "3mb",
+                maxFiles : 3,
+            //  required : true,
+                files : [
+                <?php
+                if(isset($images)):
+                    foreach($images as $image){
+                ?>
+                    {
+                        source : "/storage/products/{{$image}}"
+                    },
+                <?php } endif; ?>
+                ],
+                labelMaxFileSize: "Maximum file size is {filesize}",
+                server : {
+                    //process : "/api/saveImage/products",
+                    revert : (fileName)=>{
+                        fetch(`/api/deleteImage/products?fileName=${fileName}`, {
+                            method: "DELETE"
+                            }).then(res => res.text())
+                            .then(text => {
+                                console.log(text)
+                            });
+                    },
+                    headers:{
+                        'X-CSRF-TOKEN' : '{{ csrf_token() }}'
+                    }
+                }
+            });
+    })
 </script>
 
 
+
+@livewireScripts
 
 </body>
 

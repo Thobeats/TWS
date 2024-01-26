@@ -27,6 +27,7 @@ class Product extends Model
         'sku',
         'moq',
         'item_listing',
+        'hasVariant',
         'created_at',
         'updated_at'
     ];

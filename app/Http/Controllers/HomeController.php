@@ -45,92 +45,96 @@ class HomeController extends Controller
     }
 
     public function home(){
-        $slides = Slide::where('status', 1)->get();
-        $categories = Category::where('parent_to_children.parent_id', 0)
-                            ->join('parent_to_children', 'parent_to_children.category_id', '=', 'categories.id')
-                            ->limit(6)
-                            ->get();
-        $vendors = User::where(['role' => 2, 'account_status' => 1])->select('id', 'business_name as name')->get();
-        $sections = Section::where(['status'=>1,'for' => 2])->orderBy('position')->get();
-        $adminSections = Section::where(['status'=> 1,'for' => 3])->orderBy('position')->get();
-        $new_arrivals = Product::select('*')
-                                ->where('publish_status',1)
-                                ->orderBy('id', 'DESC')
-                                ->limit(10)
+        try{
+            $slides = Slide::where('status', 1)->get();
+            $categories = Category::where('parent_to_children.parent_id', 0)
+                                ->join('parent_to_children', 'parent_to_children.category_id', '=', 'categories.id')
+                                ->limit(6)
                                 ->get();
-        // $topVendors = Order::selectRaw("count(orders.vendor_id) as cnt, users.business_name, users.profile, users.id, vendors.business_banner")
-        //                     ->join('users','users.id','=','orders.vendor_id')
-        //                     ->join('vendors', 'vendors.user_id', '=', 'orders.vendor_id')
-        //                     ->groupBy('users.id', 'vendors.business_banner')
-        //                     ->orderBy('cnt', 'DESC')
-        //                     ->limit(5)
-        //                     ->get()
-        //                     ->map(function($item){
-        //                         $products = Product::where('vendor_id', $item->id)->limit(5)->get()->toArray();
+            $vendors = User::where(['role' => 2, 'account_status' => 1])->select('id', 'business_name as name')->get();
+            $sections = Section::where(['status'=>1,'for' => 2])->orderBy('position')->get();
+            $adminSections = Section::where(['status'=> 1,'for' => 3])->orderBy('position')->get();
+            $new_arrivals = Product::select('*')
+                                    ->where('publish_status',1)
+                                    ->orderBy('id', 'DESC')
+                                    ->limit(10)
+                                    ->get();
+            // $topVendors = Order::selectRaw("count(orders.vendor_id) as cnt, users.business_name, users.profile, users.id, vendors.business_banner")
+            //                     ->join('users','users.id','=','orders.vendor_id')
+            //                     ->join('vendors', 'vendors.user_id', '=', 'orders.vendor_id')
+            //                     ->groupBy('users.id', 'vendors.business_banner')
+            //                     ->orderBy('cnt', 'DESC')
+            //                     ->limit(5)
+            //                     ->get()
+            //                     ->map(function($item){
+            //                         $products = Product::where('vendor_id', $item->id)->limit(5)->get()->toArray();
 
-        //                         return [
-        //                             "vendor_id" => $item->id,
-        //                             "business_name" => $item->business_name,
-        //                             "profile" => $item->profile,
-        //                             "business_banner" => $item->business_banner,
-        //                             "products" => $products
-        //                         ];
-        //                     });
-        $topVendors = Vendor::where('users.account_status', 1)
-                            ->selectRaw("users.business_name, users.profile, users.id, vendors.business_banner")
-                            ->join('users','users.id','=','vendors.user_id')
-                            ->groupBy('users.id', 'vendors.business_banner')
-                            ->orderBy('users.id', 'DESC')
-                            ->limit(5)
-                            ->get()
-                            ->map(function($item){
-                                $products = Product::where('vendor_id', $item->id)->where('publish_status', 1)->limit(4)->get()->toArray();
-                                return [
-                                    "vendor_id" => $item->id,
-                                    "business_name" => $item->business_name,
-                                    "profile" => $item->profile,
-                                    "business_banner" => $item->business_banner,
-                                    "products" => $products
-                                ];
-                            });
+            //                         return [
+            //                             "vendor_id" => $item->id,
+            //                             "business_name" => $item->business_name,
+            //                             "profile" => $item->profile,
+            //                             "business_banner" => $item->business_banner,
+            //                             "products" => $products
+            //                         ];
+            //                     });
+            $topVendors = Vendor::where('users.account_status', 1)
+                                ->selectRaw("users.business_name, users.profile, users.id, vendors.business_banner")
+                                ->join('users','users.id','=','vendors.user_id')
+                                ->groupBy('users.id', 'vendors.business_banner')
+                                ->orderBy('users.id', 'DESC')
+                                ->limit(5)
+                                ->get()
+                                ->map(function($item){
+                                    $products = Product::where('vendor_id', $item->id)->where('publish_status', 1)->limit(4)->get()->toArray();
+                                    return [
+                                        "vendor_id" => $item->id,
+                                        "business_name" => $item->business_name,
+                                        "profile" => $item->profile,
+                                        "business_banner" => $item->business_banner,
+                                        "products" => $products
+                                    ];
+                                });
 
-        // $spotLight = Vendor::whereIn()
-        //                     ->join('users','users.id','=','vendors.user_id')
-        //                     ->groupBy('users.id', 'vendors.business_banner')
-        //                     ->orderBy('users.id', 'DESC')
-        //                     ->limit(5)
-        //                     ->get()
-        //                     ->map(function($item){
-        //                         $products = Product::where('vendor_id', $item->id)->limit(5)->get()->toArray();
-        //                         return [
-        //                             "vendor_id" => $item->id,
-        //                             "business_name" => $item->business_name,
-        //                             "profile" => $item->profile,
-        //                             "business_banner" => $item->business_banner,
-        //                             "products" => $products
-        //                         ];
-        //                     });
+            // $spotLight = Vendor::whereIn()
+            //                     ->join('users','users.id','=','vendors.user_id')
+            //                     ->groupBy('users.id', 'vendors.business_banner')
+            //                     ->orderBy('users.id', 'DESC')
+            //                     ->limit(5)
+            //                     ->get()
+            //                     ->map(function($item){
+            //                         $products = Product::where('vendor_id', $item->id)->limit(5)->get()->toArray();
+            //                         return [
+            //                             "vendor_id" => $item->id,
+            //                             "business_name" => $item->business_name,
+            //                             "profile" => $item->profile,
+            //                             "business_banner" => $item->business_banner,
+            //                             "products" => $products
+            //                         ];
+            //                     });
 
-        $firstTimeBuyers = Product::where(['products.publish_status' => 1, 'users.account_status' => 1])
-                                ->join('users', 'users.id', '=', 'products.vendor_id')
-                                ->select('products.*')
-                                ->inRandomOrder()
-                                ->get();
+            $firstTimeBuyers = Product::where(['products.publish_status' => 1, 'users.account_status' => 1])
+                                    ->join('users', 'users.id', '=', 'products.vendor_id')
+                                    ->select('products.*')
+                                    ->inRandomOrder()
+                                    ->get();
 
-        $freeShipping = Product::where(['products.publish_status' => 1, 'shipping_fee' => 0, 'users.account_status' => 1])
-                                ->join('users', 'users.id', '=', 'products.vendor_id')
-                                ->select('products.*')
-                                ->inRandomOrder()
-                                ->get();
+            $freeShipping = Product::where(['products.publish_status' => 1, 'shipping_fee' => 0, 'users.account_status' => 1])
+                                    ->join('users', 'users.id', '=', 'products.vendor_id')
+                                    ->select('products.*')
+                                    ->inRandomOrder()
+                                    ->get();
 
-        $newVendors = User::where(['users.role' => 2, 'users.account_status' => 1, 'vendors.verified' => 1, 'users.logged_in' => true])
-                                ->join('vendors','vendors.user_id','=','users.id')
-                                ->select('users.business_name','users.id', 'users.profile')
-                                ->orderBy('vendors.created_at', 'DESC')
-                                ->limit(10)
-                                ->get();
+            $newVendors = User::where(['users.role' => 2, 'users.account_status' => 1, 'vendors.verified' => 1, 'users.logged_in' => true])
+                                    ->join('vendors','vendors.user_id','=','users.id')
+                                    ->select('users.business_name','users.id', 'users.profile')
+                                    ->orderBy('vendors.created_at', 'DESC')
+                                    ->limit(10)
+                                    ->get();
 
-        return view('market.home',compact('vendors','sections','new_arrivals', 'adminSections','topVendors', 'categories', 'firstTimeBuyers', 'freeShipping', 'newVendors'));
+            return view('market.home',compact('vendors','sections','new_arrivals', 'adminSections','topVendors', 'categories', 'firstTimeBuyers', 'freeShipping', 'newVendors'));
+        }catch(Exception $e){
+            info($e->getMessage());
+        }
     }
 
     public function shop(Request $request){
