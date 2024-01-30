@@ -31,6 +31,9 @@
             <a href="/vendor/products/" class="btn btn-primary btn-sm">
                 <i class="bi bi-backspace"></i> Back to products
             </a>
+            @if ($product->hasVariant == true)
+                <a href="{{"/vendor/products/editVariant/$product->id?lctn=rteslctn"}}" class="btn btn-primary btn-sm">Edit Variants <i class="bi bi-backspace-reverse"></i></a>
+            @endif
         </div>
         <div class="card">
             <div class="card-body">
@@ -138,13 +141,7 @@
             </div>
             <div class="card">
                 <div class="card-body">
-                    @if ($product->hasVariant == true)
-                        <div class="row mt-3">
-                            <div class="col-12 text-end">
-                                <a href="{{"/vendor/products/editVariant/$product->id"}}" class="btn btn-primary btn-sm">Edit Variants <i class="bi bi-backspace-reverse"></i></a>
-                            </div>
-                        </div>
-                    @else
+                    @if ($product->hasVariant == false)
                         <div class="row mt-3">
                             <div class="col-lg-12">
                                 <label for="pics">Price Per Item</label>

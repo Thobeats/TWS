@@ -20,6 +20,10 @@
             <h5 class="card-title">Edit Variant</h5>
         </div>
     </div>
+    <hr>
+    <div class="card-body text-end">
+        <a href="/vendor/products/saveAllVariant?productId={{$product->id}}&lctn={{$source}}" class="btn btn-primary btn-sm">Save All Update</a>
+    </div>
     {{-- <div class="row">
         <div class="col-lg-3">
             <div class="card">
@@ -35,14 +39,14 @@
                 <div class="card-body pt-4">
                     @foreach (json_decode($variantRecord->variant_to_values, true) as $index => $value)
                         <p class='text-center border rounded p-2 {{ $active == $index ? 'bg-primary text-light' : ''}}'>
-                            <a class='{{ $active == $index ? 'text-light' : 'text-dark'}}' href="?variantIndex={{$index}}">{{ $value["'listing_name'"] }}</a>
+                            <a class='{{ $active == $index ? 'text-light' : 'text-dark'}}' href="?variantIndex={{$index}}&lctn={{$source}}">{{ $value["'listing_name'"] }}</a>
                         </p>
                     @endforeach
                 </div>
             </div>
         </div>
         <div class="col-lg-9">
-            <form action="{{ route('save_variants')}}" method="post" enctype="multipart/form">
+            <form action="{{ route('update_variants')}}" method="post" enctype="multipart/form">
                 @csrf
                 <input type="hidden" name="index" value="{{$active}}">
                 <input type="hidden" name="productId" value="{{$product->id}}">
@@ -80,11 +84,8 @@
                         <div id="pics_error" class="invalid-feedback"></div>
                     </div>
                 </div>
-
-                <div class="card">
-                    <div class="card-body pt-3 text-end">
-                        <button type="submit" class="btn btn-primary">Save</button>
-                    </div>
+                <div class="card-body text-end">
+                    <button type="submit" class="btn btn-primary btn-sm">Save Update</button>
                 </div>
             </form>
         </div>

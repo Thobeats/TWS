@@ -834,7 +834,7 @@ class VendorController extends Controller
                                 'tags',
                                 'pics','category_id','price',
                                 'publish_status','section_id',
-                                'shipping_fee', 'sku','moq'
+                                'shipping_fee', 'sku','moq','hasVariant'
                             ));
             if ($request->hasVariant == true)
             {
@@ -1488,14 +1488,13 @@ class VendorController extends Controller
         try{
             $user = Auth::user();
             $variantRecord = ProductVariant::where(['product_id' => $productId])->first();
-
+            $source = isset($request->lctn) ? $request->get('lctn') : 34422334;
             if ($variantRecord){
-
                 $product = Product::find($variantRecord->product_id);
                 $variantArray = json_decode($variantRecord->variant_to_values, true);
                 $active = $request->has('variantIndex') ? $request->get('variantIndex') : 0;
                 $images = isset($variantArray[$active]["'pics'"]) ? json_decode($variantArray[$active]["'pics'"],true) : [];
-                return view('vendor.products.edit_variant', compact('variantRecord', 'product', 'active', 'images'));
+                return view('vendor.products.edit_variant', compact('variantRecord', 'product', 'active', 'images', 'source'));
             }
 
         }catch(Exception $e){
@@ -1503,7 +1502,7 @@ class VendorController extends Controller
         }
     }
 
-    public function saveVariant(Request $request){
+    public function updateVariant(Request $request){
         try{
             $variantRecord = ProductVariant::where(['product_id' => $request->productId])->first();
 
@@ -1519,12 +1518,26 @@ class VendorController extends Controller
 
                 $variantRecord->variant_to_values = json_encode($variants);
                 $variantRecord->save();
-
-                return redirect('/vendor/products/');
             }
 
             return redirect()->back();
         }catch(Exception $e){
+
+        }
+    }
+
+    public function saveVariant(Request $request){
+        try{
+
+            if ($request->lctn == 34422334){
+                return redirect('/vendor/products/');
+            }else
+            {
+                return redirect("/vendor/products/edit/$request->productId");
+            }
+
+        }catch(Exception $e)
+        {
 
         }
     }

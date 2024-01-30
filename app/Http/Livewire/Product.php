@@ -13,6 +13,8 @@ class Product extends Component
 {
 
     public $productName;
+    public $images;
+    public $displayImages;
     public $wishlist;
     public $productVariants;
     public $productId;
@@ -72,7 +74,6 @@ class Product extends Component
                 'price' => $value["'listing_price'"],
                 'in_stock' => $value["'listing_no_in_stock'"],
                 'limit' => $value["'listing_purchase_limit'"],
-                'pics' => isset($value["'pics'"]) ? $value["'pics'"] : []
             ];
         }
     }
@@ -89,6 +90,9 @@ class Product extends Component
             $this->price = $selected['price'];
             $this->in_stock = $selected['in_stock'];
             $this->limit = $selected['limit'];
+            // if ($selected['pics'] != []){
+            //     $this->images = $selected['pics'];
+            // }
             $this->productCount = 1;
         }
         else{

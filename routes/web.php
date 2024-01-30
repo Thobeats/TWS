@@ -193,7 +193,8 @@ Route::middleware(['auth'])->group(function () {
                 Route::get('/drafts', [VendorController::class, 'all_drafts']);
                 Route::get('/create', [VendorController::class, 'create_product']);
                 Route::get('/editVariant/{id}', [VendorController::class, 'editVariant']);
-                Route::post('/saveVariant', [VendorController::class, 'saveVariant'])->name('save_variants');
+                Route::post('/updateVariant', [VendorController::class, 'updateVariant'])->name('update_variants');
+                Route::get('/saveAllVariant', [VendorController::class,'saveVariant']);
                 Route::post('/store', [VendorController::class, 'store']);
                 Route::get('/edit/{id}', [VendorController::class, 'editProduct']);
                 Route::put('/update', [VendorController::class, 'updateProduct']);
