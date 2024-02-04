@@ -4,6 +4,27 @@
     // USE STRICT
     "use strict";
 
+    $(".topVendorSlick").slick({
+        pauseOnFocus: false,
+        pauseOnHover: false,
+        slidesToShow: 1,
+        slidesToScroll: 1,
+        fade: true,
+        speed: 600,
+        infinite: true,
+        autoplay: true,
+        autoplaySpeed: 2000,
+        arrows: true,
+        appendArrows: $(this),
+        prevArrow:'<button class="arrow-slick1 prev-slick1"><i class="zmdi zmdi-caret-left"></i></button>',
+        nextArrow:'<button class="arrow-slick1 next-slick1"><i class="zmdi zmdi-caret-right"></i></button>',
+        dots: false,
+        appendDots: $(this).find('.wrap-slick1-dots'),
+        dotsClass:'slick1-dots'
+    });
+
+
+
         /*==================================================================
         [ Slick1 ]*/
         $('.wrap-slick1').each(function(){
@@ -92,7 +113,7 @@
         [ Slick2 ]*/
         $('.wrap-slick2').each(function(){
             $(this).find('.slick2').slick({
-              slidesToShow: 4,
+              slidesToShow: 6,
               slidesToScroll: 1,
               infinite: false,
               autoplay: false,
@@ -168,3 +189,10 @@
 
 
 })(jQuery);
+
+function selectSlide(id)
+{
+    $(".topVendorSlick").slick('slickGoTo', id);
+    $(".top_vendors_business_name>.home-link-active").removeClass("home-link-active").addClass("home-link");
+    $(`.top_vendors_business_name>.name${id}`).removeClass("home-link").addClass("home-link-active");
+}

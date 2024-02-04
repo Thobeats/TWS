@@ -407,7 +407,9 @@ body{
 }
 
 .main-menu > li > a {
-  font-family: Poppins-SemiBold;
+    font-size: 18px;
+    font-family: 'Titillium web', sans-serif;
+    font-weight: 600;
   text-transform: uppercase;
   color: #333;
   padding: 5px 0px;
@@ -2243,7 +2245,7 @@ input.num-product::-webkit-inner-spin-button {
 [ Block2 ]*/
 .block2-pic {
   position: relative;
-  height: 350px;
+  height: 220px;
 }
 
 .block3-pic {

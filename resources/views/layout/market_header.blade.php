@@ -11,8 +11,8 @@
             </div>
             <div class='d-flex flex-column pt-3 flex-even'>
                 <nav class="navbar justify-content-center p-l-45 top-nav">
-                    <form class="form-inline" style="width: 500px">
-                      <input class="form-control mr-sm-2" style="width:450px"  type="search" placeholder="Search" aria-label="Search">
+                    <form class="form-inline search-form">
+                      <input class="form-control mr-sm-2 w-75"  type="search" placeholder="Search" aria-label="Search">
                       <button class="btn home-btn-outline my-2 my-sm-0" type="submit"><i class="zmdi zmdi-search"></i></button>
                     </form>
                     @php
